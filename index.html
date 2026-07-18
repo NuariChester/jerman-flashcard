@@ -156,19 +156,19 @@
             border-bottom: 5px solid #1a1a1a;
         }
 
-        /* Desain Baris Kata (Artikel Putih + Kata Berwarna + Ikon Modern) */
+        /* Desain Baris Kata Minimalis */
         .word-row {
             display: flex;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
             margin: 10px 0;
             width: 100%;
         }
         
         .article {
-            font-size: 30px;
+            font-size: 32px;
             font-weight: 400;
             color: #ffffff; /* Artikel selalu putih bersih */
             transition: opacity 0.3s;
@@ -176,30 +176,42 @@
         }
         
         .word {
-            font-size: 34px;
+            font-size: 36px;
             font-weight: 700;
             transition: color 0.3s;
         }
 
-        /* Tombol Speaker Minimalis Modern di Samping Kata */
+        /* Ikon Audio Minimalis & Animasi "Air Mengalir" */
         .speak-btn-minimal {
             background: transparent;
             border: none;
-            color: rgba(255, 255, 255, 0.65);
             cursor: pointer;
-            padding: 4px;
+            padding: 4px 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s, color 0.2s;
             margin-left: 2px;
+            outline: none;
         }
-        .speak-btn-minimal:hover {
-            color: #ffcc00;
-            transform: scale(1.18);
+        .wave-element {
+            stroke: #95a5a6;
+            transition: stroke 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
         }
-        .speak-btn-minimal:active {
-            transform: scale(0.9);
+        
+        /* Animasi Mengalir saat Hover & Sentuh */
+        .speak-btn-minimal:hover .wave-1, .speak-btn-minimal:active .wave-1 {
+            animation: waterRipple 1s infinite 0.0s;
+        }
+        .speak-btn-minimal:hover .wave-2, .speak-btn-minimal:active .wave-2 {
+            animation: waterRipple 1s infinite 0.15s;
+        }
+        .speak-btn-minimal:hover .wave-3, .speak-btn-minimal:active .wave-3 {
+            animation: waterRipple 1s infinite 0.3s;
+        }
+
+        @keyframes waterRipple {
+            0%, 100% { stroke: #95a5a6; transform: translateX(0); opacity: 0.6; }
+            50% { stroke: #ffcc00; transform: translateX(2px); opacity: 1; filter: drop-shadow(0 0 3px rgba(255, 204, 0, 0.8)); }
         }
         
         .plural { font-size: 14px; opacity: 0.75; margin-top: 15px; font-style: italic; color: #cccccc; }
@@ -282,16 +294,16 @@
                         <span class="article" id="wordArticle">-</span>
                         <span class="word" id="wordText">Memuat...</span>
                         <button class="speak-btn-minimal" id="audioBtn" onclick="speakWord(event)" title="Dengarkan pelafalan">
-                            <!-- Ikon Sound Waves Modern & Clean -->
-                            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
-                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            <!-- Ikon Soundwaves Minimalis Eksak dari Referensi -->
+                            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <path class="wave-element wave-1" d="M6 9a3 3 0 0 1 0 6" />
+                                <path class="wave-element wave-2" d="M10 6a7 7 0 0 1 0 12" />
+                                <path class="wave-element wave-3" d="M14 3a11 11 0 0 1 0 18" />
                             </svg>
                         </button>
                     </div>
                     <div class="plural" id="wordPlural">-</div>
-                    <div class="hint" id="hintFront">Klik tombol ikon suara untuk mendengarkan</div>
+                    <div class="hint" id="hintFront">Klik ikon gelombang suara untuk mendengarkan</div>
                 </div>
                 <div class="card-face card-back">
                     <h2 class="meaning" id="wordMeaning">-</h2>
@@ -313,8 +325,8 @@
         <h2 style="color: #dd0000;" id="quizTitle">Ujian Mingguan! 📝</h2>
         <p id="quizDesc">Apa arti dari kata bahasa Jerman ini?</p>
         <div class="word-row" style="margin: 20px 0 25px 0;">
-            <span class="article" id="quizArticle" style="color: var(--text-color); font-size: 26px;">-</span>
-            <span class="word" id="quizWord" style="font-size: 34px;">-</span>
+            <span class="article" id="quizArticle" style="color: var(--text-color); font-size: 28px;">-</span>
+            <span class="word" id="quizWord" style="font-size: 36px;">-</span>
         </div>
         <div id="quizOptions"></div>
         <div class="progress" id="quizProgressText">Sisa soal: 0</div>
@@ -347,7 +359,7 @@
                 prev: "Mundur",
                 random: "Acak",
                 next: "Lanjut",
-                hintFront: "Klik ikon suara untuk mendengarkan pelafalan",
+                hintFront: "Klik ikon gelombang suara untuk mendengarkan",
                 hintBack: "Klik untuk membalik kembali",
                 quizTitle: "Ujian Mingguan! 📝",
                 quizDesc: "Apa arti dari kata bahasa Jerman ini?",
@@ -362,7 +374,7 @@
                 prev: "Zurück",
                 random: "Mischen",
                 next: "Weiter",
-                hintFront: "Klicke auf das Tonsymbol für die Aussprache",
+                hintFront: "Klicke auf das Wellensymbol für die Aussprache",
                 hintBack: "Klicke, um die Karte umzudrehen",
                 quizTitle: "Wöchentlicher Test! 📝",
                 quizDesc: "Was bedeutet dieses deutsche Wort?",
@@ -630,8 +642,10 @@
         }
 
         function nextWord() {
-            currentIndex++;
-            updateCard();
+            if (currentIndex < currentWords.length) {
+                currentIndex++;
+                updateCard();
+            }
         }
 
         function prevWord() {
@@ -713,7 +727,21 @@
             }
         }
 
-        // --- 10. EVENT LISTENER LEVEL ---
+        // --- 10. PINTASAN KEYBOARD (Bonus Fitur Baru) ---
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('mainUI').style.display === 'flex') {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    flipCard();
+                } else if (e.code === 'ArrowRight') {
+                    nextWord();
+                } else if (e.code === 'ArrowLeft') {
+                    prevWord();
+                }
+            }
+        });
+
+        // --- 11. EVENT LISTENER LEVEL ---
         document.querySelectorAll('.level-btn').forEach(button => {
             button.addEventListener('click', (e) => {
                 document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
