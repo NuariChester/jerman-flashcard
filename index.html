@@ -15,7 +15,7 @@
         :root {
             --bg-color: #f4f6f9;
             --text-color: #2c3e50;
-            --card-front: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 100%);
+            --card-front: linear-gradient(135deg, #242424 0%, #161616 100%);
             --card-front-text: #ffffff;
             --card-back: linear-gradient(135deg, #dd0000 0%, #a60000 100%);
             --card-back-text: #ffcc00;
@@ -47,42 +47,75 @@
 
         .header-bar {
             width: 100%; max-width: 400px;
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
         }
 
-        .header-left { display: flex; align-items: center; gap: 8px; }
+        .header-left { display: flex; align-items: center; gap: 10px; }
 
         .icon-btn {
             background: var(--btn-bg); border: none; border-radius: 50%;
             width: 40px; height: 40px; font-size: 20px; cursor: pointer;
             color: var(--text-color); transition: 0.3s; display: flex;
             align-items: center; justify-content: center;
+            box-shadow: 0 2px 5px var(--shadow);
         }
+        .icon-btn:hover { transform: scale(1.05); }
 
+        /* Tombol Switch Bahasa dengan Animasi "Sliding Pill" yang Smooth */
         .lang-switch {
-            background: var(--btn-bg); border-radius: 20px; padding: 4px;
-            display: flex; align-items: center; font-size: 13px; font-weight: 700;
-            box-shadow: 0 2px 4px var(--shadow);
+            position: relative;
+            background: var(--btn-bg);
+            border-radius: 20px;
+            padding: 3px;
+            display: flex;
+            align-items: center;
+            width: 96px;
+            height: 34px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            user-select: none;
+            box-sizing: border-box;
+        }
+        .lang-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 45px;
+            height: calc(100% - 6px);
+            background: #1a1a1a;
+            border-radius: 17px;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
         .lang-opt {
-            padding: 4px 10px; border-radius: 16px; cursor: pointer;
-            transition: 0.2s; color: var(--text-color); opacity: 0.6;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-color);
+            opacity: 0.6;
+            transition: color 0.3s, opacity 0.3s;
         }
-        .lang-opt.active { background: #1a1a1a; color: #ffcc00; opacity: 1; }
-        .lang-sep { margin: 0 2px; opacity: 0.4; font-weight: 400; }
+        .lang-opt.active {
+            color: #ffcc00;
+            opacity: 1;
+        }
 
         .streak-badge {
             background: linear-gradient(135deg, #ffcc00 0%, #ff9900 100%);
-            color: #1a1a1a; padding: 5px 15px; border-radius: 20px;
+            color: #1a1a1a; padding: 6px 16px; border-radius: 20px;
             font-weight: 700; display: flex; align-items: center; gap: 5px;
-            box-shadow: 0 4px 6px var(--shadow);
+            box-shadow: 0 4px 8px var(--shadow); font-size: 14px;
         }
 
         h1 { text-align: center; margin: 10px 0 5px 0; font-size: 24px; font-weight: 700; }
         
         .date-badge {
             background-color: #1a1a1a; color: #ffcc00; padding: 5px 15px;
-            border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 20px;
+            border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 20px;
             border: 1px solid #ffcc00;
         }
 
@@ -94,7 +127,7 @@
         }
         .level-btn.active { background-color: var(--btn-active); color: #ffffff; box-shadow: 0 4px 10px rgba(221,0,0,0.3); }
 
-        /* Kartu dengan Tinggi Lebih Optimal (300px) dan Tombol Rapi */
+        /* UI Kartu Modern (300px) */
         .card-container {
             width: 100%; max-width: 400px; height: 300px; perspective: 1000px;
             margin-bottom: 20px; cursor: pointer;
@@ -102,14 +135,14 @@
 
         .card {
             width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
-            transform-style: preserve-3d; border-radius: 18px; box-shadow: 0 10px 20px var(--shadow);
+            transform-style: preserve-3d; border-radius: 20px; box-shadow: 0 12px 24px var(--shadow);
         }
         .card.is-flipped { transform: rotateY(180deg); }
 
         .card-face {
             position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            border-radius: 18px; padding: 20px; box-sizing: border-box; text-align: center;
+            border-radius: 20px; padding: 25px; box-sizing: border-box; text-align: center;
         }
         
         .card-front { 
@@ -123,33 +156,65 @@
             border-bottom: 5px solid #1a1a1a;
         }
 
-        .article { font-size: 22px; font-weight: 700; margin-bottom: 2px; letter-spacing: 1px; transition: color 0.3s;}
-        .word { font-size: 34px; font-weight: 700; margin: 8px 0; transition: color 0.3s;}
-        
-        /* Tombol Audio Rapi & Proporsional */
-        .speak-btn { 
-            background: #ffcc00; border: none; border-radius: 50%; 
-            width: 55px; height: 55px; font-size: 24px; cursor: pointer; 
-            display: flex; align-items: center; justify-content: center;
-            margin-top: 5px; transition: 0.2s; color: #1a1a1a;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        /* Desain Baris Kata (Artikel Putih + Kata Berwarna + Ikon Modern) */
+        .word-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+            width: 100%;
         }
-        .speak-btn:hover { background: #e6b800; transform: scale(1.08); }
-        .speak-btn:active { transform: scale(0.95); }
         
-        .plural { font-size: 14px; opacity: 0.8; margin-top: 10px; font-style: italic; color: #cccccc; }
+        .article {
+            font-size: 30px;
+            font-weight: 400;
+            color: #ffffff; /* Artikel selalu putih bersih */
+            transition: opacity 0.3s;
+            opacity: 0.9;
+        }
+        
+        .word {
+            font-size: 34px;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        /* Tombol Speaker Minimalis Modern di Samping Kata */
+        .speak-btn-minimal {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.65);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, color 0.2s;
+            margin-left: 2px;
+        }
+        .speak-btn-minimal:hover {
+            color: #ffcc00;
+            transform: scale(1.18);
+        }
+        .speak-btn-minimal:active {
+            transform: scale(0.9);
+        }
+        
+        .plural { font-size: 14px; opacity: 0.75; margin-top: 15px; font-style: italic; color: #cccccc; }
         .meaning { font-size: 32px; font-weight: 700; color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
-        .hint { font-size: 12px; opacity: 0.6; margin-top: 15px; }
+        .hint { font-size: 12px; opacity: 0.55; margin-top: 25px; }
         .card-back .hint { color: #ffffff; }
 
         .controls { display: flex; gap: 10px; width: 100%; max-width: 400px; justify-content: space-between; }
         .nav-btn {
             background-color: #1a1a1a; color: #ffffff; border: none; padding: 14px 18px;
-            border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s;
+            border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s;
             flex: 1; display: flex; justify-content: center; align-items: center; gap: 5px;
         }
-        .nav-btn:hover { background-color: #333333; }
-        .nav-btn:disabled { background-color: #cccccc; color: #666666; cursor: not-allowed; }
+        .nav-btn:hover { background-color: #333333; transform: translateY(-1px); }
+        .nav-btn:disabled { background-color: #cccccc; color: #666666; cursor: not-allowed; transform: none; }
         
         .btn-random { background-color: #ffcc00; color: #1a1a1a; font-weight: 700; flex: 0.8; }
         .btn-random:hover { background-color: #e6b800; }
@@ -160,7 +225,7 @@
         #quizContainer { display: none; width: 100%; max-width: 400px; text-align: center; }
         .quiz-option {
             background: var(--btn-bg); color: var(--text-color); border: 2px solid #ccc;
-            padding: 15px; width: 100%; margin-bottom: 10px; border-radius: 10px;
+            padding: 15px; width: 100%; margin-bottom: 10px; border-radius: 12px;
             font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s;
         }
         .quiz-option:hover { border-color: #dd0000; background: rgba(221,0,0,0.05); }
@@ -190,9 +255,9 @@
     <div class="header-bar">
         <div class="header-left">
             <button class="icon-btn" id="darkModeToggle">🌙</button>
-            <div class="lang-switch">
+            <div class="lang-switch" id="langSwitchContainer">
+                <div class="lang-slider" id="langSlider"></div>
                 <span class="lang-opt active" id="btnLangID" onclick="setLanguage('id')">ID</span>
-                <span class="lang-sep">|</span>
                 <span class="lang-opt" id="btnLangDE" onclick="setLanguage('de')">DE</span>
             </div>
         </div>
@@ -212,11 +277,21 @@
         <div class="card-container" id="cardContainer" onclick="flipCard()">
             <div class="card" id="flashcard">
                 <div class="card-face card-front">
-                    <div class="article" id="wordArticle">-</div>
-                    <h2 class="word" id="wordText">Memuat...</h2>
-                    <button class="speak-btn" id="audioBtn" onclick="speakWord(event)" title="Dengarkan pelafalan">🔊</button>
+                    <!-- Baris Kata Minimalis -->
+                    <div class="word-row">
+                        <span class="article" id="wordArticle">-</span>
+                        <span class="word" id="wordText">Memuat...</span>
+                        <button class="speak-btn-minimal" id="audioBtn" onclick="speakWord(event)" title="Dengarkan pelafalan">
+                            <!-- Ikon Sound Waves Modern & Clean -->
+                            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            </svg>
+                        </button>
+                    </div>
                     <div class="plural" id="wordPlural">-</div>
-                    <div class="hint" id="hintFront">Klik tombol 🔊 untuk mendengarkan pelafalan</div>
+                    <div class="hint" id="hintFront">Klik tombol ikon suara untuk mendengarkan</div>
                 </div>
                 <div class="card-face card-back">
                     <h2 class="meaning" id="wordMeaning">-</h2>
@@ -237,8 +312,10 @@
     <div id="quizContainer">
         <h2 style="color: #dd0000;" id="quizTitle">Ujian Mingguan! 📝</h2>
         <p id="quizDesc">Apa arti dari kata bahasa Jerman ini?</p>
-        <div class="article" id="quizArticle" style="font-weight:bold; margin-bottom:-5px;">-</div>
-        <h1 id="quizWord" class="word" style="margin-bottom: 25px; font-size: 34px;">-</h1>
+        <div class="word-row" style="margin: 20px 0 25px 0;">
+            <span class="article" id="quizArticle" style="color: var(--text-color); font-size: 26px;">-</span>
+            <span class="word" id="quizWord" style="font-size: 34px;">-</span>
+        </div>
         <div id="quizOptions"></div>
         <div class="progress" id="quizProgressText">Sisa soal: 0</div>
     </div>
@@ -270,7 +347,7 @@
                 prev: "Mundur",
                 random: "Acak",
                 next: "Lanjut",
-                hintFront: "Klik tombol 🔊 untuk mendengarkan pelafalan",
+                hintFront: "Klik ikon suara untuk mendengarkan pelafalan",
                 hintBack: "Klik untuk membalik kembali",
                 quizTitle: "Ujian Mingguan! 📝",
                 quizDesc: "Apa arti dari kata bahasa Jerman ini?",
@@ -285,7 +362,7 @@
                 prev: "Zurück",
                 random: "Mischen",
                 next: "Weiter",
-                hintFront: "Klicke auf 🔊, um die Aussprache zu hören",
+                hintFront: "Klicke auf das Tonsymbol für die Aussprache",
                 hintBack: "Klicke, um die Karte umzudrehen",
                 quizTitle: "Wöchentlicher Test! 📝",
                 quizDesc: "Was bedeutet dieses deutsche Wort?",
@@ -300,6 +377,14 @@
         function setLanguage(lang) {
             currentLang = lang;
             localStorage.setItem('appLang', lang);
+
+            // Animasi Slider Bergerak
+            const slider = document.getElementById('langSlider');
+            if(lang === 'de') {
+                slider.style.transform = 'translateX(45px)';
+            } else {
+                slider.style.transform = 'translateX(0)';
+            }
 
             document.getElementById('btnLangID').classList.toggle('active', lang === 'id');
             document.getElementById('btnLangDE').classList.toggle('active', lang === 'de');
@@ -465,7 +550,7 @@
         let currentWords = [];
         let quizQueue = [];
 
-        // FUNGSI KHUSUS UNTUK MEMETA WARNA BERDASARKAN ARTIKEL
+        // FUNGSI MEMETA WARNA BERDASARKAN ARTIKEL (HANYA UNTUK KATA)
         function getArticleColor(article) {
             if (article === "der") return "#0172b7"; // Biru
             if (article === "das") return "#358732"; // Hijau
@@ -525,14 +610,13 @@
                 const articleEl = document.getElementById('wordArticle');
                 const wordEl = document.getElementById('wordText');
                 
-                // Terapkan teks & warna otomatis
+                // Artikel putih bersih & hanya kata yang berwarna
                 articleEl.textContent = data.article;
-                articleEl.style.color = wordColor;
+                articleEl.style.color = "#ffffff";
                 
                 wordEl.textContent = data.word;
                 wordEl.style.color = wordColor;
                 
-                // Plural tetap aman tidak berubah warna (sesuai request)
                 document.getElementById('wordPlural').textContent = `Plural: ${data.plural}`;
                 document.getElementById('wordMeaning').textContent = data.meaning;
                 document.getElementById('progressText').textContent = `${currentIndex + 1} / ${currentWords.length}`;
@@ -592,10 +676,10 @@
             const qWordEl = document.getElementById('quizWord');
             
             qArticleEl.textContent = currentQ.article;
-            qArticleEl.style.color = qColor;
+            qArticleEl.style.color = "var(--text-color)"; // Normal text color pada quiz
             
             qWordEl.textContent = currentQ.word;
-            qWordEl.style.color = qColor;
+            qWordEl.style.color = qColor; // Hanya kata yang berwarna
             
             let optionsSet = new Set([currentQ.meaning]);
             while(optionsSet.size < 3) {
