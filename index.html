@@ -6,6 +6,7 @@
     <title>Flashcard Jerman Harian</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#dd0000">
+    <meta name="referrer" content="no-referrer">
     <!-- Library Confetti untuk Animasi Ledakan Kertas -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -47,13 +48,35 @@
 
         .header-bar {
             width: 100%; max-width: 400px;
-            display: flex; justify-content: space-between; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+        }
+
+        .header-left {
+            display: flex; align-items: center; gap: 8px;
         }
 
         .icon-btn {
             background: var(--btn-bg); border: none; border-radius: 50%;
             width: 40px; height: 40px; font-size: 20px; cursor: pointer;
-            color: var(--text-color); transition: 0.3s;
+            color: var(--text-color); transition: 0.3s; display: flex;
+            align-items: center; justify-content: center;
+        }
+
+        /* Desain Tombol Bahasa: ID | DE */
+        .lang-switch {
+            background: var(--btn-bg); border-radius: 20px; padding: 4px;
+            display: flex; align-items: center; font-size: 13px; font-weight: 700;
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+        .lang-opt {
+            padding: 4px 10px; border-radius: 16px; cursor: pointer;
+            transition: 0.2s; color: var(--text-color); opacity: 0.6;
+        }
+        .lang-opt.active {
+            background: #1a1a1a; color: #ffcc00; opacity: 1;
+        }
+        .lang-sep {
+            margin: 0 2px; opacity: 0.4; font-weight: 400;
         }
 
         .streak-badge {
@@ -167,11 +190,19 @@
 <body>
 
     <div class="header-bar">
-        <button class="icon-btn" id="darkModeToggle">🌙</button>
+        <div class="header-left">
+            <button class="icon-btn" id="darkModeToggle">🌙</button>
+            <!-- Tombol Switch Bahasa: ID | DE -->
+            <div class="lang-switch">
+                <span class="lang-opt active" id="btnLangID" onclick="setLanguage('id')">ID</span>
+                <span class="lang-sep">|</span>
+                <span class="lang-opt" id="btnLangDE" onclick="setLanguage('de')">DE</span>
+            </div>
+        </div>
         <div class="streak-badge" id="streakDisplay">🔥 0 Hari</div>
     </div>
 
-    <h1>🇩🇪 Flashcard Jerman</h1>
+    <h1 id="appTitle">🇩🇪 Flashcard Jerman</h1>
     <div class="date-badge" id="dateDisplay">Hari Ini</div>
 
     <div class="level-selector" id="levelSelector">
@@ -190,27 +221,27 @@
                         <button class="speak-btn" id="audioBtn" onclick="speakWord(event)" title="Dengarkan pelafalan">🔊</button>
                     </h2>
                     <div class="plural" id="wordPlural">-</div>
-                    <div class="hint">Klik tombol 🔊 untuk mendengarkan pelafalan</div>
+                    <div class="hint" id="hintFront">Klik tombol 🔊 untuk mendengarkan pelafalan</div>
                 </div>
                 <div class="card-face card-back">
                     <h2 class="meaning" id="wordMeaning">-</h2>
-                    <div class="hint">Klik untuk membalik kembali</div>
+                    <div class="hint" id="hintBack">Klik untuk membalik kembali</div>
                 </div>
             </div>
         </div>
 
         <div class="controls" id="actionControls">
-            <button class="nav-btn" id="prevBtn" onclick="prevWord()">&#8592; Mundur</button>
-            <button class="nav-btn btn-random" onclick="shuffleCurrentWords()">🔀 Acak</button>
-            <button class="nav-btn" id="nextBtn" onclick="nextWord()">Lanjut &#8594;</button>
+            <button class="nav-btn" id="prevBtn" onclick="prevWord()">&#8592; <span id="txtPrev">Mundur</span></button>
+            <button class="nav-btn btn-random" onclick="shuffleCurrentWords()">🔀 <span id="txtRandom">Acak</span></button>
+            <button class="nav-btn" id="nextBtn" onclick="nextWord()"><span id="txtNext">Lanjut</span> &#8594;</button>
         </div>
         <div class="progress" id="progressText">1 / 10</div>
     </div>
 
     <!-- UI Kuis Mingguan -->
     <div id="quizContainer">
-        <h2 style="color: #dd0000;">Ujian Mingguan! 📝</h2>
-        <p>Apa arti dari kata bahasa Jerman ini?</p>
+        <h2 style="color: #dd0000;" id="quizTitle">Ujian Mingguan! 📝</h2>
+        <p id="quizDesc">Apa arti dari kata bahasa Jerman ini?</p>
         <div class="article" id="quizArticle" style="color: #d35400; font-weight:bold; margin-bottom:-5px;">-</div>
         <h1 id="quizWord" style="margin-bottom: 25px; font-size: 34px;">-</h1>
         <div id="quizOptions"></div>
@@ -220,9 +251,9 @@
     <!-- Pesan Selesai -->
     <div id="doneMessage">
         <div style="font-size: 60px; margin-bottom: 10px;">🎉🇩🇪</div>
-        <h2>Selamat!</h2>
-        <p>Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!</p>
-        <button class="btn-restart" onclick="restartWithRandomOrder()">🔄 Mengulang Kembali (Acak Urutan)</button>
+        <h2 id="doneTitle">Selamat!</h2>
+        <p id="doneDesc">Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!</p>
+        <button class="btn-restart" id="btnRestart" onclick="restartWithRandomOrder()">🔄 Mengulang Kembali (Acak Urutan)</button>
     </div>
 
     <script>
@@ -231,7 +262,77 @@
             navigator.serviceWorker.register('sw.js');
         }
 
-        // --- 2. FITUR DARK MODE ---
+        // --- 2. FITUR MULTI-BAHASA (ID & DE) ---
+        let currentLang = localStorage.getItem('appLang') || 'id';
+
+        const i18n = {
+            id: {
+                title: "🇩🇪 Flashcard Jerman",
+                prev: "Mundur",
+                random: "Acak",
+                next: "Lanjut",
+                hintFront: "Klik tombol 🔊 untuk mendengarkan pelafalan",
+                hintBack: "Klik untuk membalik kembali",
+                quizTitle: "Ujian Mingguan! 📝",
+                quizDesc: "Apa arti dari kata bahasa Jerman ini?",
+                quizRemaining: "Sisa soal",
+                doneTitle: "Selamat!",
+                doneDesc: "Kamu sudah menyelesaikan target 10 kata hari ini dengan luar biasa!",
+                restart: "🔄 Mengulang Kembali (Acak Urutan)",
+                streakDays: "Hari"
+            },
+            de: {
+                title: "🇩🇪 Deutsch Karteikarten",
+                prev: "Zurück",
+                random: "Mischen",
+                next: "Weiter",
+                hintFront: "Klicke auf 🔊, um die Aussprache zu hören",
+                hintBack: "Klicke, um die Karte umzudrehen",
+                quizTitle: "Wöchentlicher Test! 📝",
+                quizDesc: "Was bedeutet dieses deutsche Wort?",
+                quizRemaining: "Verbleibend",
+                doneTitle: "Herzlichen Glückwunsch!",
+                doneDesc: "Du hast deine heutigen 10 Wörter hervorragend gemeistert!",
+                restart: "🔄 Noch einmal üben (Zufällige Reihenfolge)",
+                streakDays: "Tage"
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('appLang', lang);
+
+            document.getElementById('btnLangID').classList.toggle('active', lang === 'id');
+            document.getElementById('btnLangDE').classList.toggle('active', lang === 'de');
+
+            document.getElementById('appTitle').textContent = i18n[lang].title;
+            document.getElementById('txtPrev').textContent = i18n[lang].prev;
+            document.getElementById('txtRandom').textContent = i18n[lang].random;
+            document.getElementById('txtNext').textContent = i18n[lang].next;
+            document.getElementById('hintFront').textContent = i18n[lang].hintFront;
+            document.getElementById('hintBack').textContent = i18n[lang].hintBack;
+            document.getElementById('quizTitle').textContent = i18n[lang].quizTitle;
+            document.getElementById('quizDesc').textContent = i18n[lang].quizDesc;
+            document.getElementById('doneTitle').textContent = i18n[lang].doneTitle;
+            document.getElementById('doneDesc').innerHTML = lang === 'id' ? 
+                'Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!' : 
+                'Du hast deine heutigen <strong>10 Wörter</strong> hervorragend gemeistert!';
+            document.getElementById('btnRestart').textContent = i18n[lang].restart;
+
+            updateStreak();
+            updateDateDisplay();
+            if (isQuizDay && quizQueue.length > 0) {
+                document.getElementById('quizProgressText').textContent = `${i18n[currentLang].quizRemaining}: ${quizQueue.length}`;
+            }
+        }
+
+        function updateDateDisplay() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const locale = currentLang === 'de' ? 'de-DE' : 'id-ID';
+            document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString(locale, options);
+        }
+
+        // --- 3. FITUR DARK MODE ---
         const darkModeToggle = document.getElementById('darkModeToggle');
         let isDark = localStorage.getItem('darkMode') === 'true';
         if(isDark) document.body.classList.add('dark-mode');
@@ -244,7 +345,7 @@
         });
         darkModeToggle.textContent = isDark ? '☀️' : '🌙';
 
-        // --- 3. FITUR STREAK ---
+        // --- 4. FITUR STREAK ---
         function updateStreak() {
             const todayStr = new Date().toDateString();
             let lastVisit = localStorage.getItem('lastVisit');
@@ -261,11 +362,10 @@
                 localStorage.setItem('lastVisit', todayStr);
                 localStorage.setItem('streak', streak);
             }
-            document.getElementById('streakDisplay').textContent = `🔥 ${streak} Hari`;
+            document.getElementById('streakDisplay').textContent = `🔥 ${streak} ${i18n[currentLang].streakDays}`;
         }
-        updateStreak();
 
-        // --- 4. FITUR SOUND EFFECT ---
+        // --- 5. FITUR SOUND EFFECT ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSound(type) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -289,11 +389,11 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.15);
         }
 
-        // --- 5. AUDIO GOOGLE TRANSLATE RESMI (100% Seragam di Semua Device) ---
+        // --- 6. AUDIO AMAZON POLLY AI (Tanpa Fallback Offline) ---
         let currentAudio = null;
 
         function speakWord(event) {
-            event.stopPropagation(); // Mencegah kartu terbalik saat tombol suara diklik
+            event.stopPropagation(); // Mencegah kartu membalik saat tombol suara diklik
 
             if (currentAudio) {
                 currentAudio.pause();
@@ -302,16 +402,16 @@
 
             const article = document.getElementById('wordArticle').textContent;
             const word = document.getElementById('wordText').textContent;
-            const fullText = encodeURIComponent(`${article} ${word}`);
+            const fullText = `${article} ${word}`;
             
-            // Mengambil suara langsung dari server gratis Google Translate (tl=de untuk bahasa Jerman)
-            const googleAudioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=de&q=${fullText}`;
+            // Menggunakan suara AI Amazon Polly (Voice: Marlene - Deutsch) anti-blokir
+            const audioUrl = `https://api.streamelements.com/kappa/v2/speech?voice=Marlene&text=${encodeURIComponent(fullText)}`;
             
-            currentAudio = new Audio(googleAudioUrl);
+            currentAudio = new Audio(audioUrl);
             currentAudio.play();
         }
 
-        // --- 6. DATABASE 280 KATA (A1 & A2) ---
+        // --- 7. DATABASE 280 KATA (A1 & A2) ---
         const database = {
             "A1": [
                 { article: "der", word: "Vater", plural: "die Väter", meaning: "Ayah" }, { article: "die", word: "Mutter", plural: "die Mütter", meaning: "Ibu" }, { article: "der", word: "Sohn", plural: "die Söhne", meaning: "Anak Laki-laki" }, { article: "die", word: "Tochter", plural: "die Töchter", meaning: "Anak Perempuan" }, { article: "der", word: "Bruder", plural: "die Brüder", meaning: "Saudara Laki-laki" }, { article: "die", word: "Schwester", plural: "die Schwestern", meaning: "Saudara Perempuan" }, { article: "der", word: "Opa", plural: "die Opas", meaning: "Kakek" }, { article: "die", word: "Oma", plural: "die Omas", meaning: "Nenek" }, { article: "der", word: "Onkel", plural: "die Onkel", meaning: "Paman" }, { article: "die", word: "Tante", plural: "die Tanten", meaning: "Bibi" },
@@ -325,7 +425,7 @@
                 { article: "das", word: "Meer", plural: "die Meere", meaning: "Laut" }, { article: "der", word: "Himmel", plural: "die Himmel", meaning: "Langit" }, { article: "der", word: "Kopf", plural: "die Köpfe", meaning: "Kepala" }, { article: "das", word: "Auge", plural: "die Augen", meaning: "Mata" }, { article: "das", word: "Ohr", plural: "die Ohren", meaning: "Telinga" }, { article: "die", word: "Nase", plural: "die Nasen", meaning: "Hidung" }, { article: "der", word: "Mund", plural: "die Münder", meaning: "Mulut" }, { article: "der", word: "Arm", plural: "die Arme", meaning: "Lengan" }, { article: "die", word: "Hand", plural: "die Hände", meaning: "Tangan" }, { article: "das", word: "Bein", plural: "die Beine", meaning: "Kaki (Tungkai)" },
                 { article: "der", word: "Fuß", plural: "die Füße", meaning: "Telapak Kaki" }, { article: "der", word: "Hund", plural: "die Hunde", meaning: "Anjing" }, { article: "die", word: "Katze", plural: "die Katzen", meaning: "Kucing" }, { article: "der", word: "Vogel", plural: "die Vögel", meaning: "Burung" }, { article: "die", word: "Maus", plural: "die Mäuse", meaning: "Tikus" }, { article: "das", word: "Pferd", plural: "die Pferde", meaning: "Kuda" }, { article: "die", word: "Kuh", plural: "die Kühe", meaning: "Sapi" }, { article: "das", word: "Schwein", plural: "die Schweine", meaning: "Babi" }, { article: "die", word: "Stadt", plural: "die Städte", meaning: "Kota" }, { article: "das", word: "Dorf", plural: "die Dörfer", meaning: "Desa" },
                 { article: "die", word: "Straße", plural: "die Straßen", meaning: "Jalan" }, { article: "der", word: "Platz", plural: "die Plätze", meaning: "Tempat / Alun-alun" }, { article: "der", word: "Park", plural: "die Parks", meaning: "Taman" }, { article: "die", word: "Schule", plural: "die Schulen", meaning: "Sekolah" }, { article: "die", word: "Universität", plural: "die Universitäten", meaning: "Universitas" }, { article: "das", word: "Restaurant", plural: "die Restaurants", meaning: "Restoran" }, { article: "das", word: "Café", plural: "die Cafés", meaning: "Kafe" }, { article: "der", word: "Supermarkt", plural: "die Supermärkte", meaning: "Supermarket" }, { article: "der", word: "Markt", plural: "die Märkte", meaning: "Pasar" }, { article: "der", word: "Bahnhof", plural: "die Bahnhöfe", meaning: "Stasiun" },
-                { article: "der", word: "Flughafen", plural: "die Flughäfen", meaning: "Bandara" }, { article: "die", word: "Hose", plural: "die Hosen", meaning: "Celana" }, { article: "das", word: "Hemd", plural: "die Hemden", meaning: "Kemeja" }, { article: "das", word: "T-Shirt", plural: "die T-Shirts", meaning: "Kaos" }, { article: "der", word: "Pullover", plural: "die Pullover", meaning: "Baju Hangat" }, { article: "die", word: "Jacke", plural: "die Jacken", meaning: "Jaket" }, { article: "der", word: "Mantel", plural: "die Mäntel", meaning: "Mantel" }, { article: "der", word: "Schuh", plural: "die Schuhe", meaning: "Sepatu" }, { article: "die", word: "Socke", plural: "die Socken", meaning: "Kaos Kaki" }, { article: "der", word: "Hut", plural: "die Hüte", meaning: "Topi" },
+                { article: "der", word: "Flughafen", plural: "die Flughäfen", meaning: "Bandara" }, { article: "die", word: "Hose", plural: "die Hosen", meaning: "Celana" }, { article: "das", word: "Hemd", plural: "die Hemden", meaning: "Kemeja" }, { article: "das", word: "T-Shirt", plural: "die T-Shirts", meaning: "Kaos" }, { article: "der", word: "Pullover", plural: "die Pullover", meaning: "Baju Hangat" }, { article: "die", word: "Jacke", plural: "die Jacken", meaning: "Jaket" }, { article: "der", word: "Mantel", plural: "die Mäntel", meaning: "Mäntel" }, { article: "der", word: "Schuh", plural: "die Schuhe", meaning: "Sepatu" }, { article: "die", word: "Socke", plural: "die Socken", meaning: "Kaos Kaki" }, { article: "der", word: "Hut", plural: "die Hüte", meaning: "Topi" },
                 { article: "die", word: "Brille", plural: "die Brillen", meaning: "Kacamata" }, { article: "der", word: "Name", plural: "die Namen", meaning: "Nama" }, { article: "die", word: "Zahl", plural: "die Zahlen", meaning: "Angka" }, { article: "die", word: "Farbe", plural: "die Farben", meaning: "Warna" }, { article: "die", word: "Frage", plural: "die Fragen", meaning: "Pertanyaan" }, { article: "die", word: "Antwort", plural: "die Antworten", meaning: "Jawaban" }, { article: "der", word: "Fehler", plural: "die Fehler", meaning: "Kesalahan" }, { article: "das", word: "Problem", plural: "die Probleme", meaning: "Masalah" }, { article: "das", word: "Beispiel", plural: "die Beispiele", meaning: "Contoh" }, { article: "das", word: "Wort", plural: "die Wörter", meaning: "Kata" },
                 { article: "der", word: "Satz", plural: "die Sätze", meaning: "Kalimat" }, { article: "die", word: "Sprache", plural: "die Sprachen", meaning: "Bahasa" }, { article: "der", word: "Text", plural: "die Texte", meaning: "Teks" }, { article: "der", word: "Brief", plural: "die Briefe", meaning: "Surat" }, { article: "die", word: "E-Mail", plural: "die E-Mails", meaning: "Email" }, { article: "das", word: "Spiel", plural: "die Spiele", meaning: "Permainan" }, { article: "der", word: "Freund", plural: "die Freunde", meaning: "Teman (Pria)" }, { article: "die", word: "Freundin", plural: "die Freundinnen", meaning: "Teman (Wanita)" }, { article: "der", word: "Beruf", plural: "die Berufe", meaning: "Pekerjaan" }, { article: "die", word: "Arbeit", plural: "die Arbeiten", meaning: "Kerja" }
             ],
@@ -346,10 +446,8 @@
             ]
         };
 
-        // --- 7. LOGIKA HARI & NAVIGASI KATA ---
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        // --- 8. LOGIKA HARI & NAVIGASI KATA ---
         const today = new Date();
-        document.getElementById('dateDisplay').textContent = today.toLocaleDateString('id-ID', options);
         const dayNumber = Math.floor(today.getTime() / (1000 * 60 * 60 * 24)); 
         const isQuizDay = (dayNumber % 7 === 0); 
 
@@ -446,7 +544,7 @@
             updateCard();
         }
 
-        // --- 8. SISTEM KUIS MINGGUAN ---
+        // --- 9. SISTEM KUIS MINGGUAN ---
         function loadNextQuiz() {
             if(quizQueue.length === 0) {
                 document.getElementById('quizContainer').style.display = 'none';
@@ -481,7 +579,7 @@
                 btn.onclick = () => checkQuiz(opt, currentQ.meaning);
                 optionsDiv.appendChild(btn);
             });
-            document.getElementById('quizProgressText').textContent = `Sisa soal: ${quizQueue.length}`;
+            document.getElementById('quizProgressText').textContent = `${i18n[currentLang].quizRemaining}: ${quizQueue.length}`;
         }
 
         function checkQuiz(selected, correct) {
@@ -497,7 +595,7 @@
             }
         }
 
-        // --- 9. EVENT LISTENER LEVEL ---
+        // --- 10. EVENT LISTENER LEVEL ---
         document.querySelectorAll('.level-btn').forEach(button => {
             button.addEventListener('click', (e) => {
                 document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
@@ -507,6 +605,7 @@
         });
 
         // Inisialisasi awal
+        setLanguage(currentLang);
         initDailyData("A1");
 
     </script>
