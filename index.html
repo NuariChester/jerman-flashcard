@@ -123,8 +123,8 @@
             border-bottom: 5px solid #1a1a1a;
         }
 
-        .article { font-size: 20px; color: #ffcc00; font-weight: 600; margin-bottom: 2px; letter-spacing: 1px; }
-        .word { font-size: 32px; font-weight: 700; margin: 8px 0; }
+        .article { font-size: 22px; font-weight: 700; margin-bottom: 2px; letter-spacing: 1px; transition: color 0.3s;}
+        .word { font-size: 34px; font-weight: 700; margin: 8px 0; transition: color 0.3s;}
         
         /* Tombol Audio Rapi & Proporsional */
         .speak-btn { 
@@ -237,8 +237,8 @@
     <div id="quizContainer">
         <h2 style="color: #dd0000;" id="quizTitle">Ujian Mingguan! 📝</h2>
         <p id="quizDesc">Apa arti dari kata bahasa Jerman ini?</p>
-        <div class="article" id="quizArticle" style="color: #d35400; font-weight:bold; margin-bottom:-5px;">-</div>
-        <h1 id="quizWord" style="margin-bottom: 25px; font-size: 34px;">-</h1>
+        <div class="article" id="quizArticle" style="font-weight:bold; margin-bottom:-5px;">-</div>
+        <h1 id="quizWord" class="word" style="margin-bottom: 25px; font-size: 34px;">-</h1>
         <div id="quizOptions"></div>
         <div class="progress" id="quizProgressText">Sisa soal: 0</div>
     </div>
@@ -465,6 +465,14 @@
         let currentWords = [];
         let quizQueue = [];
 
+        // FUNGSI KHUSUS UNTUK MEMETA WARNA BERDASARKAN ARTIKEL
+        function getArticleColor(article) {
+            if (article === "der") return "#0172b7"; // Biru
+            if (article === "das") return "#358732"; // Hijau
+            if (article === "die") return "#d3302f"; // Merah
+            return "#ffffff"; // Default putih
+        }
+
         function initDailyData(level) {
             currentLevel = level;
             currentIndex = 0;
@@ -512,8 +520,19 @@
             flashcard.classList.remove('is-flipped');
             setTimeout(() => {
                 const data = currentWords[currentIndex];
-                document.getElementById('wordArticle').textContent = data.article;
-                document.getElementById('wordText').textContent = data.word;
+                const wordColor = getArticleColor(data.article);
+                
+                const articleEl = document.getElementById('wordArticle');
+                const wordEl = document.getElementById('wordText');
+                
+                // Terapkan teks & warna otomatis
+                articleEl.textContent = data.article;
+                articleEl.style.color = wordColor;
+                
+                wordEl.textContent = data.word;
+                wordEl.style.color = wordColor;
+                
+                // Plural tetap aman tidak berubah warna (sesuai request)
                 document.getElementById('wordPlural').textContent = `Plural: ${data.plural}`;
                 document.getElementById('wordMeaning').textContent = data.meaning;
                 document.getElementById('progressText').textContent = `${currentIndex + 1} / ${currentWords.length}`;
@@ -567,8 +586,16 @@
                 return;
             }
             const currentQ = quizQueue[0];
-            document.getElementById('quizArticle').textContent = currentQ.article;
-            document.getElementById('quizWord').textContent = currentQ.word;
+            const qColor = getArticleColor(currentQ.article);
+            
+            const qArticleEl = document.getElementById('quizArticle');
+            const qWordEl = document.getElementById('quizWord');
+            
+            qArticleEl.textContent = currentQ.article;
+            qArticleEl.style.color = qColor;
+            
+            qWordEl.textContent = currentQ.word;
+            qWordEl.style.color = qColor;
             
             let optionsSet = new Set([currentQ.meaning]);
             while(optionsSet.size < 3) {
