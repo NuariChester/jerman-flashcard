@@ -404,7 +404,7 @@
             const word = document.getElementById('wordText').textContent.trim();
             
             // Menyusun format tautan persis seperti di verbformen.de (contoh: der_Kind.mp3)
-            const audioFileName = `${article}_${word}.mp3`;
+            const audioFileName = `der_${word}.mp3`;
             const verbformenAudioUrl = `https://www.verbformen.de/deklination/substantive/grundform/${audioFileName}`;
             
             currentAudio = new Audio(verbformenAudioUrl);
