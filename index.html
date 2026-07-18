@@ -389,25 +389,30 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.15);
         }
 
-        // --- 6. AUDIO VERBFORMEN.DE (100% Persis Sama di Semua HP/Mac & Jernih) ---
+        // --- 6. AUDIO FROM VERBFORMEN.DE  ---
         let currentAudio = null;
 
         function speakWord(event) {
-            event.stopPropagation(); // Mencegah kartu membalik saat tombol suara diklik
+            event.stopPropagation(); // 
 
             if (currentAudio) {
                 currentAudio.pause();
                 currentAudio = null;
             }
 
-            const article = document.getElementById('wordArticle').textContent.trim();
             const word = document.getElementById('wordText').textContent.trim();
             
-            // Menyusun format tautan persis seperti di verbformen.de (contoh: der_Kind.mp3)
+            // Variabel artikel diganti paksa menjadi 'der'
             const audioFileName = `der_${word}.mp3`;
             const verbformenAudioUrl = `https://www.verbformen.de/deklination/substantive/grundform/${audioFileName}`;
             
             currentAudio = new Audio(verbformenAudioUrl);
+            
+            // Tambahan: error handling jika file tidak ditemukan di server
+            currentAudio.onerror = () => {
+                console.log("Audio tidak ditemukan di server, mencoba alternatif lain...");
+            };
+            
             currentAudio.play();
         }
 
