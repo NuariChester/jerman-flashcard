@@ -6,6 +6,8 @@
     <title>Flashcard Jerman Harian</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#dd0000">
+    <!-- Library Confetti untuk Animasi Ledakan Kertas -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
@@ -148,7 +150,7 @@
         }
         .quiz-option:hover { border-color: #dd0000; background: rgba(221,0,0,0.05); }
 
-        /* Pesan Selesai */
+        /* Pesan Selesai & Ledakan Confetti */
         #doneMessage { display: none; text-align: center; margin-top: 30px; max-width: 400px; }
         #doneMessage h2 { color: #dd0000; font-size: 26px; margin-bottom: 10px; }
         #doneMessage p { font-size: 16px; margin-bottom: 25px; line-height: 1.5; }
@@ -185,10 +187,10 @@
                     <div class="article" id="wordArticle">-</div>
                     <h2 class="word">
                         <span id="wordText">Memuat...</span>
-                        <button class="speak-btn" id="audioBtn" onclick="handleAudioClick(event)" title="Klik 1x: Normal | Klik 2x: Sangat Lambat (🐢)">🔊</button>
+                        <button class="speak-btn" id="audioBtn" onclick="speakWord(event)" title="Dengarkan pelafalan">🔊</button>
                     </h2>
                     <div class="plural" id="wordPlural">-</div>
-                    <div class="hint">Klik 1x tombol 🔊 untuk normal | Klik 2x cepat untuk sangat lambat (🐢)</div>
+                    <div class="hint">Klik tombol 🔊 untuk mendengarkan pelafalan</div>
                 </div>
                 <div class="card-face card-back">
                     <h2 class="meaning" id="wordMeaning">-</h2>
@@ -287,59 +289,26 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.15);
         }
 
-        // --- 5. PERBAIKAN AUDIO BAHASA JERMAN (Active Voice Binding) ---
-        let germanVoice = null;
-        function loadVoices() {
-            const voices = window.speechSynthesis.getVoices();
-            // Secara agresif mencari suara beraksen Jerman (de-DE, de_DE, de-AT, dll)
-            germanVoice = voices.find(v => v.lang.toLowerCase().includes('de'));
-        }
-        loadVoices();
-        if (window.speechSynthesis.onvoiceschanged !== undefined) {
-            window.speechSynthesis.onvoiceschanged = loadVoices;
-        }
+        // --- 5. AUDIO GOOGLE TRANSLATE RESMI (100% Seragam di Semua Device) ---
+        let currentAudio = null;
 
-        function speakWord(rate) {
-            window.speechSynthesis.cancel(); // Hentikan suara sebelumnya jika ada
+        function speakWord(event) {
+            event.stopPropagation(); // Mencegah kartu terbalik saat tombol suara diklik
+
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
 
             const article = document.getElementById('wordArticle').textContent;
             const word = document.getElementById('wordText').textContent;
-            const fullText = `${article} ${word}`;
+            const fullText = encodeURIComponent(`${article} ${word}`);
             
-            let msg = new SpeechSynthesisUtterance(fullText);
-            msg.lang = 'de-DE';
-            if (germanVoice) {
-                msg.voice = germanVoice; // Mengunci ke voice asli Jerman
-            }
-            msg.rate = rate; // 1.0 = Normal | 0.45 = Sangat Lambat
-
-            const btn = document.getElementById('audioBtn');
-            const originalIcon = "🔊";
-            btn.textContent = (rate < 0.7) ? "🐢" : "🔊"; // Ikon berubah jadi kura-kura kalau lambat
-
-            msg.onend = () => { btn.textContent = originalIcon; };
-            msg.onerror = () => { btn.textContent = originalIcon; };
-
-            window.speechSynthesis.speak(msg);
-        }
-
-        // Logika Klik 1x vs Klik 2x (Double Click)
-        let clickTimeout = null;
-        function handleAudioClick(event) {
-            event.stopPropagation(); // Mencegah kartu membalik
+            // Mengambil suara langsung dari server gratis Google Translate (tl=de untuk bahasa Jerman)
+            const googleAudioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=de&q=${fullText}`;
             
-            if (clickTimeout === null) {
-                // Klik pertama tertahan 250 milidetik menunggu klik kedua
-                clickTimeout = setTimeout(() => {
-                    speakWord(1.0); // Klik 1x: Kecepatan Normal
-                    clickTimeout = null;
-                }, 250);
-            } else {
-                // Jika diklik lagi dalam 250ms -> Double Click terdeteksi!
-                clearTimeout(clickTimeout);
-                clickTimeout = null;
-                speakWord(0.45); // Klik 2x: Kecepatan Sangat Lambat (🐢)
-            }
+            currentAudio = new Audio(googleAudioUrl);
+            currentAudio.play();
         }
 
         // --- 6. DATABASE 280 KATA (A1 & A2) ---
@@ -423,6 +392,14 @@
                 document.getElementById('mainUI').style.display = 'none';
                 document.getElementById('doneMessage').style.display = 'block';
                 playSound('correct');
+                
+                // --- EFEK LEDAKAN CONFETTI MERIAH ---
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#ff0000', '#ffcc00', '#000000', '#ffffff']
+                });
                 return;
             }
 
@@ -474,6 +451,14 @@
             if(quizQueue.length === 0) {
                 document.getElementById('quizContainer').style.display = 'none';
                 document.getElementById('doneMessage').style.display = 'block';
+                
+                // Confetti juga meledak saat lulus ujian mingguan!
+                confetti({
+                    particleCount: 200,
+                    spread: 100,
+                    origin: { y: 0.6 },
+                    colors: ['#ff0000', '#ffcc00', '#000000', '#ffffff']
+                });
                 return;
             }
             const currentQ = quizQueue[0];
