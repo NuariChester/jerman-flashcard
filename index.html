@@ -389,38 +389,26 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.15);
         }
 
-        // --- 6. AUDIO JERMAN MURNI (Anti-Bisu & Anti-Blokir 100%) ---
-        // Memaksa sistem peramban untuk menggunakan profil aksen bahasa Jerman terbaik tanpa bergantung pada server API pihak ketiga yang mudah diblokir.
-        let germanVoice = null;
-        function loadGermanVoice() {
-            if ('speechSynthesis' in window) {
-                const voices = window.speechSynthesis.getVoices();
-                // Mencari suara Jerman natural (misal Anna/Marlene di Apple, atau Google Deutsch di Android)
-                germanVoice = voices.find(v => v.lang.toLowerCase() === 'de-de' || v.lang.toLowerCase() === 'de_de' || v.lang.toLowerCase().includes('de-'));
-            }
-        }
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = loadGermanVoice;
-            loadGermanVoice();
-        }
+        // --- 6. AUDIO VERBFORMEN.DE (100% Persis Sama di Semua HP/Mac & Jernih) ---
+        let currentAudio = null;
 
         function speakWord(event) {
             event.stopPropagation(); // Mencegah kartu membalik saat tombol suara diklik
 
-            const article = document.getElementById('wordArticle').textContent;
-            const word = document.getElementById('wordText').textContent;
-            const fullText = `${article} ${word}`;
-
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // Hentikan suara sebelumnya jika ada
-                const msg = new SpeechSynthesisUtterance(fullText);
-                msg.lang = 'de-DE'; // Kunci ketat ke pelafalan bahasa Jerman
-                msg.rate = 0.95; // Kecepatan pelafalan natural
-                if (germanVoice) msg.voice = germanVoice;
-                window.speechSynthesis.speak(msg);
-            } else {
-                alert("Mohon maaf, browser di perangkat Anda belum mendukung fitur pemutar suara.");
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
             }
+
+            const article = document.getElementById('wordArticle').textContent.trim();
+            const word = document.getElementById('wordText').textContent.trim();
+            
+            // Menyusun format tautan persis seperti di verbformen.de (contoh: der_Kind.mp3)
+            const audioFileName = `${article}_${word}.mp3`;
+            const verbformenAudioUrl = `https://www.verbformen.de/deklination/substantive/grundform/${audioFileName}`;
+            
+            currentAudio = new Audio(verbformenAudioUrl);
+            currentAudio.play();
         }
 
         // --- 7. DATABASE 280 KATA (A1 & A2) ---
