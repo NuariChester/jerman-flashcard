@@ -389,26 +389,38 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.15);
         }
 
-        // --- 6. AUDIO AMAZON POLLY AI (Tanpa Fallback Offline) ---
-        let currentAudio = null;
+        // --- 6. AUDIO JERMAN MURNI (Anti-Bisu & Anti-Blokir 100%) ---
+        // Memaksa sistem peramban untuk menggunakan profil aksen bahasa Jerman terbaik tanpa bergantung pada server API pihak ketiga yang mudah diblokir.
+        let germanVoice = null;
+        function loadGermanVoice() {
+            if ('speechSynthesis' in window) {
+                const voices = window.speechSynthesis.getVoices();
+                // Mencari suara Jerman natural (misal Anna/Marlene di Apple, atau Google Deutsch di Android)
+                germanVoice = voices.find(v => v.lang.toLowerCase() === 'de-de' || v.lang.toLowerCase() === 'de_de' || v.lang.toLowerCase().includes('de-'));
+            }
+        }
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = loadGermanVoice;
+            loadGermanVoice();
+        }
 
         function speakWord(event) {
             event.stopPropagation(); // Mencegah kartu membalik saat tombol suara diklik
 
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio = null;
-            }
-
             const article = document.getElementById('wordArticle').textContent;
             const word = document.getElementById('wordText').textContent;
             const fullText = `${article} ${word}`;
-            
-            // Menggunakan suara AI Amazon Polly (Voice: Marlene - Deutsch) anti-blokir
-            const audioUrl = `https://api.streamelements.com/kappa/v2/speech?voice=Marlene&text=${encodeURIComponent(fullText)}`;
-            
-            currentAudio = new Audio(audioUrl);
-            currentAudio.play();
+
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Hentikan suara sebelumnya jika ada
+                const msg = new SpeechSynthesisUtterance(fullText);
+                msg.lang = 'de-DE'; // Kunci ketat ke pelafalan bahasa Jerman
+                msg.rate = 0.95; // Kecepatan pelafalan natural
+                if (germanVoice) msg.voice = germanVoice;
+                window.speechSynthesis.speak(msg);
+            } else {
+                alert("Mohon maaf, browser di perangkat Anda belum mendukung fitur pemutar suara.");
+            }
         }
 
         // --- 7. DATABASE 280 KATA (A1 & A2) ---
@@ -425,7 +437,7 @@
                 { article: "das", word: "Meer", plural: "die Meere", meaning: "Laut" }, { article: "der", word: "Himmel", plural: "die Himmel", meaning: "Langit" }, { article: "der", word: "Kopf", plural: "die Köpfe", meaning: "Kepala" }, { article: "das", word: "Auge", plural: "die Augen", meaning: "Mata" }, { article: "das", word: "Ohr", plural: "die Ohren", meaning: "Telinga" }, { article: "die", word: "Nase", plural: "die Nasen", meaning: "Hidung" }, { article: "der", word: "Mund", plural: "die Münder", meaning: "Mulut" }, { article: "der", word: "Arm", plural: "die Arme", meaning: "Lengan" }, { article: "die", word: "Hand", plural: "die Hände", meaning: "Tangan" }, { article: "das", word: "Bein", plural: "die Beine", meaning: "Kaki (Tungkai)" },
                 { article: "der", word: "Fuß", plural: "die Füße", meaning: "Telapak Kaki" }, { article: "der", word: "Hund", plural: "die Hunde", meaning: "Anjing" }, { article: "die", word: "Katze", plural: "die Katzen", meaning: "Kucing" }, { article: "der", word: "Vogel", plural: "die Vögel", meaning: "Burung" }, { article: "die", word: "Maus", plural: "die Mäuse", meaning: "Tikus" }, { article: "das", word: "Pferd", plural: "die Pferde", meaning: "Kuda" }, { article: "die", word: "Kuh", plural: "die Kühe", meaning: "Sapi" }, { article: "das", word: "Schwein", plural: "die Schweine", meaning: "Babi" }, { article: "die", word: "Stadt", plural: "die Städte", meaning: "Kota" }, { article: "das", word: "Dorf", plural: "die Dörfer", meaning: "Desa" },
                 { article: "die", word: "Straße", plural: "die Straßen", meaning: "Jalan" }, { article: "der", word: "Platz", plural: "die Plätze", meaning: "Tempat / Alun-alun" }, { article: "der", word: "Park", plural: "die Parks", meaning: "Taman" }, { article: "die", word: "Schule", plural: "die Schulen", meaning: "Sekolah" }, { article: "die", word: "Universität", plural: "die Universitäten", meaning: "Universitas" }, { article: "das", word: "Restaurant", plural: "die Restaurants", meaning: "Restoran" }, { article: "das", word: "Café", plural: "die Cafés", meaning: "Kafe" }, { article: "der", word: "Supermarkt", plural: "die Supermärkte", meaning: "Supermarket" }, { article: "der", word: "Markt", plural: "die Märkte", meaning: "Pasar" }, { article: "der", word: "Bahnhof", plural: "die Bahnhöfe", meaning: "Stasiun" },
-                { article: "der", word: "Flughafen", plural: "die Flughäfen", meaning: "Bandara" }, { article: "die", word: "Hose", plural: "die Hosen", meaning: "Celana" }, { article: "das", word: "Hemd", plural: "die Hemden", meaning: "Kemeja" }, { article: "das", word: "T-Shirt", plural: "die T-Shirts", meaning: "Kaos" }, { article: "der", word: "Pullover", plural: "die Pullover", meaning: "Baju Hangat" }, { article: "die", word: "Jacke", plural: "die Jacken", meaning: "Jaket" }, { article: "der", word: "Mantel", plural: "die Mäntel", meaning: "Mäntel" }, { article: "der", word: "Schuh", plural: "die Schuhe", meaning: "Sepatu" }, { article: "die", word: "Socke", plural: "die Socken", meaning: "Kaos Kaki" }, { article: "der", word: "Hut", plural: "die Hüte", meaning: "Topi" },
+                { article: "der", word: "Flughafen", plural: "die Flughäfen", meaning: "Bandara" }, { article: "die", word: "Hose", plural: "die Hosen", meaning: "Celana" }, { article: "das", word: "Hemd", plural: "die Hemden", meaning: "Kemeja" }, { article: "das", word: "T-Shirt", plural: "die T-Shirts", meaning: "Kaos" }, { article: "der", word: "Pullover", plural: "die Pullover", meaning: "Baju Hangat" }, { article: "die", word: "Jacke", plural: "die Jacken", meaning: "Jaket" }, { article: "der", word: "Mantel", plural: "die Mäntel", meaning: "Mantel" }, { article: "der", word: "Schuh", plural: "die Schuhe", meaning: "Sepatu" }, { article: "die", word: "Socke", plural: "die Socken", meaning: "Kaos Kaki" }, { article: "der", word: "Hut", plural: "die Hüte", meaning: "Topi" },
                 { article: "die", word: "Brille", plural: "die Brillen", meaning: "Kacamata" }, { article: "der", word: "Name", plural: "die Namen", meaning: "Nama" }, { article: "die", word: "Zahl", plural: "die Zahlen", meaning: "Angka" }, { article: "die", word: "Farbe", plural: "die Farben", meaning: "Warna" }, { article: "die", word: "Frage", plural: "die Fragen", meaning: "Pertanyaan" }, { article: "die", word: "Antwort", plural: "die Antworten", meaning: "Jawaban" }, { article: "der", word: "Fehler", plural: "die Fehler", meaning: "Kesalahan" }, { article: "das", word: "Problem", plural: "die Probleme", meaning: "Masalah" }, { article: "das", word: "Beispiel", plural: "die Beispiele", meaning: "Contoh" }, { article: "das", word: "Wort", plural: "die Wörter", meaning: "Kata" },
                 { article: "der", word: "Satz", plural: "die Sätze", meaning: "Kalimat" }, { article: "die", word: "Sprache", plural: "die Sprachen", meaning: "Bahasa" }, { article: "der", word: "Text", plural: "die Texte", meaning: "Teks" }, { article: "der", word: "Brief", plural: "die Briefe", meaning: "Surat" }, { article: "die", word: "E-Mail", plural: "die E-Mails", meaning: "Email" }, { article: "das", word: "Spiel", plural: "die Spiele", meaning: "Permainan" }, { article: "der", word: "Freund", plural: "die Freunde", meaning: "Teman (Pria)" }, { article: "die", word: "Freundin", plural: "die Freundinnen", meaning: "Teman (Wanita)" }, { article: "der", word: "Beruf", plural: "die Berufe", meaning: "Pekerjaan" }, { article: "die", word: "Arbeit", plural: "die Arbeiten", meaning: "Kerja" }
             ],
