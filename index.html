@@ -383,6 +383,29 @@
             background: transparent;
             overflow: hidden;
         }
+
+         /* --- DESAIN TOMBOL INSTALL PWA --- */
+        .btn-install-pwa {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: #ffffff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+            transition: 0.3s;
+            margin-bottom: 15px;
+            display: none; /* Sembunyi secara default sampai browser siap */
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-install-pwa:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(46, 204, 113, 0.4);
+            background: linear-gradient(135deg, #27ae60 0%, #219a52 100%);
+        }
     </style>
 </head>
 <body>
@@ -464,6 +487,11 @@
 
     <!-- Catatan Perbaikan -->
     <div class="maintenance-note">⚠️ Catatan: Tombol audio sedang dalam perbaikan fungsi.</div>
+
+     <!-- Tombol Install PWA Langsung -->
+    <button id="btnInstallPWA" class="btn-install-pwa">
+        <span>📲</span> <span id="txtInstall">Install Aplikasi di Handphone</span>
+    </button>
     
     <!-- MENU PANDUAN & TRAKTIR KOPI (Sesuai Garis Oranye) -->
     <div class="footer-links">
@@ -571,7 +599,8 @@
                 btnGuideClose: "Tutup Panduan",
                 modalCoffeeTitle: "☕ Traktir Kopi Chester",
                 txtCoffeeDesc: "Dukunganmu sangat berarti agar aplikasi Flashcard Jerman ini terus berkembang dan bebas iklan!",
-                btnCoffeeClose: "Tutup Jendela"
+                btnCoffeeClose: "Tutup Jendela",
+                installApp: "Install Aplikasi"
             },
             de: {
                 title: "🇩🇪 Deutsch Karteikarten",
@@ -599,7 +628,8 @@
                 btnGuideClose: "Schließen",
                 modalCoffeeTitle: "☕ Kaffee für Chester",
                 txtCoffeeDesc: "Deine Unterstützung hilft dabei, diese Karteikarten-App werbefrei und aktuell zu halten!",
-                btnCoffeeClose: "Schließen"
+                btnCoffeeClose: "Schließen",
+               installApp: "App Installieren"
             }
         };
 
@@ -617,6 +647,7 @@
             document.getElementById('btnLangID').classList.toggle('active', lang === 'id');
             document.getElementById('btnLangDE').classList.toggle('active', lang === 'de');
 
+            document.getElementById('txtInstall').textContent = i18n[lang].installApp;
             document.getElementById('appTitle').textContent = i18n[lang].title;
             document.getElementById('txtPrev').textContent = i18n[lang].prev;
             document.getElementById('txtRandom').textContent = i18n[lang].random;
@@ -1011,6 +1042,57 @@
         setLanguage(currentLang);
         initDailyData("A1");
 
+         // --- FITUR TOMBOL INSTALL PWA (DIRECT INSTALL) ---
+        let deferredPrompt;
+        const installBtn = document.getElementById('btnInstallPWA');
+
+        // 1. Tangkap sinyal instalasi dari browser dan munculkan tombol kita
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Mencegah banner mini default browser muncul di bawah layar
+            e.preventDefault();
+            // Simpan sinyal event-nya untuk dipanggil saat tombol diklik
+            deferredPrompt = e;
+            // Munculkan tombol Install kita ke layar!
+            if (installBtn) {
+                installBtn.style.display = 'flex';
+            }
+        });
+
+        // 2. Apa yang terjadi saat tombol "📲 Install Aplikasi" diklik
+        if (installBtn) {
+            installBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    // Munculkan pop-up instalasi resmi dari browser (1-Click)
+                    deferredPrompt.prompt();
+                    // Tunggu respon pengguna (apakah klik Install atau Cancel)
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        console.log('Pengguna menyetujui instalasi');
+                        // Sembunyikan tombol karena sudah berhasil di-install
+                        installBtn.style.display = 'none';
+                    }
+                    // Reset variabel karena prompt hanya bisa dipakai sekali
+                    deferredPrompt = null;
+                } else {
+                    // Fallback pintar jika pengguna memakai iOS / iPhone (Safari)
+                    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                    if (isIOS) {
+                        alert('📲 Cara install di iPhone/iOS:\n\n1. Klik ikon Share (panah ke atas) di menu bawah Safari.\n2. Scroll ke bawah dan pilih "Add to Home Screen" (Tambahkan ke Layar Utama).');
+                    } else {
+                        alert('Aplikasi ini sudah terinstall atau browser kamu sedang memprosesnya!');
+                    }
+                }
+            });
+        }
+
+        // 3. Otomatis sembunyikan tombol jika aplikasi sukses terpasang
+        window.addEventListener('appinstalled', () => {
+            if (installBtn) {
+                installBtn.style.display = 'none';
+            }
+            deferredPrompt = null;
+            console.log('PWA berhasil diinstall ke Layar Utama!');
+        });
     </script>
 </body>
 </html>
