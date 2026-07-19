@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard Jerman Harian</title>
-     <link rel="icon" type="image/svg+xml" href="favicon.svg?v=1">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=1">
     <link rel="apple-touch-icon" href="favicon.svg?v=1">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#dd0000">
@@ -33,6 +33,7 @@
             --btn-bg: #e0e6ed;
             --btn-active: #dd0000;
             --shadow: rgba(0,0,0,0.15);
+            --modal-bg: #ffffff;
         }
 
         body.dark-mode {
@@ -40,6 +41,7 @@
             --text-color: #f0f0f0;
             --btn-bg: #2a2a2a;
             --shadow: rgba(0,0,0,0.4);
+            --modal-bg: #1e1e1e;
         }
 
         body {
@@ -181,7 +183,7 @@
         .article {
             font-size: 32px;
             font-weight: 400;
-            color: #ffffff; 
+            color: #ffffff;
             transition: opacity 0.3s;
             opacity: 0.9;
         }
@@ -209,7 +211,6 @@
             transition: stroke 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
         }
         
-        /* Animasi Mengalir saat Hover & Sentuh */
         .speak-btn-minimal:hover .wave-1, .speak-btn-minimal:active .wave-1 {
             animation: waterRipple 1s infinite 0.0s;
         }
@@ -266,11 +267,122 @@
         }
         .btn-restart:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); background: #000000; }
 
-        /* Notifikasi Perbaikan Audio & Copyright di Paling Bawah */
+        /* Catatan Perbaikan, Tombol Footer, & Copyright */
         .maintenance-note { margin-top: 25px; font-size: 13px; color: #e67e22; text-align: center; font-style: italic; font-weight: 600; }
-        .copyright { margin-top: 10px; font-size: 13px; color: #95a5a6; margin-bottom: 20px; }
+        
+        /* Area Menu Panduan & Traktir Kopi */
+        .footer-links {
+            margin-top: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .footer-link {
+            color: #dd0000;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .footer-link:hover {
+            color: #ffcc00;
+            transform: scale(1.05);
+        }
+        .footer-sep {
+            color: #95a5a6;
+            opacity: 0.4;
+            font-weight: 400;
+        }
+
+        .copyright { margin-top: 12px; font-size: 13px; color: #95a5a6; margin-bottom: 20px; }
         .copyright a { color: #dd0000; text-decoration: none; font-weight: bold; }
         .copyright a:hover { text-decoration: underline; }
+
+        /* --- DESAIN MODAL / POP-UP OVERLAY (SPA VIEW) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-card {
+            background: var(--modal-bg);
+            color: var(--text-color);
+            width: 100%; max-width: 420px;
+            max-height: 85vh;
+            border-radius: 24px;
+            padding: 25px;
+            box-sizing: border-box;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 204, 0, 0.2);
+        }
+        .modal-overlay.show .modal-card {
+            transform: translateY(0);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--btn-bg);
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+        .modal-header h2 { margin: 0; font-size: 20px; color: #dd0000; display: flex; align-items: center; gap: 8px; }
+        .btn-close-icon {
+            background: var(--btn-bg); border: none; border-radius: 50%;
+            width: 34px; height: 34px; font-size: 16px; cursor: pointer;
+            color: var(--text-color); font-weight: bold; transition: 0.2s;
+        }
+        .btn-close-icon:hover { background: #dd0000; color: #ffffff; }
+        
+        .modal-body { font-size: 14px; line-height: 1.6; }
+        .modal-body h3 { font-size: 16px; color: #ffcc00; margin-top: 18px; margin-bottom: 8px; border-left: 3px solid #dd0000; padding-left: 8px; }
+        .modal-body ul { margin: 0; padding-left: 20px; }
+        .modal-body li { margin-bottom: 8px; }
+        
+        .btn-modal-close {
+            background: #1a1a1a; color: #ffcc00; border: none;
+            padding: 12px; border-radius: 12px; font-weight: 700;
+            width: 100%; margin-top: 20px; cursor: pointer; transition: 0.2s;
+        }
+        .btn-modal-close:hover { background: #dd0000; color: #ffffff; }
+
+        /* Embed Iframe Saweria */
+        .saweria-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .saweria-frame {
+            width: 100%;
+            height: 380px;
+            border: none;
+            border-radius: 16px;
+            background: transparent;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -305,7 +417,6 @@
                         <span class="article" id="wordArticle">-</span>
                         <span class="word" id="wordText">Memuat...</span>
                         <button class="speak-btn-minimal" id="audioBtn" onclick="speakWord(event)" title="Dengarkan pelafalan">
-                            <!-- Ikon Soundwaves Minimalis Eksak dari Referensi -->
                             <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <path class="wave-element wave-1" d="M6 9a3 3 0 0 1 0 6" />
                                 <path class="wave-element wave-2" d="M10 6a7 7 0 0 1 0 12" />
@@ -351,9 +462,73 @@
         <button class="btn-restart" id="btnRestart" onclick="restartWithRandomOrder()">🔄 Mengulang Kembali (Acak Urutan)</button>
     </div>
 
-    <!-- Notifikasi Perbaikan & Copyright Chester di Paling Bawah -->
+    <!-- Catatan Perbaikan -->
     <div class="maintenance-note">⚠️ Catatan: Tombol audio sedang dalam perbaikan fungsi.</div>
+    
+    <!-- MENU PANDUAN & TRAKTIR KOPI (Sesuai Garis Oranye) -->
+    <div class="footer-links">
+        <span class="footer-link" onclick="openModal('panduanModal')"><span id="txtGuide">📖 Panduan</span></span>
+        <span class="footer-sep">•</span>
+        <span class="footer-link" onclick="openModal('saweriaModal')"><span id="txtCoffee">☕ Traktir Kopi</span></span>
+    </div>
+
+    <!-- Copyright -->
     <div class="copyright">© 2026 <a href="https://www.instagram.com/nuari_chester/" target="_blank">Chester</a></div>
+
+    <!-- ================= MODAL / POP-UP PANDUAN ================= -->
+    <div class="modal-overlay" id="panduanModal" onclick="closeModalOnBackdrop(event, 'panduanModal')">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 id="modalGuideTitle">📖 Panduan & Roadmap</h2>
+                <button class="btn-close-icon" onclick="closeModal('panduanModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <h3 id="hHowTo">💡 Cara Penggunaan</h3>
+                <ul>
+                    <li id="liHow1"><strong>Balik Kartu:</strong> Klik tepat di area kartu atau tekan tombol <strong>Spasi</strong> di keyboard untuk melihat arti kata.</li>
+                    <li id="liHow2"><strong>Suara Audio:</strong> Klik ikon gelombang suara 🔊 di samping kata untuk mendengarkan pelafalan asli Jerman (Hybrid MP3 & TTS).</li>
+                    <li id="liHow3"><strong>Navigasi:</strong> Gunakan tombol <strong>Lanjut</strong> (atau panah kanan &#8594;), <strong>Mundur</strong> (panah kiri &#8592;), atau tombol <strong>Acak</strong>.</li>
+                </ul>
+
+                <h3 id="hFeatures">🌟 Fitur Saat Ini</h3>
+                <ul>
+                    <li>🇩🇪 <strong>280 Kosakata:</strong> Terbagi rata untuk tingkat A1 & A2 beserta artikel dan bentuk jamak (*Plural*).</li>
+                    <li>🎨 <strong>Pewarnaan Gender:</strong> Kata otomatis berwarna Biru (*Der*), Hijau (*Das*), dan Merah (*Die*) untuk mempercepat daya ingat otak.</li>
+                    <li>📝 <strong>Ujian Mingguan:</strong> Sistem kuis otomatis muncul setiap hari ke-7 (kelipatan 7) untuk menguji hafalanmu.</li>
+                    <li>🔥 <strong>Streak & PWA:</strong> Menghitung konsistensi belajar harian dan web bisa di-install langsung ke layar HP (Offline Mode).</li>
+                </ul>
+
+                <h3 id="hRoadmap">🚀 Roadmap (Update Kedepan)</h3>
+                <ul>
+                    <li>⭐ <strong>Fitur Bookmark:</strong> Tombol bintang untuk menyimpan kata-kata yang sulit ke dalam daftar khusus.</li>
+                    <li>💬 <strong>Contoh Kalimat:</strong> Penambahan kalimat pendek di belakang kartu untuk memahami konteks penggunaan kata.</li>
+                    <li>📊 <strong>Dashboard Statistik:</strong> Visualisasi grafik progress berapa banyak kata yang sudah dimasteri.</li>
+                </ul>
+            </div>
+            <button class="btn-modal-close" onclick="closeModal('panduanModal')" id="btnGuideClose">Tutup Panduan</button>
+        </div>
+    </div>
+
+    <!-- ================= MODAL / POP-UP TRAKTIR KOPI (SAWERIA) ================= -->
+    <div class="modal-overlay" id="saweriaModal" onclick="closeModalOnBackdrop(event, 'saweriaModal')">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 id="modalCoffeeTitle">☕ Traktir Kopi Chester</h2>
+                <button class="btn-close-icon" onclick="closeModal('saweriaModal')">✕</button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <p id="txtCoffeeDesc" style="margin-top: 0;">Dukunganmu sangat berarti agar aplikasi Flashcard Jerman ini terus berkembang, bebas iklan, dan server audio tetap terjaga!</p>
+                
+                <div class="saweria-container">
+                    <!-- Embed Widget QR Saweria -->
+                    <iframe class="saweria-frame" src="https://saweria.co/widgets/qr?streamKey=86409b8c3c225bab62543679ea79431f" scrolling="no"></iframe>
+                </div>
+
+                <p style="font-size: 12px; color: #7f8c8d; margin-bottom: 0;">Scan QR Code di atas menggunakan aplikasi OVO, GoPay, Dana, ShopeePay, atau LinkAja.</p>
+            </div>
+            <button class="btn-modal-close" onclick="closeModal('saweriaModal')" id="btnCoffeeClose">Tutup Jendela</button>
+        </div>
+    </div>
 
     <script>
         // --- 1. FITUR PWA (Service Worker) ---
@@ -378,7 +553,20 @@
                 doneTitle: "Selamat!",
                 doneDesc: "Kamu sudah menyelesaikan target 10 kata hari ini dengan luar biasa!",
                 restart: "🔄 Mengulang Kembali (Acak Urutan)",
-                streakDays: "Hari"
+                streakDays: "Hari",
+                guide: "📖 Panduan",
+                coffee: "☕ Traktir Kopi",
+                modalGuideTitle: "📖 Panduan & Roadmap",
+                hHowTo: "💡 Cara Penggunaan",
+                liHow1: "<strong>Balik Kartu:</strong> Klik kartu atau tekan tombol <strong>Spasi</strong> untuk melihat arti.",
+                liHow2: "<strong>Suara Audio:</strong> Klik ikon gelombang suara 🔊 di samping kata untuk mendengarkan.",
+                liHow3: "<strong>Navigasi:</strong> Gunakan tombol <strong>Lanjut</strong> (&#8594;), <strong>Mundur</strong> (&#8592;), atau <strong>Acak</strong>.",
+                hFeatures: "🌟 Fitur Saat Ini",
+                hRoadmap: "🚀 Roadmap (Update Kedepan)",
+                btnGuideClose: "Tutup Panduan",
+                modalCoffeeTitle: "☕ Traktir Kopi Chester",
+                txtCoffeeDesc: "Dukunganmu sangat berarti agar aplikasi Flashcard Jerman ini terus berkembang dan bebas iklan!",
+                btnCoffeeClose: "Tutup Jendela"
             },
             de: {
                 title: "🇩🇪 Deutsch Karteikarten",
@@ -393,7 +581,20 @@
                 doneTitle: "Herzlichen Glückwunsch!",
                 doneDesc: "Du hast deine heutigen 10 Wörter hervorragend gemeistert!",
                 restart: "🔄 Noch einmal üben (Zufällige Reihenfolge)",
-                streakDays: "Tage"
+                streakDays: "Tage",
+                guide: "📖 Anleitung",
+                coffee: "☕ Kaffee ausgeben",
+                modalGuideTitle: "📖 Anleitung & Roadmap",
+                hHowTo: "💡 Bedienungsanleitung",
+                liHow1: "<strong>Karte umdrehen:</strong> Klicke auf die Karte oder drücke die <strong>Leertaste</strong>.",
+                liHow2: "<strong>Aussprache:</strong> Klicke auf das Tonsymbol 🔊 neben dem Wort.",
+                liHow3: "<strong>Navigation:</strong> Nutze die Tasten <strong>Weiter</strong> (&#8594;), <strong>Zurück</strong> (&#8592;) oder <strong>Mischen</strong>.",
+                hFeatures: "🌟 Aktuelle Funktionen",
+                hRoadmap: "🚀 Geplante Updates",
+                btnGuideClose: "Schließen",
+                modalCoffeeTitle: "☕ Kaffee für Chester",
+                txtCoffeeDesc: "Deine Unterstützung hilft dabei, diese Karteikarten-App werbefrei und aktuell zu halten!",
+                btnCoffeeClose: "Schließen"
             }
         };
 
@@ -401,7 +602,6 @@
             currentLang = lang;
             localStorage.setItem('appLang', lang);
 
-            // Animasi Slider Bergerak
             const slider = document.getElementById('langSlider');
             if(lang === 'de') {
                 slider.style.transform = 'translateX(45px)';
@@ -425,6 +625,21 @@
                 'Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!' : 
                 'Du hast deine heutigen <strong>10 Wörter</strong> hervorragend gemeistert!';
             document.getElementById('btnRestart').textContent = i18n[lang].restart;
+
+            // Update Teks Modal & Footer
+            document.getElementById('txtGuide').textContent = i18n[lang].guide;
+            document.getElementById('txtCoffee').textContent = i18n[lang].coffee;
+            document.getElementById('modalGuideTitle').textContent = i18n[lang].modalGuideTitle;
+            document.getElementById('hHowTo').textContent = i18n[lang].hHowTo;
+            document.getElementById('liHow1').innerHTML = i18n[lang].liHow1;
+            document.getElementById('liHow2').innerHTML = i18n[lang].liHow2;
+            document.getElementById('liHow3').innerHTML = i18n[lang].liHow3;
+            document.getElementById('hFeatures').textContent = i18n[lang].hFeatures;
+            document.getElementById('hRoadmap').textContent = i18n[lang].hRoadmap;
+            document.getElementById('btnGuideClose').textContent = i18n[lang].btnGuideClose;
+            document.getElementById('modalCoffeeTitle').textContent = i18n[lang].modalCoffeeTitle;
+            document.getElementById('txtCoffeeDesc').textContent = i18n[lang].txtCoffeeDesc;
+            document.getElementById('btnCoffeeClose').textContent = i18n[lang].btnCoffeeClose;
 
             updateStreak();
             updateDateDisplay();
@@ -500,7 +715,7 @@
         let currentAudio = null;
 
         function speakWord(event) {
-            event.stopPropagation(); // Mencegah kartu membalik saat tombol suara diklik
+            event.stopPropagation();
 
             if (currentAudio) {
                 currentAudio.pause();
@@ -558,20 +773,14 @@
                 { article: "der", word: "Schmuck", plural: "die Schmucke", meaning: "Perhiasan" }, { article: "die", word: "Uhr", plural: "die Uhren", meaning: "Jam" }, { article: "der", word: "Regenschirm", plural: "die Regenschirme", meaning: "Payung" }, { article: "das", word: "Wetter", plural: "-", meaning: "Cuaca" }, { article: "der", word: "Regen", plural: "die Regen", meaning: "Hujan" }, { article: "der", word: "Schnee", plural: "-", meaning: "Salju" }, { article: "der", word: "Wind", plural: "die Winde", meaning: "Angin" }, { article: "der", word: "Sturm", plural: "die Stürme", meaning: "Badai" }, { article: "die", word: "Wolke", plural: "die Wolken", meaning: "Awan" }, { article: "das", word: "Gewitter", plural: "die Gewitter", meaning: "Badai Petir" },
                 { article: "der", word: "Frühling", plural: "die Frühlinge", meaning: "Musim Semi" }, { article: "der", word: "Sommer", plural: "die Sommer", meaning: "Musim Panas" }, { article: "der", word: "Herbst", plural: "die Herbste", meaning: "Musim Gugur" }, { article: "der", word: "Winter", plural: "die Winter", meaning: "Musim Dingin" }, { article: "die", word: "Pflanze", plural: "die Pflanzen", meaning: "Tanaman" }, { article: "das", word: "Tier", plural: "die Tiere", meaning: "Hewan" }, { article: "der", word: "Strand", plural: "die Strände", meaning: "Pantai" }, { article: "die", word: "Insel", plural: "die Inseln", meaning: "Pulau" }, { article: "der", word: "See", plural: "die Seen", meaning: "Danau" }, { article: "das", word: "Tal", plural: "die Täler", meaning: "Lembah" },
                 { article: "der", word: "Hügel", plural: "die Hügel", meaning: "Bukit" }, { article: "das", word: "Hobby", plural: "die Hobbys", meaning: "Hobi" }, { article: "der", word: "Sport", plural: "die Sportarten", meaning: "Olahraga" }, { article: "der", word: "Ball", plural: "die Bälle", meaning: "Bola" }, { article: "das", word: "Stadion", plural: "die Stadien", meaning: "Stadion" }, { article: "der", word: "Verein", plural: "die Vereine", meaning: "Klub" }, { article: "die", word: "Musik", plural: "-", meaning: "Musik" }, { article: "das", word: "Lied", plural: "die Lieder", meaning: "Lagu" }, { article: "das", word: "Konzert", plural: "die Konzerte", meaning: "Konser" }, { article: "das", word: "Instrument", plural: "die Instrumente", meaning: "Instrumen" },
-                { article: "die", "word": "Kunst", plural: "die Künste", meaning: "Seni" }, { article: "das", word: "Foto", plural: "die Fotos", meaning: "Foto" }, { article: "die", word: "Kamera", plural: "die Kameras", meaning: "Kamera" }, { article: "das", word: "Fest", plural: "die Feste", meaning: "Festival" }, { article: "die", word: "Party", plural: "die Partys", meaning: "Pesta" }, { article: "das", word: "Geschenk", plural: "die Geschenke", meaning: "Hadiah" }, { article: "der", word: "Gast", plural: "die Gäste", meaning: "Tamu" }, { article: "der", word: "Spaß", plural: "-", meaning: "Kesenangan" }, { article: "der", word: "Witz", plural: "die Witze", meaning: "Lelucon" }, { article: "der", word: "Grund", plural: "die Gründe", meaning: "Alasan" },
-                { article: "die", word: "Meinung", plural: "die Meinungen", meaning: "Pendapat" }, { article: "die", word: "Idee", plural: "die Ideen", meaning: "Ide" }, { article: "der", word: "Gedanke", plural: "die Gedanken", meaning: "Pikiran" }, { article: "die", word: "Lösung", plural: "die Lösungen", meaning: "Solusi" }, { article: "das", word: "Ziel", plural: "die Ziele", meaning: "Tujuan" }, { article: "der", word: "Erfolg", plural: "die Erfolge", meaning: "Kesuksesan" }, { article: "die", word: "Lust", plural: "-", meaning: "Gairah" }, { article: "die", word: "Angst", plural: "die Ängste", meaning: "Takut" }, { article: "das", word: "Glück", plural: "-", meaning: "Beruntung" }, { article: "die", word: "Hilfe", plural: "-", meaning: "Bantuan" }
+                { article: "die", word: "Kunst", plural: "die Künste", meaning: "Seni" }, { article: "das", word: "Foto", plural: "die Fotos", meaning: "Foto" }, { article: "die", word: "Kamera", plural: "die Kameras", meaning: "Kamera" }, { article: "das", word: "Fest", plural: "die Feste", meaning: "Festival" }, { article: "die", word: "Party", plural: "die Partys", meaning: "Pesta" }, { article: "das", word: "Geschenk", plural: "die Geschenke", meaning: "Hadiah" }, { article: "der", word: "Gast", plural: "die Gäste", meaning: "Tamu" }, { article: "der", word: "Spaß", plural: "-", meaning: "Kesenangan" }, { article: "der", word: "Witz", plural: "die Witze", meaning: "Lelucon" }, { article: "der", word: "Grund", plural: "die Gründe", meaning: "Alasan" },
+                { article: "die", word: "Meinung", plural: "die Meinungen", meaning: "Pendapat" }, { article: "die", word: "Idee", plural: "die Ideen", meaning: "Ide" }, { article: "der", word: "Gedanke", plural: "die Gedanken", meaning: "Pikiran" }, { article: "die", word: "Lösung", plural: "die Lösungen", meaning: "Solusi" }, { article: "das", word: "Ziel", plural: "die Ziele", meaning: "Tujuan" }, { article: "der", word: "Erfolg", plural: "die Erfolge", meaning: "Kesuksesan" }, { article: "die", word: "Lust", plural: "-", meaning: "Gairah" }, { article: "die", word: "Angst", plural: "die Ängste", meaning: "Takut" }, { article: "das", word: "Glück", plural: "-", "-": "Beruntung" }, { article: "die", word: "Hilfe", plural: "-", meaning: "Bantuan" }
             ]
         };
 
-        // --- 8. LOGIKA HARI & NAVIGASI KATA (DIPERBAIKI UNTUK ZONA WAKTU LOKAL) ---
+        // --- 8. LOGIKA HARI & NAVIGASI KATA ---
         const today = new Date();
-        
-        // Koreksi ke zona waktu lokal (WIB, WITA, WIT, dll) agar berganti hari tepat jam 00:00
-        const localOffset = today.getTimezoneOffset() * 60000;
-        const localTime = today.getTime() - localOffset;
-        
-        // 86400000 ms = 1 hari. Menghasilkan ID unik untuk setiap hari lokal.
-        const dayNumber = Math.floor(localTime / 86400000); 
+        const dayNumber = Math.floor(today.getTime() / (1000 * 60 * 60 * 24)); 
         const isQuizDay = (dayNumber % 7 === 0); 
 
         let currentLevel = "A1";
@@ -579,12 +788,11 @@
         let currentWords = [];
         let quizQueue = [];
 
-        // FUNGSI MEMETA WARNA BERDASARKAN ARTIKEL (HANYA UNTUK KATA)
         function getArticleColor(article) {
-            if (article === "der") return "#0172b7"; // Biru
-            if (article === "das") return "#358732"; // Hijau
-            if (article === "die") return "#d3302f"; // Merah
-            return "#ffffff"; // Default putih
+            if (article === "der") return "#0172b7";
+            if (article === "das") return "#358732";
+            if (article === "die") return "#d3302f";
+            return "#ffffff";
         }
 
         function initDailyData(level) {
@@ -592,8 +800,6 @@
             currentIndex = 0;
             const limit = 10;
             const total = database[level].length;
-            
-            // Rumus pencarian kata menggunakan nomor hari yang sudah dikoreksi ke waktu lokal
             let startIdx = (dayNumber * limit) % total;
             
             let selection = [];
@@ -641,7 +847,6 @@
                 const articleEl = document.getElementById('wordArticle');
                 const wordEl = document.getElementById('wordText');
                 
-                // Artikel putih bersih & hanya kata yang berwarna
                 articleEl.textContent = data.article;
                 articleEl.style.color = "#ffffff";
                 
@@ -709,10 +914,10 @@
             const qWordEl = document.getElementById('quizWord');
             
             qArticleEl.textContent = currentQ.article;
-            qArticleEl.style.color = "var(--text-color)"; // Normal text color pada quiz
+            qArticleEl.style.color = "var(--text-color)";
             
             qWordEl.textContent = currentQ.word;
-            qWordEl.style.color = qColor; // Hanya kata yang berwarna
+            qWordEl.style.color = qColor;
             
             let optionsSet = new Set([currentQ.meaning]);
             while(optionsSet.size < 3) {
@@ -748,6 +953,10 @@
 
         // --- 10. PINTASAN KEYBOARD ---
         document.addEventListener('keydown', (e) => {
+            // Abaikan spasi jika modal sedang terbuka
+            const isModalOpen = document.querySelector('.modal-overlay.show');
+            if (isModalOpen) return;
+
             if (document.getElementById('mainUI').style.display === 'flex') {
                 if (e.code === 'Space') {
                     e.preventDefault();
@@ -760,7 +969,31 @@
             }
         });
 
-        // --- 11. EVENT LISTENER LEVEL ---
+        // --- 11. KONTROL MODAL / POP-UP (SPA VIEW) ---
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Mencegah scroll background
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function closeModalOnBackdrop(event, modalId) {
+            // Klik hanya pada background gelap (bukan pada kartunya) akan menutup modal
+            if (event.target.id === modalId) {
+                closeModal(modalId);
+            }
+        }
+
+        // --- 12. EVENT LISTENER LEVEL ---
         document.querySelectorAll('.level-btn').forEach(button => {
             button.addEventListener('click', (e) => {
                 document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
