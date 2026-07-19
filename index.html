@@ -509,7 +509,7 @@
         </div>
     </div>
 
-    <!-- ================= MODAL / POP-UP TRAKTIR KOPI (SAWERIA) ================= -->
+   <!-- ================= MODAL / POP-UP TRAKTIR KOPI (SAWERIA) ================= -->
     <div class="modal-overlay" id="saweriaModal" onclick="closeModalOnBackdrop(event, 'saweriaModal')">
         <div class="modal-card">
             <div class="modal-header">
@@ -520,11 +520,16 @@
                 <p id="txtCoffeeDesc" style="margin-top: 0;">Dukunganmu sangat berarti agar aplikasi Flashcard Jerman ini terus berkembang, bebas iklan, dan server audio tetap terjaga!</p>
                 
                 <div class="saweria-container">
-                    <!-- Embed Widget QR Saweria -->
-                    <iframe class="saweria-frame" src="https://saweria.co/widgets/qr?streamKey=86409b8c3c225bab62543679ea79431f" scrolling="no"></iframe>
+                    <!-- Menampilkan Gambar QR Code Langsung (Super Cepat & Anti-Blank) -->
+                    <img src="saweria.png" alt="QR Code Saweria" style="width: 100%; max-width: 300px; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); margin: 10px 0;">
                 </div>
 
-                <p style="font-size: 12px; color: #7f8c8d; margin-bottom: 0;">Scan QR Code di atas menggunakan aplikasi OVO, GoPay, Dana, ShopeePay, atau LinkAja.</p>
+                <!-- Tombol Alternatif untuk Pengguna HP yang Tidak Bisa Scan Layar Sendiri -->
+                <a href="https://saweria.co/widgets/qr?streamKey=86409b8c3c225bab62543679ea79431f" target="_blank" style="display: inline-block; background: #ffcc00; color: #1a1a1a; text-decoration: none; font-weight: 700; padding: 10px 20px; border-radius: 20px; font-size: 13px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.2s;">
+                    👉 Buka Langsung di Saweria
+                </a>
+
+                <p style="font-size: 11px; color: #7f8c8d; margin-top: 15px; margin-bottom: 0;">Scan QR Code di atas menggunakan aplikasi OVO, GoPay, Dana, ShopeePay, atau LinkAja.</p>
             </div>
             <button class="btn-modal-close" onclick="closeModal('saweriaModal')" id="btnCoffeeClose">Tutup Jendela</button>
         </div>
