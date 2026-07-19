@@ -384,28 +384,7 @@
             overflow: hidden;
         }
 
-         /* --- DESAIN TOMBOL INSTALL PWA --- */
-        .btn-install-pwa {
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-            color: #ffffff;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
-            transition: 0.3s;
-            margin-bottom: 15px;
-            display: flex; /* Sembunyi secara default sampai browser siap */
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-install-pwa:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 14px rgba(46, 204, 113, 0.4);
-            background: linear-gradient(135deg, #27ae60 0%, #219a52 100%);
-        }
+         
     </style>
 </head>
 <body>
@@ -488,10 +467,6 @@
     <!-- Catatan Perbaikan -->
     <div class="maintenance-note">⚠️ Catatan: Tombol audio sedang dalam perbaikan fungsi.</div>
 
-     <!-- Tombol Install PWA Langsung -->
-    <button id="btnInstallPWA" class="btn-install-pwa">
-        <span>📲</span> <span id="txtInstall">Install Aplikasi di Handphone</span>
-    </button>
     
     <!-- MENU PANDUAN & TRAKTIR KOPI (Sesuai Garis Oranye) -->
     <div class="footer-links">
@@ -563,6 +538,25 @@
         </div>
     </div>
 
+     <!-- ================= MODAL / POP-UP INSTALL PWA (OTOMATIS) ================= -->
+    <div class="modal-overlay" id="installModal" onclick="handleSnoozeInstall(event, 'installModal')">
+        <div class="modal-card" style="text-align: center; border: 2px solid #ffcc00;">
+            <div style="font-size: 50px; margin-bottom: 10px;">📲</div>
+            <h2 style="color: #dd0000; margin: 0 0 10px 0; font-size: 22px;" id="installTitle">Install Aplikasi DeFlash!</h2>
+            <p style="font-size: 14px; line-height: 1.5; margin-bottom: 20px;" id="installDesc">
+                Biar akses belajar lebih cepat tanpa repot buka browser, install web app ini langsung ke layar utama HP kamu sekarang!
+            </p>
+            
+            <button class="nav-btn btn-random" style="width: 100%; padding: 14px; margin-bottom: 10px; font-size: 16px;" onclick="triggerInstallPWA()">
+                <span id="btnInstallText">🚀 Install Sekarang</span>
+            </button>
+            
+            <button style="background: transparent; border: none; color: #95a5a6; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 8px;" onclick="snoozeInstallPWA()">
+                <span id="btnSkipText">Lewati (Ingatkan 2 Hari Lagi)</span>
+            </button>
+        </div>
+    </div>
+
     <script>
         // --- 1. FITUR PWA (Service Worker) ---
         if ('serviceWorker' in navigator) {
@@ -600,7 +594,11 @@
                 modalCoffeeTitle: "☕ Traktir Kopi Chester",
                 txtCoffeeDesc: "Dukunganmu sangat berarti agar aplikasi Flashcard Jerman ini terus berkembang dan bebas iklan!",
                 btnCoffeeClose: "Tutup Jendela",
-                installApp: "Install Aplikasi"
+                installTitle: "Install Aplikasi DeFlash!",
+                installDesc: "Biar akses belajar lebih cepat tanpa repot buka browser, install web app ini langsung ke layar utama HP kamu sekarang!",
+                btnInstallText: "🚀 Install Sekarang",
+                btnSkipText: "Lewati"
+                 
             },
             de: {
                 title: "🇩🇪 Deutsch Karteikarten",
@@ -629,7 +627,10 @@
                 modalCoffeeTitle: "☕ Kaffee für Chester",
                 txtCoffeeDesc: "Deine Unterstützung hilft dabei, diese Karteikarten-App werbefrei und aktuell zu halten!",
                 btnCoffeeClose: "Schließen",
-               installApp: "App Installieren"
+                installTitle: "DeFlash App Installieren!",
+                installDesc: "Für schnelleren Zugriff ohne Browser: Installiere diese Web-App jetzt direkt auf deinem Startbildschirm!",
+                btnInstallText: "🚀 Jetzt Installieren",
+                btnSkipText: "Überspringen"
             }
         };
 
@@ -676,6 +677,10 @@
             document.getElementById('modalCoffeeTitle').textContent = i18n[lang].modalCoffeeTitle;
             document.getElementById('txtCoffeeDesc').textContent = i18n[lang].txtCoffeeDesc;
             document.getElementById('btnCoffeeClose').textContent = i18n[lang].btnCoffeeClose;
+            document.getElementById('installTitle').textContent = i18n[lang].installTitle;
+            document.getElementById('installDesc').textContent = i18n[lang].installDesc;
+            document.getElementById('btnInstallText').textContent = i18n[lang].btnInstallText;
+            document.getElementById('btnSkipText').textContent = i18n[lang].btnSkipText;
 
             updateStreak();
             updateDateDisplay();
@@ -872,6 +877,7 @@
                     origin: { y: 0.6 },
                     colors: ['#ff0000', '#ffcc00', '#000000', '#ffffff']
                 });
+                 checkAndShowPwaPrompt();
                 return;
             }
 
@@ -1042,56 +1048,87 @@
         setLanguage(currentLang);
         initDailyData("A1");
 
-         // --- FITUR TOMBOL INSTALL PWA (DIRECT INSTALL) ---
+         // --- FITUR PWA SMART PROMPT (MUNCUL SETELAH SELESAI 10 KATA) ---
         let deferredPrompt;
-        const installBtn = document.getElementById('btnInstallPWA');
 
-        // 1. Tangkap sinyal instalasi dari browser dan munculkan tombol kita
+        // 1. Tangkap sinyal instalasi dari browser
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Mencegah banner mini default browser muncul di bawah layar
             e.preventDefault();
-            // Simpan sinyal event-nya untuk dipanggil saat tombol diklik
             deferredPrompt = e;
-            // Munculkan tombol Install kita ke layar!
-            if (installBtn) {
-                installBtn.style.display = 'flex';
-            }
         });
 
-        // 2. Apa yang terjadi saat tombol "📲 Install Aplikasi" diklik
-        if (installBtn) {
-            installBtn.addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    // Munculkan pop-up instalasi resmi dari browser (1-Click)
-                    deferredPrompt.prompt();
-                    // Tunggu respon pengguna (apakah klik Install atau Cancel)
-                    const { outcome } = await deferredPrompt.userChoice;
-                    if (outcome === 'accepted') {
-                        console.log('Pengguna menyetujui instalasi');
-                        // Sembunyikan tombol karena sudah berhasil di-install
-                        installBtn.style.display = 'none';
-                    }
-                    // Reset variabel karena prompt hanya bisa dipakai sekali
-                    deferredPrompt = null;
-                } else {
-                    // Fallback pintar jika pengguna memakai iOS / iPhone (Safari)
-                    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                    if (isIOS) {
-                        alert('📲 Cara install di iPhone/iOS:\n\n1. Klik ikon Share (panah ke atas) di menu bawah Safari.\n2. Scroll ke bawah dan pilih "Add to Home Screen" (Tambahkan ke Layar Utama).');
-                    } else {
-                        alert('Aplikasi ini sudah terinstall atau browser kamu sedang memprosesnya!');
-                    }
-                }
-            });
+        // 2. Cek apakah aplikasi sudah terinstall di perangkat ini
+        function isPwaInstalled() {
+            return window.matchMedia('(display-mode: standalone)').matches || 
+                   window.navigator.standalone === true || 
+                   localStorage.getItem('pwaInstalledPermanently') === 'true';
         }
 
-        // 3. Otomatis sembunyikan tombol jika aplikasi sukses terpasang
-        window.addEventListener('appinstalled', () => {
-            if (installBtn) {
-                installBtn.style.display = 'none';
+        // 3. Cek apakah pop-up boleh dimunculkan (berdasarkan waktu lewati/snooze)
+        function canShowInstallPrompt() {
+            if (isPwaInstalled()) return false; // Jangan muncul lagi kalau sudah install!
+            
+            const nextShowTime = localStorage.getItem('pwaPromptNextShow');
+            if (!nextShowTime) return true; // Belum pernah lewati, boleh muncul
+            
+            return Date.now() > parseInt(nextShowTime); // Cek apakah sudah lewat 2 hari (48 jam)
+        }
+
+        // 4. Fungsi memunculkan Pop-Up (Ditembak saat kartu selesai)
+        function checkAndShowPwaPrompt() {
+            setTimeout(() => {
+                if (canShowInstallPrompt()) {
+                    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                    
+                    if (deferredPrompt || isIOS) {
+                        if (isIOS) {
+                            document.getElementById('btnInstallText').textContent = "🍏 Cara Install di iPhone";
+                        }
+                        openModal('installModal');
+                    }
+                }
+            }, 1500);
+        }
+
+        // 5. Aksi tombol "🚀 Install Sekarang"
+        async function triggerInstallPWA() {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            if (isIOS) {
+                alert('📲 Langkah Mudah Install di iPhone/iOS:\n\n1. Klik ikon Share (panah ke atas) di menu tengah bawah Safari.\n2. Scroll ke bawah dan klik "Add to Home Screen" (Tambahkan ke Layar Utama).\n3. Klik "Add" di kanan atas.');
+                snoozeInstallPWA(); 
+            } else if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User menginstall PWA!');
+                    localStorage.setItem('pwaInstalledPermanently', 'true'); 
+                    closeModal('installModal');
+                }
+                deferredPrompt = null;
             }
-            deferredPrompt = null;
-            console.log('PWA berhasil diinstall ke Layar Utama!');
+        }
+
+        // 6. Aksi tombol "Lewati" (Bungkam selama 2 Hari / 48 Jam)
+        function snoozeInstallPWA() {
+            const duaHariDalamMs = 2 * 24 * 60 * 60 * 1000; 
+            localStorage.setItem('pwaPromptNextShow', Date.now() + duaHariDalamMs);
+            closeModal('installModal');
+            console.log('Pop-up install dibisukan selama 2 hari.');
+        }
+
+        // 7. Jika pengguna klik area gelap di luar kartu, hitung sebagai "Lewati"
+        function handleSnoozeInstall(event, modalId) {
+            if (event.target.id === modalId) {
+                snoozeInstallPWA();
+            }
+        }
+
+        // 8. Deteksi otomatis dari sistem jika web sukses terinstall
+        window.addEventListener('appinstalled', () => {
+            localStorage.setItem('pwaInstalledPermanently', 'true');
+            closeModal('installModal');
+            console.log('PWA terpasang resmi, pop-up dimatikan selamanya.');
         });
     </script>
 </body>
