@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Latar Belakang Squircle Modern (Schwarz / Hitam) -->
+  <rect width="512" height="512" rx="128" fill="#181818"/>
+  
+  <!-- Efek Glow Halus di Belakang Buku -->
+  <circle cx="256" cy="256" r="140" fill="#dd0000" opacity="0.15" filter="blur(30px)"/>
+  
+  <!-- Halaman Kiri Buku (Rot / Merah Jerman) -->
+  <path d="M120 170 Q180 145 244 170 V370 Q180 345 120 370 Z" fill="#dd0000"/>
+  <path d="M120 170 Q180 145 244 170 V185 Q180 160 120 185 Z" fill="#ff3333" opacity="0.4"/>
+  
+  <!-- Halaman Kanan Buku (Gold / Kuning Emas Jerman) -->
+  <path d="M392 170 Q332 145 268 170 V370 Q332 345 392 370 Z" fill="#ffcc00"/>
+  <path d="M392 170 Q332 145 268 170 V185 Q332 160 392 185 Z" fill="#ffe066" opacity="0.6"/>
+  
+  <!-- Punggung Buku / Spine Tengah -->
+  <path d="M244 170 Q256 162 268 170 V370 Q256 362 244 370 Z" fill="#ffffff" opacity="0.9"/>
+  
+  <!-- Pita Pembatas Buku (Bookmark Ribbon) -->
+  <path d="M248 365 V430 L256 418 L264 430 V365 Z" fill="#ffffff"/>
+</svg>
