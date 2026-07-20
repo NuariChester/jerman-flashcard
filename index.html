@@ -169,13 +169,13 @@
             border-bottom: 5px solid #1a1a1a;
         }
 
-        /* Desain Baris Kata & Wrapper Audio (Diperbaiki agar nempel seperti Gambar 2) */
+        /* Desain Baris Kata & Wrapper Audio Utama */
         .word-row {
             display: flex;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px; /* Jarak antara artikel (der/die/das) dengan kata */
+            gap: 10px;
             margin: 10px 0;
             width: 100%;
         }
@@ -183,7 +183,7 @@
         .word-audio-wrapper {
             display: inline-flex;
             align-items: center;
-            gap: 0px; /* Menghilangkan jarak antara kata dan ikon audio */
+            gap: 0px;
         }
         
         .article {
@@ -200,30 +200,55 @@
             transition: color 0.3s;
         }
 
-        /* Ikon Audio Minimalis & Animasi "Air Mengalir" */
-        .speak-btn-minimal {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 4px 0px 4px 2px;
+        /* Baris Plural dengan Audio Mini */
+        .plural-row {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: -6px; /* Menarik ikon agar lebih menempel ke teks kata */
+            gap: 2px;
+            margin-top: 15px;
+        }
+        .plural-text {
+            font-size: 14px;
+            opacity: 0.75;
+            font-style: italic;
+            color: #cccccc;
+        }
+
+        /* Ikon Audio & Animasi Gelombang Suara (Utama & Plural) */
+        .speak-btn-minimal, .speak-btn-plural {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             outline: none;
         }
+        .speak-btn-minimal {
+            padding: 4px 0px 4px 2px;
+            margin-left: -6px;
+        }
+        .speak-btn-plural {
+            padding: 2px 0px 2px 2px;
+            margin-left: -2px;
+        }
+        
         .wave-element {
             stroke: #95a5a6;
             transition: stroke 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
         }
         
-        .speak-btn-minimal:hover .wave-1, .speak-btn-minimal:active .wave-1 {
+        .speak-btn-minimal:hover .wave-1, .speak-btn-minimal:active .wave-1,
+        .speak-btn-plural:hover .wave-1, .speak-btn-plural:active .wave-1 {
             animation: waterRipple 1s infinite 0.0s;
         }
-        .speak-btn-minimal:hover .wave-2, .speak-btn-minimal:active .wave-2 {
+        .speak-btn-minimal:hover .wave-2, .speak-btn-minimal:active .wave-2,
+        .speak-btn-plural:hover .wave-2, .speak-btn-plural:active .wave-2 {
             animation: waterRipple 1s infinite 0.15s;
         }
-        .speak-btn-minimal:hover .wave-3, .speak-btn-minimal:active .wave-3 {
+        .speak-btn-minimal:hover .wave-3, .speak-btn-minimal:active .wave-3,
+        .speak-btn-plural:hover .wave-3, .speak-btn-plural:active .wave-3 {
             animation: waterRipple 1s infinite 0.3s;
         }
 
@@ -232,7 +257,6 @@
             50% { stroke: #ffcc00; transform: translateX(2px); opacity: 1; filter: drop-shadow(0 0 3px rgba(255, 204, 0, 0.8)); }
         }
         
-        .plural { font-size: 14px; opacity: 0.75; margin-top: 15px; font-style: italic; color: #cccccc; }
         .meaning { font-size: 32px; font-weight: 700; color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
         .hint { font-size: 12px; opacity: 0.55; margin-top: 25px; }
         .card-back .hint { color: #ffffff; }
@@ -432,7 +456,17 @@
                             </button>
                         </div>
                     </div>
-                    <div class="plural" id="wordPlural">-</div>
+                    <!-- Baris Plural dengan Audio Mini -->
+                    <div class="plural-row" id="pluralContainer">
+                        <span class="plural-text" id="wordPlural">-</span>
+                        <button class="speak-btn-plural" id="audioBtnPlural" onclick="speakPlural(event)" title="Dengarkan pelafalan plural" style="display: none;">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <path class="wave-element wave-1" d="M6 9a3 3 0 0 1 0 6" />
+                                <path class="wave-element wave-2" d="M10 6a7 7 0 0 1 0 12" />
+                                <path class="wave-element wave-3" d="M14 3a11 11 0 0 1 0 18" />
+                            </svg>
+                        </button>
+                    </div>
                     <div class="hint" id="hintFront">Klik ikon gelombang suara untuk mendengarkan</div>
                 </div>
                 <div class="card-face card-back">
@@ -625,7 +659,7 @@
                 hHowTo: "💡 Bedienungsanleitung",
                 liHow1: "<strong>Karte umdrehen:</strong> Klicke auf die Karte oder drücke die <strong>Leertaste</strong>.",
                 liHow2: "<strong>Aussprache:</strong> Klicke auf das Tonsymbol 🔊 neben dem Wort.",
-                liHow3: "<strong>Navigation:</strong> Nutze die Tasten <strong>Weiter</strong> (&#8594;), <strong>Zurück</strong> (&#8592;) oder <strong>Mischen</strong>.",
+                liHow3: "<strong>Navigation:</strong> Nutze die Tasten <strong>Weiter</strong> (&#8594;), <strong>Zurück</strong> (&#8592;) atau <strong>Mischen</strong>.",
                 hFeatures: "🌟 Aktuelle Funktionen",
                 hRoadmap: "🚀 Geplante Updates",
                 btnGuideClose: "Schließen",
@@ -756,7 +790,7 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.15);
         }
 
-        // --- 6. AUDIO HYBRID DENGAN MAPPING KARAKTER KHUSUS ---
+        // --- 6. AUDIO HYBRID DENGAN MAPPING KARAKTER KHUSUS (UTAMA & PLURAL) ---
         let currentAudio = null;
 
         function mapGermanToFilename(str) {
@@ -768,6 +802,15 @@
                 .replace(/Ä/g, 'A3')
                 .replace(/Ö/g, 'O3')
                 .replace(/Ü/g, 'U3');
+        }
+
+        // Helper untuk penamaan file plural dari audio/stammformen/ (Contoh: die Bilder -> die_Bilder.mp3)
+        function getPluralAudioFilename(pluralStr) {
+            let bersih = pluralStr.replace(/\*/g, "");
+            let mapped = mapGermanToFilename(bersih);
+            mapped = mapped.replace(/[^a-zA-Z0-9]/g, '_');
+            mapped = mapped.replace(/_+/g, '_').replace(/^_|_$/g, '');
+            return `${mapped}.mp3`;
         }
 
         function speakWord(event) {
@@ -792,6 +835,37 @@
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
                     const msg = new SpeechSynthesisUtterance(fullText);
+                    msg.lang = 'de-DE';
+                    msg.rate = 0.88;
+                    window.speechSynthesis.speak(msg);
+                }
+            };
+            
+            currentAudio.play();
+        }
+
+        function speakPlural(event) {
+            event.stopPropagation();
+
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+
+            const data = currentWords[currentIndex];
+            if (!data || !data.plural || data.plural === '-') return;
+
+            const cleanPluralText = data.plural.replace(/\*/g, "");
+            const filename = getPluralAudioFilename(data.plural);
+            const repoAudioUrl = `audio/stammformen/${filename}`;
+            
+            currentAudio = new Audio(repoAudioUrl);
+            
+            currentAudio.onerror = () => {
+                console.warn(`File audio/stammformen/${filename} tidak ditemukan. Menggunakan suara sistem...`);
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const msg = new SpeechSynthesisUtterance(cleanPluralText);
                     msg.lang = 'de-DE';
                     msg.rate = 0.88;
                     window.speechSynthesis.speak(msg);
@@ -866,7 +940,7 @@
             flashcard.classList.remove('is-flipped');
             setTimeout(() => {
                 const data = currentWords[currentIndex];
-                const wordColor = getArticleColor(data.article); // <- Mengambil warna der/die/das
+                const wordColor = getArticleColor(data.article);
                 
                 const articleEl = document.getElementById('wordArticle');
                 const wordEl = document.getElementById('wordText');
@@ -877,13 +951,23 @@
                 wordEl.textContent = data.word;
                 wordEl.style.color = wordColor;
                 
-                // --- LOGIKA PEWARNAAN TEKS PLURAL DINAMIS (MEMAKAI WARNA ARTIKEL ASLI) ---
-                const formattedPlural = data.plural.replace(
-                    /\*(.*?)\*/g, 
-                    `<span style="color: ${wordColor}; font-weight: 700; text-decoration: underline;">$1</span>`
-                );
-                document.getElementById('wordPlural').innerHTML = `Plural: ${formattedPlural}`;
-                // -------------------------------------------------------------------------
+                // --- LOGIKA PLURAL TANPA UNDERLINE + TOMBOL AUDIO MINI ---
+                const pluralTextEl = document.getElementById('wordPlural');
+                const pluralAudioBtn = document.getElementById('audioBtnPlural');
+
+                if (data.plural && data.plural !== '-') {
+                    // Warna dinamis tanpa text-decoration: underline;
+                    const formattedPlural = data.plural.replace(
+                        /\*(.*?)\*/g, 
+                        `<span style="color: ${wordColor}; font-weight: 700;">$1</span>`
+                    );
+                    pluralTextEl.innerHTML = `Plural: ${formattedPlural}`;
+                    pluralAudioBtn.style.display = 'flex';
+                } else {
+                    pluralTextEl.innerHTML = `Plural: -`;
+                    pluralAudioBtn.style.display = 'none';
+                }
+                // ---------------------------------------------------------
                 
                 document.getElementById('wordMeaning').textContent = data.meaning;
                 document.getElementById('progressText').textContent = `${currentIndex + 1} / ${currentWords.length}`;
