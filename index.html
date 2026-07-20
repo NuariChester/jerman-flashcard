@@ -169,15 +169,21 @@
             border-bottom: 5px solid #1a1a1a;
         }
 
-        /* Desain Baris Kata Minimalis */
+        /* Desain Baris Kata & Wrapper Audio (Diperbaiki agar nempel seperti Gambar 2) */
         .word-row {
             display: flex;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px; /* Jarak antara artikel (der/die/das) dengan kata */
             margin: 10px 0;
             width: 100%;
+        }
+        
+        .word-audio-wrapper {
+            display: inline-flex;
+            align-items: center;
+            gap: 0px; /* Menghilangkan jarak antara kata dan ikon audio */
         }
         
         .article {
@@ -199,11 +205,11 @@
             background: transparent;
             border: none;
             cursor: pointer;
-            padding: 4px 6px;
+            padding: 4px 0px 4px 2px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 2px;
+            margin-left: -6px; /* Menarik ikon agar lebih menempel ke teks kata */
             outline: none;
         }
         .wave-element {
@@ -383,8 +389,6 @@
             background: transparent;
             overflow: hidden;
         }
-
-         
     </style>
 </head>
 <body>
@@ -417,14 +421,16 @@
                     <!-- Baris Kata Minimalis -->
                     <div class="word-row">
                         <span class="article" id="wordArticle">-</span>
-                        <span class="word" id="wordText">Memuat...</span>
-                        <button class="speak-btn-minimal" id="audioBtn" onclick="speakWord(event)" title="Dengarkan pelafalan">
-                            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                <path class="wave-element wave-1" d="M6 9a3 3 0 0 1 0 6" />
-                                <path class="wave-element wave-2" d="M10 6a7 7 0 0 1 0 12" />
-                                <path class="wave-element wave-3" d="M14 3a11 11 0 0 1 0 18" />
-                            </svg>
-                        </button>
+                        <div class="word-audio-wrapper">
+                            <span class="word" id="wordText">Memuat...</span>
+                            <button class="speak-btn-minimal" id="audioBtn" onclick="speakWord(event)" title="Dengarkan pelafalan">
+                                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <path class="wave-element wave-1" d="M6 9a3 3 0 0 1 0 6" />
+                                    <path class="wave-element wave-2" d="M10 6a7 7 0 0 1 0 12" />
+                                    <path class="wave-element wave-3" d="M14 3a11 11 0 0 1 0 18" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <div class="plural" id="wordPlural">-</div>
                     <div class="hint" id="hintFront">Klik ikon gelombang suara untuk mendengarkan</div>
@@ -467,7 +473,6 @@
     <!-- Catatan Perbaikan -->
     <div class="maintenance-note">⚠️ Catatan: Tombol audio sedang dalam perbaikan fungsi.</div>
 
-    
     <!-- MENU PANDUAN & TRAKTIR KOPI (Sesuai Garis Oranye) -->
     <div class="footer-links">
         <span class="footer-link" onclick="openModal('panduanModal')"><span id="txtGuide">📖 Panduan</span></span>
@@ -512,7 +517,7 @@
         </div>
     </div>
 
-   <!-- ================= MODAL / POP-UP TRAKTIR KOPI (SAWERIA) ================= -->
+    <!-- ================= MODAL / POP-UP TRAKTIR KOPI (SAWERIA) ================= -->
     <div class="modal-overlay" id="saweriaModal" onclick="closeModalOnBackdrop(event, 'saweriaModal')">
         <div class="modal-card">
             <div class="modal-header">
@@ -598,7 +603,6 @@
                 installDesc: "Biar akses belajar lebih cepat tanpa repot buka browser, install web app ini langsung ke layar utama HP kamu sekarang!",
                 btnInstallText: "🚀 Install Sekarang",
                 btnSkipText: "Lewati"
-                 
             },
             de: {
                 title: "🇩🇪 Deutsch Karteikarten",
@@ -751,8 +755,20 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.15);
         }
 
-        // --- 6. AUDIO HYBRID (Prioritas MP3 GitHub + Fallback Suara Browser) ---
+        // --- 6. AUDIO HYBRID DENGAN MAPPING KARAKTER KHUSUS ---
         let currentAudio = null;
+
+        // Fungsi khusus untuk menerjemahkan karakter Jerman ke aturan penamaan file kamu
+        function mapGermanToFilename(str) {
+            return str
+                .replace(/ß/g, 's5')
+                .replace(/ä/g, 'a3')
+                .replace(/ö/g, 'o3')
+                .replace(/ü/g, 'u3')
+                .replace(/Ä/g, 'A3')
+                .replace(/Ö/g, 'O3')
+                .replace(/Ü/g, 'U3');
+        }
 
         function speakWord(event) {
             event.stopPropagation();
@@ -766,11 +782,14 @@
             const word = document.getElementById('wordText').textContent.trim();
             const fullText = `${article} ${word}`;
             
-            const repoAudioUrl = `audio/${word}.mp3`;
+            // Ubah kata Jerman ke format mapping kamu sebelum mencari file MP3-nya
+            const mappedWord = mapGermanToFilename(word);
+            const repoAudioUrl = `audio/${mappedWord}.mp3`;
+            
             currentAudio = new Audio(repoAudioUrl);
             
             currentAudio.onerror = () => {
-                console.warn(`File audio/${word}.mp3 tidak ditemukan. Menggunakan suara sistem...`);
+                console.warn(`File audio/${mappedWord}.mp3 tidak ditemukan. Menggunakan suara sistem...`);
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
                     const msg = new SpeechSynthesisUtterance(fullText);
