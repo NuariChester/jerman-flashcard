@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-K43HSM32VH"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K43HSM32VH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-K43HSM32VH');
-</script>
+      gtag('config', 'G-K43HSM32VH');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard Jerman Harian</title>
@@ -176,7 +176,7 @@
             justify-content: center;
             flex-wrap: wrap;
             gap: 10px;
-            margin: 10px 0;
+            margin: 5px 0 0 0;
             width: 100%;
         }
         
@@ -200,13 +200,24 @@
             transition: color 0.3s;
         }
 
+        /* 💡 Teks Fonetik IPA di bawah kata utama */
+        .ipa-text {
+            font-size: 15px;
+            font-weight: 400;
+            color: #a0aab2; /* Warna abu-abu terang yang elegan */
+            letter-spacing: 1px;
+            margin-top: 2px;
+            margin-bottom: 5px;
+            font-family: 'Poppins', monospace;
+        }
+
         /* Baris Plural dengan Audio Mini */
         .plural-row {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 2px;
-            margin-top: 15px;
+            margin-top: 10px;
         }
         .plural-text {
             font-size: 14px;
@@ -258,7 +269,7 @@
         }
         
         .meaning { font-size: 32px; font-weight: 700; color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
-        .hint { font-size: 12px; opacity: 0.55; margin-top: 25px; }
+        .hint { font-size: 12px; opacity: 0.55; margin-top: 20px; }
         .card-back .hint { color: #ffffff; }
 
         .controls { display: flex; gap: 10px; width: 100%; max-width: 400px; justify-content: space-between; }
@@ -297,9 +308,6 @@
         }
         .btn-restart:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); background: #000000; }
 
-        /* Catatan Perbaikan, Tombol Footer, & Copyright */
-        .maintenance-note { margin-top: 25px; font-size: 13px; color: #e67e22; text-align: center; font-style: italic; font-weight: 600; }
-        
         /* Area Menu Panduan & Traktir Kopi */
         .footer-links {
             margin-top: 12px;
@@ -405,14 +413,6 @@
             align-items: center;
             margin-top: 10px;
         }
-        .saweria-frame {
-            width: 100%;
-            height: 380px;
-            border: none;
-            border-radius: 16px;
-            background: transparent;
-            overflow: hidden;
-        }
     </style>
 </head>
 <body>
@@ -456,6 +456,10 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- 💡 ELEMEN BARU: Teks Fonetik IPA di bawah kata utama -->
+                    <div class="ipa-text" id="wordIpa">-</div>
+
                     <!-- Baris Plural dengan Audio Mini -->
                     <div class="plural-row" id="pluralContainer">
                         <span class="plural-text" id="wordPlural">-</span>
@@ -531,7 +535,7 @@
 
                 <h3 id="hFeatures">🌟 Fitur Saat Ini</h3>
                 <ul>
-                    <li>🇩🇪 <strong>280 Kosakata:</strong> Terbagi rata untuk tingkat A1 & A2 beserta artikel dan bentuk jamak (*Plural*).</li>
+                    <li>🇩🇪 <strong>280+ Kosakata:</strong> Terbagi rata untuk tingkat A1 & A2 beserta artikel, fonetik IPA, dan bentuk jamak (*Plural*).</li>
                     <li>🎨 <strong>Pewarnaan Gender:</strong> Kata otomatis berwarna Biru (*Der*), Hijau (*Das*), dan Merah (*Die*) untuk mempercepat daya ingat otak.</li>
                     <li>📝 <strong>Ujian Mingguan:</strong> Sistem kuis otomatis muncul setiap hari ke-7 (kelipatan 7) untuk menguji hafalanmu.</li>
                     <li>🔥 <strong>Streak & PWA:</strong> Menghitung konsistensi belajar harian dan web bisa di-install langsung ke layar HP (Offline Mode).</li>
@@ -559,11 +563,9 @@
                 <p id="txtCoffeeDesc" style="margin-top: 0;">Dukunganmu sangat berarti agar aplikasi Flashcard Jerman ini terus berkembang, bebas iklan, dan server audio tetap terjaga!</p>
                 
                 <div class="saweria-container">
-                    <!-- Menampilkan Gambar QR Code Langsung (Super Cepat & Anti-Blank) -->
                     <img src="Saweria.png" alt="QR Code Saweria" style="width: 100%; max-width: 300px; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); margin: 10px 0;">
                 </div>
 
-                <!-- Tombol Alternatif untuk Pengguna HP yang Tidak Bisa Scan Layar Sendiri -->
                 <a href="https://saweria.co/widgets/qr?streamKey=86409b8c3c225bab62543679ea79431f" target="_blank" style="display: inline-block; background: #ffcc00; color: #1a1a1a; text-decoration: none; font-weight: 700; padding: 10px 20px; border-radius: 20px; font-size: 13px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.2s;">
                     👉 Buka Langsung di Saweria
                 </a>
@@ -659,7 +661,7 @@
                 hHowTo: "💡 Bedienungsanleitung",
                 liHow1: "<strong>Karte umdrehen:</strong> Klicke auf die Karte oder drücke die <strong>Leertaste</strong>.",
                 liHow2: "<strong>Aussprache:</strong> Klicke auf das Tonsymbol 🔊 neben dem Wort.",
-                liHow3: "<strong>Navigation:</strong> Nutze die Tasten <strong>Weiter</strong> (&#8594;), <strong>Zurück</strong> (&#8592;) atau <strong>Mischen</strong>.",
+                liHow3: "<strong>Navigation:</strong> Nutze die Tasten <strong>Weiter</strong> (&#8594;), <strong>Zurück</strong> (&#8592;) oder <strong>Mischen</strong>.",
                 hFeatures: "🌟 Aktuelle Funktionen",
                 hRoadmap: "🚀 Geplante Updates",
                 btnGuideClose: "Schließen",
@@ -804,7 +806,6 @@
                 .replace(/Ü/g, 'U3');
         }
 
-        // Helper untuk penamaan file plural dari audio/stammformen/ (Contoh: die Bilder -> die_Bilder.mp3)
         function getPluralAudioFilename(pluralStr) {
             let bersih = pluralStr.replace(/\*/g, "");
             let mapped = mapGermanToFilename(bersih);
@@ -875,7 +876,7 @@
             currentAudio.play();
         }
 
-        // --- 7. LOGIKA HARI & NAVIGASI KATA ---
+        // --- 7. LOGIKA HARI & NAVIGASI KATA (SYSTEM FLAT ARRAY) ---
         const today = new Date();
         const dayNumber = Math.floor(today.getTime() / (1000 * 60 * 60 * 24)); 
         const isQuizDay = (dayNumber % 7 === 0); 
@@ -896,12 +897,15 @@
             currentLevel = level;
             currentIndex = 0;
             const limit = 10;
-            const total = database[level].length;
-            let startIdx = (dayNumber * limit) % total;
             
+            // 💡 PENYESUAIAN BARU: Filter array berdasarkan properti "level"
+            const filteredWords = database.filter(item => item.level === level);
+            const total = filteredWords.length;
+            
+            let startIdx = (dayNumber * limit) % total;
             let selection = [];
             for(let i = 0; i < limit; i++) {
-                selection.push(database[level][(startIdx + i) % total]);
+                selection.push(filteredWords[(startIdx + i) % total]);
             }
             
             if(isQuizDay) {
@@ -933,7 +937,7 @@
                     origin: { y: 0.6 },
                     colors: ['#ff0000', '#ffcc00', '#000000', '#ffffff']
                 });
-                 checkAndShowPwaPrompt();
+                checkAndShowPwaPrompt();
                 return;
             }
 
@@ -950,13 +954,21 @@
                 
                 wordEl.textContent = data.word;
                 wordEl.style.color = wordColor;
+
+                // 💡 PENYESUAIAN BARU: Menampilkan teks IPA
+                const ipaEl = document.getElementById('wordIpa');
+                if (data.ipa && data.ipa !== '-') {
+                    ipaEl.textContent = data.ipa;
+                    ipaEl.style.display = "block";
+                } else {
+                    ipaEl.style.display = "none";
+                }
                 
                 // --- LOGIKA PLURAL TANPA UNDERLINE + TOMBOL AUDIO MINI ---
                 const pluralTextEl = document.getElementById('wordPlural');
                 const pluralAudioBtn = document.getElementById('audioBtnPlural');
 
                 if (data.plural && data.plural !== '-') {
-                    // Warna dinamis tanpa text-decoration: underline;
                     const formattedPlural = data.plural.replace(
                         /\*(.*?)\*/g, 
                         `<span style="color: ${wordColor}; font-weight: 700;">$1</span>`
@@ -1035,8 +1047,12 @@
             qWordEl.style.color = qColor;
             
             let optionsSet = new Set([currentQ.meaning]);
+
+            // 💡 PENYESUAIAN BARU: Filter dulu datanya sesuai level saat ini
+            const currentLevelWords = database.filter(item => item.level === currentLevel);
+
             while(optionsSet.size < 3) {
-                let randomItem = database[currentLevel][Math.floor(Math.random() * database[currentLevel].length)];
+                let randomItem = currentLevelWords[Math.floor(Math.random() * currentLevelWords.length)];
                 optionsSet.add(randomItem.meaning);
             }
             let optionsArr = Array.from(optionsSet).sort(() => Math.random() - 0.5);
