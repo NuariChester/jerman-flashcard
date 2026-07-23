@@ -200,11 +200,11 @@
             transition: color 0.3s;
         }
 
-        /* 💡 Teks Fonetik IPA di bawah kata utama */
+        /* Teks Fonetik IPA di bawah kata utama */
         .ipa-text {
             font-size: 15px;
             font-weight: 400;
-            color: #a0aab2; /* Warna abu-abu terang yang elegan */
+            color: #a0aab2; 
             letter-spacing: 1px;
             margin-top: 2px;
             margin-bottom: 5px;
@@ -226,7 +226,7 @@
             color: #cccccc;
         }
 
-        /* Ikon Audio & Animasi Gelombang Suara (Utama & Plural) */
+        /* Ikon Audio & Animasi Gelombang Suara */
         .speak-btn-minimal, .speak-btn-plural {
             background: transparent;
             border: none;
@@ -236,14 +236,8 @@
             justify-content: center;
             outline: none;
         }
-        .speak-btn-minimal {
-            padding: 4px 0px 4px 2px;
-            margin-left: -6px;
-        }
-        .speak-btn-plural {
-            padding: 2px 0px 2px 2px;
-            margin-left: -2px;
-        }
+        .speak-btn-minimal { padding: 4px 0px 4px 2px; margin-left: -6px; }
+        .speak-btn-plural { padding: 2px 0px 2px 2px; margin-left: -2px; }
         
         .wave-element {
             stroke: #95a5a6;
@@ -295,6 +289,30 @@
         }
         .quiz-option:hover { border-color: #dd0000; background: rgba(221,0,0,0.05); }
 
+        /* --- VISUAL BENAR / SALAH KUIS --- */
+        .quiz-option.correct {
+            background-color: #358732 !important; 
+            color: #ffffff !important;
+            border-color: #358732 !important;
+            transform: scale(1.02);
+            box-shadow: 0 4px 10px rgba(53, 135, 50, 0.4);
+        }
+        .quiz-option.wrong {
+            background-color: #d3302f !important; 
+            color: #ffffff !important;
+            border-color: #d3302f !important;
+            animation: shake 0.4s;
+            box-shadow: 0 4px 10px rgba(211, 48, 47, 0.4);
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
         /* Pesan Selesai */
         #doneMessage { display: none; text-align: center; margin-top: 30px; max-width: 400px; }
         #doneMessage h2 { color: #dd0000; font-size: 26px; margin-bottom: 10px; }
@@ -326,15 +344,8 @@
             align-items: center;
             gap: 4px;
         }
-        .footer-link:hover {
-            color: #ffcc00;
-            transform: scale(1.05);
-        }
-        .footer-sep {
-            color: #95a5a6;
-            opacity: 0.4;
-            font-weight: 400;
-        }
+        .footer-link:hover { color: #ffcc00; transform: scale(1.05); }
+        .footer-sep { color: #95a5a6; opacity: 0.4; font-weight: 400; }
 
         .copyright { margin-top: 12px; font-size: 13px; color: #95a5a6; margin-bottom: 20px; }
         .copyright a { color: #dd0000; text-decoration: none; font-weight: bold; }
@@ -342,48 +353,24 @@
 
         /* --- DESAIN MODAL / POP-UP OVERLAY (SPA VIEW) --- */
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            z-index: 2000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px);
+            z-index: 2000; display: none; justify-content: center; align-items: center;
+            padding: 20px; box-sizing: border-box; opacity: 0; transition: opacity 0.3s ease;
         }
-        .modal-overlay.show {
-            display: flex;
-            opacity: 1;
-        }
+        .modal-overlay.show { display: flex; opacity: 1; }
         .modal-card {
-            background: var(--modal-bg);
-            color: var(--text-color);
-            width: 100%; max-width: 420px;
-            max-height: 85vh;
-            border-radius: 24px;
-            padding: 25px;
-            box-sizing: border-box;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            overflow-y: auto;
-            position: relative;
-            transform: translateY(20px);
+            background: var(--modal-bg); color: var(--text-color);
+            width: 100%; max-width: 420px; max-height: 85vh; border-radius: 24px;
+            padding: 25px; box-sizing: border-box; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            overflow-y: auto; position: relative; transform: translateY(20px);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(255, 204, 0, 0.2);
         }
-        .modal-overlay.show .modal-card {
-            transform: translateY(0);
-        }
+        .modal-overlay.show .modal-card { transform: translateY(0); }
         .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--btn-bg);
-            padding-bottom: 12px;
-            margin-bottom: 18px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--btn-bg); padding-bottom: 12px; margin-bottom: 18px;
         }
         .modal-header h2 { margin: 0; font-size: 20px; color: #dd0000; display: flex; align-items: center; gap: 8px; }
         .btn-close-icon {
@@ -406,13 +393,7 @@
         .btn-modal-close:hover { background: #dd0000; color: #ffffff; }
 
         /* Embed Iframe Saweria */
-        .saweria-container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 10px;
-        }
+        .saweria-container { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -457,7 +438,7 @@
                         </div>
                     </div>
 
-                    <!-- 💡 ELEMEN BARU: Teks Fonetik IPA di bawah kata utama -->
+                    <!-- Teks Fonetik IPA -->
                     <div class="ipa-text" id="wordIpa">-</div>
 
                     <!-- Baris Plural dengan Audio Mini -->
@@ -508,14 +489,13 @@
         <button class="btn-restart" id="btnRestart" onclick="restartWithRandomOrder()">🔄 Mengulang Kembali (Acak Urutan)</button>
     </div>
 
-    <!-- MENU PANDUAN & TRAKTIR KOPI (Sesuai Garis Oranye) -->
+    <!-- MENU PANDUAN & TRAKTIR KOPI -->
     <div class="footer-links">
         <span class="footer-link" onclick="openModal('panduanModal')"><span id="txtGuide">📖 Panduan</span></span>
         <span class="footer-sep">•</span>
         <span class="footer-link" onclick="openModal('saweriaModal')"><span id="txtCoffee">☕ Traktir Kopi</span></span>
     </div>
 
-    <!-- Copyright -->
     <div class="copyright">© 2026 <a href="https://www.instagram.com/nuari_chester/" target="_blank">Chester</a></div>
 
     <!-- ================= MODAL / POP-UP PANDUAN ================= -->
@@ -552,7 +532,7 @@
         </div>
     </div>
 
-    <!-- ================= MODAL / POP-UP TRAKTIR KOPI (SAWERIA) ================= -->
+    <!-- ================= MODAL / POP-UP TRAKTIR KOPI ================= -->
     <div class="modal-overlay" id="saweriaModal" onclick="closeModalOnBackdrop(event, 'saweriaModal')">
         <div class="modal-card">
             <div class="modal-header">
@@ -576,7 +556,7 @@
         </div>
     </div>
 
-     <!-- ================= MODAL / POP-UP INSTALL PWA (OTOMATIS) ================= -->
+     <!-- ================= MODAL / POP-UP INSTALL PWA ================= -->
     <div class="modal-overlay" id="installModal" onclick="handleSnoozeInstall(event, 'installModal')">
         <div class="modal-card" style="text-align: center; border: 2px solid #ffcc00;">
             <div style="font-size: 50px; margin-bottom: 10px;">📲</div>
@@ -605,6 +585,11 @@
             navigator.serviceWorker.register('sw.js');
         }
 
+        // Variabel Data Global Baru
+        let dailySelection = []; 
+        let quizScore = 0;
+        let totalQuizQuestions = 0;
+
         // --- 2. FITUR MULTI-BAHASA (ID & DE) ---
         let currentLang = localStorage.getItem('appLang') || 'id';
 
@@ -620,7 +605,7 @@
                 quizDesc: "Apa arti dari kata bahasa Jerman ini?",
                 quizRemaining: "Sisa soal",
                 doneTitle: "Selamat!",
-                doneDesc: "Kamu sudah menyelesaikan target 10 kata hari ini dengan luar biasa!",
+                doneDesc: "Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!",
                 restart: "🔄 Mengulang Kembali (Acak Urutan)",
                 streakDays: "Hari",
                 guide: "📖 Panduan",
@@ -652,7 +637,7 @@
                 quizDesc: "Was bedeutet dieses deutsche Wort?",
                 quizRemaining: "Verbleibend",
                 doneTitle: "Herzlichen Glückwunsch!",
-                doneDesc: "Du hast deine heutigen 10 Wörter hervorragend gemeistert!",
+                doneDesc: "Du hast deine heutigen <strong>10 Wörter</strong> hervorragend gemeistert!",
                 restart: "🔄 Noch einmal üben (Zufällige Reihenfolge)",
                 streakDays: "Tage",
                 guide: "📖 Anleitung",
@@ -697,11 +682,24 @@
             document.getElementById('hintBack').textContent = i18n[lang].hintBack;
             document.getElementById('quizTitle').textContent = i18n[lang].quizTitle;
             document.getElementById('quizDesc').textContent = i18n[lang].quizDesc;
-            document.getElementById('doneTitle').textContent = i18n[lang].doneTitle;
-            document.getElementById('doneDesc').innerHTML = lang === 'id' ? 
-                'Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!' : 
-                'Du hast deine heutigen <strong>10 Wörter</strong> hervorragend gemeistert!';
-            document.getElementById('btnRestart').textContent = i18n[lang].restart;
+            
+            // Logika pintar untuk menentukan teks layar akhir
+            const doneTitle = document.getElementById('doneTitle');
+            const doneDesc = document.getElementById('doneDesc');
+            const btnRestart = document.getElementById('btnRestart');
+
+            // Cek apakah kita sedang berada di layar penyelesaian Kuis
+            if (document.getElementById('quizContainer').style.display === 'none' && document.getElementById('mainUI').style.display === 'none' && (btnRestart.textContent.includes('Normal') || btnRestart.textContent.includes('Karteikarten'))) {
+                doneTitle.textContent = lang === 'id' ? "Kuis Selesai! 🎉" : "Quiz Beendet! 🎉";
+                doneDesc.innerHTML = lang === 'id' ? 
+                    `Skor kamu: <strong>${quizScore} / ${totalQuizQuestions}</strong> benar pada tebakan pertama.<br><br>Sekarang mari kita lanjut ke mode hafalan kartu normal!` : 
+                    `Dein Ergebnis: <strong>${quizScore} / ${totalQuizQuestions}</strong> beim ersten Versuch richtig.<br><br>Lass uns nun zum normalen Karteikarten-Modus wechseln!`;
+                btnRestart.textContent = lang === 'id' ? "Lanjut ke Hafalan Normal ➔" : "Weiter zu Karteikarten ➔";
+            } else {
+                doneTitle.textContent = i18n[lang].doneTitle;
+                doneDesc.innerHTML = i18n[lang].doneDesc;
+                btnRestart.textContent = i18n[lang].restart;
+            }
 
             // Update Teks Modal & Footer
             document.getElementById('txtGuide').textContent = i18n[lang].guide;
@@ -792,7 +790,7 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.15);
         }
 
-        // --- 6. AUDIO HYBRID DENGAN MAPPING KARAKTER KHUSUS (UTAMA & PLURAL) ---
+        // --- 6. AUDIO HYBRID ---
         let currentAudio = null;
 
         function mapGermanToFilename(str) {
@@ -816,11 +814,7 @@
 
         function speakWord(event) {
             event.stopPropagation();
-
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio = null;
-            }
+            if (currentAudio) { currentAudio.pause(); currentAudio = null; }
 
             const article = document.getElementById('wordArticle').textContent.trim();
             const word = document.getElementById('wordText').textContent.trim();
@@ -830,9 +824,7 @@
             const repoAudioUrl = `audio/${mappedWord}.mp3`;
             
             currentAudio = new Audio(repoAudioUrl);
-            
             currentAudio.onerror = () => {
-                console.warn(`File audio/${mappedWord}.mp3 tidak ditemukan. Menggunakan suara sistem...`);
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
                     const msg = new SpeechSynthesisUtterance(fullText);
@@ -841,17 +833,12 @@
                     window.speechSynthesis.speak(msg);
                 }
             };
-            
             currentAudio.play();
         }
 
         function speakPlural(event) {
             event.stopPropagation();
-
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio = null;
-            }
+            if (currentAudio) { currentAudio.pause(); currentAudio = null; }
 
             const data = currentWords[currentIndex];
             if (!data || !data.plural || data.plural === '-') return;
@@ -861,9 +848,7 @@
             const repoAudioUrl = `audio/stammformen/${filename}`;
             
             currentAudio = new Audio(repoAudioUrl);
-            
             currentAudio.onerror = () => {
-                console.warn(`File audio/stammformen/${filename} tidak ditemukan. Menggunakan suara sistem...`);
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
                     const msg = new SpeechSynthesisUtterance(cleanPluralText);
@@ -872,11 +857,10 @@
                     window.speechSynthesis.speak(msg);
                 }
             };
-            
             currentAudio.play();
         }
 
-        // --- 7. LOGIKA HARI & NAVIGASI KATA (SYSTEM FLAT ARRAY) ---
+        // --- 7. LOGIKA HARI & NAVIGASI KATA TERBARU (SCATTERED THEMES) ---
         const today = new Date();
         const dayNumber = Math.floor(today.getTime() / (1000 * 60 * 60 * 24)); 
         const isQuizDay = (dayNumber % 7 === 0); 
@@ -898,21 +882,31 @@
             currentIndex = 0;
             const limit = 10;
             
-            // 💡 PENYESUAIAN BARU: Filter array berdasarkan properti "level"
             const filteredWords = database.filter(item => item.level === level);
             const total = filteredWords.length;
             
             let startIdx = (dayNumber * limit) % total;
             let selection = [];
+            
+            // 💡 LOMPATAN MATEMATIKA (PRIME STEP JUMPS): 
+            // Ini akan mengacak agar kata-katanya tidak bergerombol di 1 tema, 
+            // tapi tetap menjaga ke-konsistenan 10 kata yang sama per hari.
+            const primeStep = 37; 
             for(let i = 0; i < limit; i++) {
-                selection.push(filteredWords[(startIdx + i) % total]);
+                let scatteredIndex = (startIdx + (i * primeStep)) % total;
+                // Tambahkan isRetry: false untuk menandakan ini bukan jawaban yang diremedial
+                selection.push({...filteredWords[scatteredIndex], isRetry: false});
             }
+            dailySelection = selection; // Simpan 10 kata hari ini secara global
             
             if(isQuizDay) {
                 document.getElementById('mainUI').style.display = 'none';
                 document.getElementById('quizContainer').style.display = 'block';
                 document.getElementById('doneMessage').style.display = 'none';
-                quizQueue = [...selection];
+                
+                quizScore = 0;
+                totalQuizQuestions = selection.length;
+                quizQueue = [...selection].sort(() => Math.random() - 0.5); // Kuis muncul dengan urutan acak
                 loadNextQuiz();
             } else {
                 document.getElementById('mainUI').style.display = 'flex';
@@ -926,11 +920,27 @@
         const flashcard = document.getElementById('flashcard');
 
         function updateCard() {
+            // Ketika Flashcard normal selesai di akhir
             if(currentIndex >= currentWords.length) {
                 document.getElementById('mainUI').style.display = 'none';
                 document.getElementById('doneMessage').style.display = 'block';
                 playSound('correct');
                 
+                const doneTitle = document.getElementById('doneTitle');
+                const doneDesc = document.getElementById('doneDesc');
+                const btnRestart = document.getElementById('btnRestart');
+
+                if (currentLang === 'id') {
+                    doneTitle.textContent = "Selamat!";
+                    doneDesc.innerHTML = "Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!";
+                    btnRestart.textContent = "🔄 Mengulang Kembali (Acak Urutan)";
+                } else {
+                    doneTitle.textContent = "Herzlichen Glückwunsch!";
+                    doneDesc.innerHTML = "Du hast deine heutigen <strong>10 Wörter</strong> hervorragend gemeistert!";
+                    btnRestart.textContent = "🔄 Noch einmal üben (Zufällige Reihenfolge)";
+                }
+                btnRestart.onclick = restartWithRandomOrder; // Reset tombol kembali ke mode acak hafalan normal
+
                 confetti({
                     particleCount: 150,
                     spread: 80,
@@ -955,7 +965,6 @@
                 wordEl.textContent = data.word;
                 wordEl.style.color = wordColor;
 
-                // 💡 PENYESUAIAN BARU: Menampilkan teks IPA
                 const ipaEl = document.getElementById('wordIpa');
                 if (data.ipa && data.ipa !== '-') {
                     ipaEl.textContent = data.ipa;
@@ -964,7 +973,6 @@
                     ipaEl.style.display = "none";
                 }
                 
-                // --- LOGIKA PLURAL TANPA UNDERLINE + TOMBOL AUDIO MINI ---
                 const pluralTextEl = document.getElementById('wordPlural');
                 const pluralAudioBtn = document.getElementById('audioBtnPlural');
 
@@ -979,7 +987,6 @@
                     pluralTextEl.innerHTML = `Plural: -`;
                     pluralAudioBtn.style.display = 'none';
                 }
-                // ---------------------------------------------------------
                 
                 document.getElementById('wordMeaning').textContent = data.meaning;
                 document.getElementById('progressText').textContent = `${currentIndex + 1} / ${currentWords.length}`;
@@ -988,29 +995,10 @@
             }, 150);
         }
 
-        function flipCard() {
-            flashcard.classList.toggle('is-flipped');
-        }
-
-        function nextWord() {
-            if (currentIndex < currentWords.length) {
-                currentIndex++;
-                updateCard();
-            }
-        }
-
-        function prevWord() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateCard();
-            }
-        }
-
-        function shuffleCurrentWords() {
-            currentWords = currentWords.sort(() => Math.random() - 0.5);
-            currentIndex = 0;
-            updateCard();
-        }
+        function flipCard() { flashcard.classList.toggle('is-flipped'); }
+        function nextWord() { if (currentIndex < currentWords.length) { currentIndex++; updateCard(); } }
+        function prevWord() { if (currentIndex > 0) { currentIndex--; updateCard(); } }
+        function shuffleCurrentWords() { currentWords = currentWords.sort(() => Math.random() - 0.5); currentIndex = 0; updateCard(); }
 
         function restartWithRandomOrder() {
             currentWords = currentWords.sort(() => Math.random() - 0.5);
@@ -1020,12 +1008,36 @@
             updateCard();
         }
 
-        // --- 8. SISTEM KUIS MINGGUAN ---
+        // --- 8. SISTEM KUIS MINGGUAN TERBARU ---
         function loadNextQuiz() {
+            // Jika antrian soal sudah habis, maka Kuis Selesai!
             if(quizQueue.length === 0) {
                 document.getElementById('quizContainer').style.display = 'none';
                 document.getElementById('doneMessage').style.display = 'block';
                 
+                const doneTitle = document.getElementById('doneTitle');
+                const doneDesc = document.getElementById('doneDesc');
+                const btnRestart = document.getElementById('btnRestart');
+
+                if (currentLang === 'id') {
+                    doneTitle.textContent = "Kuis Selesai! 🎉";
+                    doneDesc.innerHTML = `Skor kamu: <strong>${quizScore} / ${totalQuizQuestions}</strong> benar pada tebakan pertama.<br><br>Sekarang mari kita lanjut ke mode hafalan kartu normal!`;
+                    btnRestart.textContent = "Lanjut ke Hafalan Normal ➔";
+                } else {
+                    doneTitle.textContent = "Quiz Beendet! 🎉";
+                    doneDesc.innerHTML = `Dein Ergebnis: <strong>${quizScore} / ${totalQuizQuestions}</strong> beim ersten Versuch richtig.<br><br>Lass uns nun zum normalen Karteikarten-Modus wechseln!`;
+                    btnRestart.textContent = "Weiter zu Karteikarten ➔";
+                }
+                
+                // 💡 Fungsi Tombol diubah agar mengembalikan user ke mode Flashcard biasa dengan list 10 kata yang sama
+                btnRestart.onclick = function() {
+                    document.getElementById('doneMessage').style.display = 'none';
+                    document.getElementById('mainUI').style.display = 'flex';
+                    currentWords = [...dailySelection]; // Memuat kembali 10 kata untuk hari ini
+                    currentIndex = 0;
+                    updateCard();
+                };
+
                 confetti({
                     particleCount: 200,
                     spread: 100,
@@ -1034,6 +1046,7 @@
                 });
                 return;
             }
+
             const currentQ = quizQueue[0];
             const qColor = getArticleColor(currentQ.article);
             
@@ -1042,13 +1055,10 @@
             
             qArticleEl.textContent = currentQ.article;
             qArticleEl.style.color = "var(--text-color)";
-            
             qWordEl.textContent = currentQ.word;
             qWordEl.style.color = qColor;
             
             let optionsSet = new Set([currentQ.meaning]);
-
-            // 💡 PENYESUAIAN BARU: Filter dulu datanya sesuai level saat ini
             const currentLevelWords = database.filter(item => item.level === currentLevel);
 
             while(optionsSet.size < 3) {
@@ -1059,26 +1069,50 @@
             
             const optionsDiv = document.getElementById('quizOptions');
             optionsDiv.innerHTML = '';
+            
             optionsArr.forEach(opt => {
                 let btn = document.createElement('button');
                 btn.className = 'quiz-option';
                 btn.textContent = opt;
-                btn.onclick = () => checkQuiz(opt, currentQ.meaning);
+                // Kita kirim elemen tombol agar bisa diwarnai animasi
+                btn.onclick = function() { checkQuiz(opt, currentQ.meaning, this, currentQ); };
                 optionsDiv.appendChild(btn);
             });
             document.getElementById('quizProgressText').textContent = `${i18n[currentLang].quizRemaining}: ${quizQueue.length}`;
         }
 
-        function checkQuiz(selected, correct) {
+        function checkQuiz(selected, correct, btnElement, currentQ) {
+            // Matikan tombol agar tidak di-klik double
+            const allBtns = document.querySelectorAll('.quiz-option');
+            allBtns.forEach(b => b.style.pointerEvents = 'none');
+
             if(selected === correct) {
+                btnElement.classList.add('correct');
                 playSound('correct');
-                quizQueue.shift();
-                setTimeout(loadNextQuiz, 400);
+                
+                // Jika soal ini belum pernah salah sebelumnya, maka skor ditambah 1
+                if(!currentQ.isRetry) {
+                    quizScore++;
+                }
+
+                quizQueue.shift(); // Buang dari antrian kuis
+                setTimeout(loadNextQuiz, 1000); // Jeda 1 detik agar suara selesai dan warna terlihat
             } else {
+                btnElement.classList.add('wrong');
                 playSound('wrong');
+                
+                // Tunjukkan ke user mana opsi yang benar
+                allBtns.forEach(b => {
+                    if(b.textContent === correct) {
+                        b.classList.add('correct');
+                    }
+                });
+
                 let q = quizQueue.shift();
-                quizQueue.push(q);
-                setTimeout(loadNextQuiz, 400);
+                q.isRetry = true; // Tandai bahwa user sudah pernah salah di kata ini
+                quizQueue.push(q); // Masukkan lagi ke antrian paling belakang
+                
+                setTimeout(loadNextQuiz, 1500); // Jeda 1.5 detik
             }
         }
 
@@ -1099,7 +1133,7 @@
             }
         });
 
-        // --- 10. KONTROL MODAL / POP-UP (SPA VIEW) ---
+        // --- 10. KONTROL MODAL ---
         function openModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
@@ -1151,10 +1185,8 @@
 
         function canShowInstallPrompt() {
             if (isPwaInstalled()) return false; 
-            
             const nextShowTime = localStorage.getItem('pwaPromptNextShow');
             if (!nextShowTime) return true; 
-            
             return Date.now() > parseInt(nextShowTime); 
         }
 
@@ -1162,7 +1194,6 @@
             setTimeout(() => {
                 if (canShowInstallPrompt()) {
                     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                    
                     if (deferredPrompt || isIOS) {
                         if (isIOS) {
                             document.getElementById('btnInstallText').textContent = " Cara Install di iPhone";
@@ -1175,7 +1206,6 @@
 
         async function triggerInstallPWA() {
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            
             if (isIOS) {
                 alert('📲 Langkah Mudah Install di iPhone/iOS:\n\n1. Klik ikon Share (panah ke atas) di menu tengah bawah Safari.\n2. Scroll ke bawah dan klik "Add to Home Screen" (Tambahkan ke Layar Utama).\n3. Klik "Add" di kanan atas.');
                 snoozeInstallPWA(); 
@@ -1183,7 +1213,6 @@
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
                 if (outcome === 'accepted') {
-                    console.log('User menginstall PWA!');
                     localStorage.setItem('pwaInstalledPermanently', 'true'); 
                     closeModal('installModal');
                 }
@@ -1195,7 +1224,6 @@
             const duaHariDalamMs = 2 * 24 * 60 * 60 * 1000; 
             localStorage.setItem('pwaPromptNextShow', Date.now() + duaHariDalamMs);
             closeModal('installModal');
-            console.log('Pop-up install dibisukan selama 2 hari.');
         }
 
         function handleSnoozeInstall(event, modalId) {
@@ -1207,7 +1235,6 @@
         window.addEventListener('appinstalled', () => {
             localStorage.setItem('pwaInstalledPermanently', 'true');
             closeModal('installModal');
-            console.log('PWA terpasang resmi, pop-up dimatikan selamanya.');
         });
     </script>
 </body>
