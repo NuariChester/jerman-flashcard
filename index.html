@@ -169,14 +169,14 @@
             border-bottom: 5px solid #1a1a1a;
         }
 
-        /* Desain Baris Kata & Wrapper Audio Utama */
+        /* PERBAIKAN SPASI: Cukup gap vertikal (0px) untuk artikel dan kata yang dirapatkan */
         .word-row {
             display: flex;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
-            margin: 5px 0 0 0;
+            gap: 0px 10px; /* Vertikal 0px, Horizontal tetap 10px */
+            margin: 10px 0; /* Dikembalikan normal */
             width: 100%;
         }
         
@@ -192,15 +192,17 @@
             color: #ffffff;
             transition: opacity 0.3s;
             opacity: 0.9;
+            line-height: 1.1; /* Ditipiskan agar rapat bila turun baris */
         }
         
         .word {
             font-size: 36px;
             font-weight: 700;
             transition: color 0.3s;
+            line-height: 1.1; /* Ditipiskan agar rapat bila turun baris */
         }
 
-        /* Teks Fonetik IPA di bawah kata utama */
+        /* SPASI LAINNYA DIKEMBALIKAN NORMAL */
         .ipa-text {
             font-size: 15px;
             font-weight: 400;
@@ -211,7 +213,6 @@
             font-family: 'Poppins', monospace;
         }
 
-        /* Baris Plural dengan Audio Mini */
         .plural-row {
             display: flex;
             align-items: center;
@@ -263,7 +264,7 @@
         }
         
         .meaning { font-size: 32px; font-weight: 700; color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
-        .hint { font-size: 12px; opacity: 0.55; margin-top: 20px; }
+        .hint { font-size: 12px; opacity: 0.55; margin-top: 20px; } /* Dikembalikan normal */
         .card-back .hint { color: #ffffff; }
 
         .controls { display: flex; gap: 10px; width: 100%; max-width: 400px; justify-content: space-between; }
@@ -286,8 +287,13 @@
             background: var(--btn-bg); color: var(--text-color); border: 2px solid #ccc;
             padding: 15px; width: 100%; margin-bottom: 10px; border-radius: 12px;
             font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s;
+            box-shadow: none; /* Bersihkan efek shadow awal */
         }
-        .quiz-option:hover { border-color: #dd0000; background: rgba(221,0,0,0.05); }
+        
+        /* PERBAIKAN SHADOWING CLICK: Efek hover hanya aktif di PC/perangkat kursor */
+        @media (hover: hover) {
+            .quiz-option:hover { border-color: #dd0000; background: rgba(221,0,0,0.05); }
+        }
 
         /* --- VISUAL BENAR / SALAH KUIS --- */
         .quiz-option.correct {
@@ -295,14 +301,14 @@
             color: #ffffff !important;
             border-color: #358732 !important;
             transform: scale(1.02);
-            box-shadow: 0 4px 10px rgba(53, 135, 50, 0.4);
+            box-shadow: 0 4px 10px rgba(53, 135, 50, 0.4) !important;
         }
         .quiz-option.wrong {
             background-color: #d3302f !important; 
             color: #ffffff !important;
             border-color: #d3302f !important;
             animation: shake 0.4s;
-            box-shadow: 0 4px 10px rgba(211, 48, 47, 0.4);
+            box-shadow: 0 4px 10px rgba(211, 48, 47, 0.4) !important;
         }
 
         @keyframes shake {
@@ -888,16 +894,13 @@
             let startIdx = (dayNumber * limit) % total;
             let selection = [];
             
-            // 💡 LOMPATAN MATEMATIKA (PRIME STEP JUMPS): 
-            // Ini akan mengacak agar kata-katanya tidak bergerombol di 1 tema, 
-            // tapi tetap menjaga ke-konsistenan 10 kata yang sama per hari.
+            // LOMPATAN MATEMATIKA (PRIME STEP JUMPS)
             const primeStep = 37; 
             for(let i = 0; i < limit; i++) {
                 let scatteredIndex = (startIdx + (i * primeStep)) % total;
-                // Tambahkan isRetry: false untuk menandakan ini bukan jawaban yang diremedial
                 selection.push({...filteredWords[scatteredIndex], isRetry: false});
             }
-            dailySelection = selection; // Simpan 10 kata hari ini secara global
+            dailySelection = selection; 
             
             if(isQuizDay) {
                 document.getElementById('mainUI').style.display = 'none';
@@ -906,7 +909,7 @@
                 
                 quizScore = 0;
                 totalQuizQuestions = selection.length;
-                quizQueue = [...selection].sort(() => Math.random() - 0.5); // Kuis muncul dengan urutan acak
+                quizQueue = [...selection].sort(() => Math.random() - 0.5); 
                 loadNextQuiz();
             } else {
                 document.getElementById('mainUI').style.display = 'flex';
@@ -920,7 +923,6 @@
         const flashcard = document.getElementById('flashcard');
 
         function updateCard() {
-            // Ketika Flashcard normal selesai di akhir
             if(currentIndex >= currentWords.length) {
                 document.getElementById('mainUI').style.display = 'none';
                 document.getElementById('doneMessage').style.display = 'block';
@@ -939,7 +941,7 @@
                     doneDesc.innerHTML = "Du hast deine heutigen <strong>10 Wörter</strong> hervorragend gemeistert!";
                     btnRestart.textContent = "🔄 Noch einmal üben (Zufällige Reihenfolge)";
                 }
-                btnRestart.onclick = restartWithRandomOrder; // Reset tombol kembali ke mode acak hafalan normal
+                btnRestart.onclick = restartWithRandomOrder;
 
                 confetti({
                     particleCount: 150,
@@ -1010,7 +1012,6 @@
 
         // --- 8. SISTEM KUIS MINGGUAN TERBARU ---
         function loadNextQuiz() {
-            // Jika antrian soal sudah habis, maka Kuis Selesai!
             if(quizQueue.length === 0) {
                 document.getElementById('quizContainer').style.display = 'none';
                 document.getElementById('doneMessage').style.display = 'block';
@@ -1029,11 +1030,10 @@
                     btnRestart.textContent = "Weiter zu Karteikarten ➔";
                 }
                 
-                // 💡 Fungsi Tombol diubah agar mengembalikan user ke mode Flashcard biasa dengan list 10 kata yang sama
                 btnRestart.onclick = function() {
                     document.getElementById('doneMessage').style.display = 'none';
                     document.getElementById('mainUI').style.display = 'flex';
-                    currentWords = [...dailySelection]; // Memuat kembali 10 kata untuk hari ini
+                    currentWords = [...dailySelection]; 
                     currentIndex = 0;
                     updateCard();
                 };
@@ -1074,7 +1074,6 @@
                 let btn = document.createElement('button');
                 btn.className = 'quiz-option';
                 btn.textContent = opt;
-                // Kita kirim elemen tombol agar bisa diwarnai animasi
                 btn.onclick = function() { checkQuiz(opt, currentQ.meaning, this, currentQ); };
                 optionsDiv.appendChild(btn);
             });
@@ -1082,7 +1081,6 @@
         }
 
         function checkQuiz(selected, correct, btnElement, currentQ) {
-            // Matikan tombol agar tidak di-klik double
             const allBtns = document.querySelectorAll('.quiz-option');
             allBtns.forEach(b => b.style.pointerEvents = 'none');
 
@@ -1090,18 +1088,14 @@
                 btnElement.classList.add('correct');
                 playSound('correct');
                 
-                // Jika soal ini belum pernah salah sebelumnya, maka skor ditambah 1
-                if(!currentQ.isRetry) {
-                    quizScore++;
-                }
+                if(!currentQ.isRetry) quizScore++;
 
-                quizQueue.shift(); // Buang dari antrian kuis
-                setTimeout(loadNextQuiz, 1000); // Jeda 1 detik agar suara selesai dan warna terlihat
+                quizQueue.shift(); 
+                setTimeout(loadNextQuiz, 1000); 
             } else {
                 btnElement.classList.add('wrong');
                 playSound('wrong');
                 
-                // Tunjukkan ke user mana opsi yang benar
                 allBtns.forEach(b => {
                     if(b.textContent === correct) {
                         b.classList.add('correct');
@@ -1109,10 +1103,10 @@
                 });
 
                 let q = quizQueue.shift();
-                q.isRetry = true; // Tandai bahwa user sudah pernah salah di kata ini
-                quizQueue.push(q); // Masukkan lagi ke antrian paling belakang
+                q.isRetry = true; 
+                quizQueue.push(q); 
                 
-                setTimeout(loadNextQuiz, 1500); // Jeda 1.5 detik
+                setTimeout(loadNextQuiz, 1500); 
             }
         }
 
