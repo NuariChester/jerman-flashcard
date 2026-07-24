@@ -74,7 +74,6 @@
         }
         .icon-btn:hover { transform: scale(1.05); }
 
-        /* Tombol Switch Bahasa dengan Animasi "Sliding Pill" yang Smooth */
         .lang-switch {
             position: relative;
             background: var(--btn-bg);
@@ -112,10 +111,7 @@
             opacity: 0.6;
             transition: color 0.3s, opacity 0.3s;
         }
-        .lang-opt.active {
-            color: #ffcc00;
-            opacity: 1;
-        }
+        .lang-opt.active { color: #ffcc00; opacity: 1; }
 
         .streak-badge {
             background: linear-gradient(135deg, #ffcc00 0%, #ff9900 100%);
@@ -140,12 +136,10 @@
         }
         .level-btn.active { background-color: var(--btn-active); color: #ffffff; box-shadow: 0 4px 10px rgba(221,0,0,0.3); }
 
-        /* UI Kartu Modern (300px) */
         .card-container {
             width: 100%; max-width: 400px; height: 300px; perspective: 1000px;
             margin-bottom: 20px; cursor: pointer;
         }
-
         .card {
             width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
             transform-style: preserve-3d; border-radius: 20px; box-shadow: 0 12px 24px var(--shadow);
@@ -157,106 +151,35 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             border-radius: 20px; padding: 25px; box-sizing: border-box; text-align: center;
         }
-        
-        .card-front { 
-            background: var(--card-front); color: var(--card-front-text);
-            border-bottom: 5px solid #ffcc00;
-        }
-        
-        .card-back { 
-            background: var(--card-back); color: var(--card-back-text);
-            transform: rotateY(180deg);
-            border-bottom: 5px solid #1a1a1a;
-        }
+        .card-front { background: var(--card-front); color: var(--card-front-text); border-bottom: 5px solid #ffcc00; }
+        .card-back { background: var(--card-back); color: var(--card-back-text); transform: rotateY(180deg); border-bottom: 5px solid #1a1a1a; }
 
-        /* PERBAIKAN SPASI: Cukup gap vertikal (0px) untuk artikel dan kata yang dirapatkan */
         .word-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 0px 10px; /* Vertikal 0px, Horizontal tetap 10px */
-            margin: 10px 0; /* Dikembalikan normal */
-            width: 100%;
+            display: flex; align-items: center; justify-content: center;
+            flex-wrap: wrap; gap: 0px 10px; margin: 10px 0; width: 100%;
         }
+        .word-audio-wrapper { display: inline-flex; align-items: center; gap: 0px; }
         
-        .word-audio-wrapper {
-            display: inline-flex;
-            align-items: center;
-            gap: 0px;
-        }
-        
-        .article {
-            font-size: 32px;
-            font-weight: 400;
-            color: #ffffff;
-            transition: opacity 0.3s;
-            opacity: 0.9;
-            line-height: 1.1; /* Ditipiskan agar rapat bila turun baris */
-        }
-        
-        .word {
-            font-size: 36px;
-            font-weight: 700;
-            transition: color 0.3s;
-            line-height: 1.1; /* Ditipiskan agar rapat bila turun baris */
-        }
+        .article { font-size: 32px; font-weight: 400; color: #ffffff; transition: opacity 0.3s; opacity: 0.9; line-height: 1.1; }
+        .word { font-size: 36px; font-weight: 700; transition: color 0.3s; line-height: 1.1; }
 
-        /* SPASI LAINNYA DIKEMBALIKAN NORMAL */
-        .ipa-text {
-            font-size: 15px;
-            font-weight: 400;
-            color: #a0aab2; 
-            letter-spacing: 1px;
-            margin-top: 2px;
-            margin-bottom: 5px;
-            font-family: 'Poppins', monospace;
-        }
+        .ipa-text { font-size: 15px; font-weight: 400; color: #a0aab2; letter-spacing: 1px; margin-top: 2px; margin-bottom: 5px; font-family: 'Poppins', monospace; }
 
-        .plural-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            margin-top: 10px;
-        }
-        .plural-text {
-            font-size: 14px;
-            opacity: 0.75;
-            font-style: italic;
-            color: #cccccc;
-        }
+        .plural-row { display: flex; align-items: center; justify-content: center; gap: 2px; margin-top: 10px; }
+        .plural-text { font-size: 14px; opacity: 0.75; font-style: italic; color: #cccccc; }
 
-        /* Ikon Audio & Animasi Gelombang Suara */
         .speak-btn-minimal, .speak-btn-plural {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            outline: none;
+            background: transparent; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; outline: none;
         }
         .speak-btn-minimal { padding: 4px 0px 4px 2px; margin-left: -6px; }
         .speak-btn-plural { padding: 2px 0px 2px 2px; margin-left: -2px; }
         
-        .wave-element {
-            stroke: #95a5a6;
-            transition: stroke 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
-        }
+        .wave-element { stroke: #95a5a6; transition: stroke 0.3s ease, transform 0.3s ease, opacity 0.3s ease; }
         
-        .speak-btn-minimal:hover .wave-1, .speak-btn-minimal:active .wave-1,
-        .speak-btn-plural:hover .wave-1, .speak-btn-plural:active .wave-1 {
-            animation: waterRipple 1s infinite 0.0s;
-        }
-        .speak-btn-minimal:hover .wave-2, .speak-btn-minimal:active .wave-2,
-        .speak-btn-plural:hover .wave-2, .speak-btn-plural:active .wave-2 {
-            animation: waterRipple 1s infinite 0.15s;
-        }
-        .speak-btn-minimal:hover .wave-3, .speak-btn-minimal:active .wave-3,
-        .speak-btn-plural:hover .wave-3, .speak-btn-plural:active .wave-3 {
-            animation: waterRipple 1s infinite 0.3s;
-        }
+        .speak-btn-minimal:hover .wave-1, .speak-btn-minimal:active .wave-1, .speak-btn-plural:hover .wave-1, .speak-btn-plural:active .wave-1 { animation: waterRipple 1s infinite 0.0s; }
+        .speak-btn-minimal:hover .wave-2, .speak-btn-minimal:active .wave-2, .speak-btn-plural:hover .wave-2, .speak-btn-plural:active .wave-2 { animation: waterRipple 1s infinite 0.15s; }
+        .speak-btn-minimal:hover .wave-3, .speak-btn-minimal:active .wave-3, .speak-btn-plural:hover .wave-3, .speak-btn-plural:active .wave-3 { animation: waterRipple 1s infinite 0.3s; }
 
         @keyframes waterRipple {
             0%, 100% { stroke: #95a5a6; transform: translateX(0); opacity: 0.6; }
@@ -264,7 +187,7 @@
         }
         
         .meaning { font-size: 32px; font-weight: 700; color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
-        .hint { font-size: 12px; opacity: 0.55; margin-top: 20px; } /* Dikembalikan normal */
+        .hint { font-size: 12px; opacity: 0.55; margin-top: 20px; }
         .card-back .hint { color: #ffffff; }
 
         .controls { display: flex; gap: 10px; width: 100%; max-width: 400px; justify-content: space-between; }
@@ -281,75 +204,56 @@
 
         .progress { margin-top: 15px; font-size: 15px; font-weight: 600; opacity: 0.8; }
         
+        /* Layar Transisi Pre-Quiz */
+        #preQuizMessage { display: none; text-align: center; margin-top: 10px; max-width: 400px; width: 100%; }
+        #preQuizMessage h2 { color: #dd0000; font-size: 26px; margin-bottom: 10px; }
+        #preQuizMessage p { font-size: 16px; margin-bottom: 25px; line-height: 1.5; }
+
         /* Quiz Mode Styles */
-        #quizContainer { display: none; width: 100%; max-width: 400px; text-align: center; }
+        #quizContainer { display: none; width: 100%; max-width: 400px; text-align: center; margin-top: 10px; }
         .quiz-option {
             background: var(--btn-bg); color: var(--text-color); border: 2px solid #ccc;
             padding: 15px; width: 100%; margin-bottom: 10px; border-radius: 12px;
-            font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s;
-            box-shadow: none; /* Bersihkan efek shadow awal */
+            font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: none;
         }
-        
-        /* PERBAIKAN SHADOWING CLICK: Efek hover hanya aktif di PC/perangkat kursor */
-        @media (hover: hover) {
-            .quiz-option:hover { border-color: #dd0000; background: rgba(221,0,0,0.05); }
-        }
+        @media (hover: hover) { .quiz-option:hover { border-color: #dd0000; background: rgba(221,0,0,0.05); } }
 
-        /* --- VISUAL BENAR / SALAH KUIS --- */
-        .quiz-option.correct {
-            background-color: #358732 !important; 
-            color: #ffffff !important;
-            border-color: #358732 !important;
-            transform: scale(1.02);
-            box-shadow: 0 4px 10px rgba(53, 135, 50, 0.4) !important;
-        }
-        .quiz-option.wrong {
-            background-color: #d3302f !important; 
-            color: #ffffff !important;
-            border-color: #d3302f !important;
-            animation: shake 0.4s;
-            box-shadow: 0 4px 10px rgba(211, 48, 47, 0.4) !important;
-        }
+        .quiz-option.correct { background-color: #358732 !important; color: #ffffff !important; border-color: #358732 !important; transform: scale(1.02); box-shadow: 0 4px 10px rgba(53, 135, 50, 0.4) !important; }
+        .quiz-option.wrong { background-color: #d3302f !important; color: #ffffff !important; border-color: #d3302f !important; animation: shake 0.4s; box-shadow: 0 4px 10px rgba(211, 48, 47, 0.4) !important; }
 
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
 
-        /* Pesan Selesai */
-        #doneMessage { display: none; text-align: center; margin-top: 30px; max-width: 400px; }
+        /* Pesan Selesai Akhir (Post-Quiz / Skip) */
+        #doneMessage { display: none; text-align: center; margin-top: 10px; max-width: 400px; width: 100%; }
         #doneMessage h2 { color: #dd0000; font-size: 26px; margin-bottom: 10px; }
         #doneMessage p { font-size: 16px; margin-bottom: 25px; line-height: 1.5; }
         
+        .btn-start-quiz {
+            background: linear-gradient(135deg, #ffcc00 0%, #ff9900 100%);
+            color: #1a1a1a; border: none; padding: 16px 20px;
+            border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer;
+            box-shadow: 0 6px 15px rgba(255, 204, 0, 0.3); transition: 0.3s; width: 100%; margin-bottom: 12px;
+        }
+        .btn-start-quiz:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 204, 0, 0.4); }
+
+        .btn-skip-quiz {
+            background: transparent; color: var(--text-color); border: 2px solid var(--text-color);
+            padding: 14px 20px; border-radius: 30px; font-size: 15px; font-weight: 600; cursor: pointer;
+            transition: 0.3s; width: 100%; opacity: 0.7;
+        }
+        .btn-skip-quiz:hover { opacity: 1; }
+
         .btn-restart {
             background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
             color: #ffcc00; border: 2px solid #ffcc00; padding: 15px 30px;
             border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2); transition: 0.3s; width: 100%;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2); transition: 0.3s; width: 100%; margin-bottom: 10px;
         }
         .btn-restart:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); background: #000000; }
 
         /* Area Menu Panduan & Traktir Kopi */
-        .footer-links {
-            margin-top: 12px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            font-size: 14px;
-            font-weight: 700;
-        }
-        .footer-link {
-            color: #dd0000;
-            cursor: pointer;
-            transition: color 0.2s, transform: scale(1.05);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+        .footer-links { margin-top: 12px; display: flex; gap: 12px; align-items: center; font-size: 14px; font-weight: 700; }
+        .footer-link { color: #dd0000; cursor: pointer; transition: color 0.2s, transform: scale(1.05); text-decoration: none; display: flex; align-items: center; gap: 4px; }
         .footer-link:hover { color: #ffcc00; transform: scale(1.05); }
         .footer-sep { color: #95a5a6; opacity: 0.4; font-weight: 400; }
 
@@ -357,7 +261,7 @@
         .copyright a { color: #dd0000; text-decoration: none; font-weight: bold; }
         .copyright a:hover { text-decoration: underline; }
 
-        /* --- DESAIN MODAL / POP-UP OVERLAY (SPA VIEW) --- */
+        /* --- MODAL --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px);
@@ -366,39 +270,23 @@
         }
         .modal-overlay.show { display: flex; opacity: 1; }
         .modal-card {
-            background: var(--modal-bg); color: var(--text-color);
-            width: 100%; max-width: 420px; max-height: 85vh; border-radius: 24px;
+            background: var(--modal-bg); color: var(--text-color); width: 100%; max-width: 420px; max-height: 85vh; border-radius: 24px;
             padding: 25px; box-sizing: border-box; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            overflow-y: auto; position: relative; transform: translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto; position: relative; transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(255, 204, 0, 0.2);
         }
         .modal-overlay.show .modal-card { transform: translateY(0); }
-        .modal-header {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid var(--btn-bg); padding-bottom: 12px; margin-bottom: 18px;
-        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--btn-bg); padding-bottom: 12px; margin-bottom: 18px; }
         .modal-header h2 { margin: 0; font-size: 20px; color: #dd0000; display: flex; align-items: center; gap: 8px; }
-        .btn-close-icon {
-            background: var(--btn-bg); border: none; border-radius: 50%;
-            width: 34px; height: 34px; font-size: 16px; cursor: pointer;
-            color: var(--text-color); font-weight: bold; transition: 0.2s;
-        }
+        .btn-close-icon { background: var(--btn-bg); border: none; border-radius: 50%; width: 34px; height: 34px; font-size: 16px; cursor: pointer; color: var(--text-color); font-weight: bold; transition: 0.2s; }
         .btn-close-icon:hover { background: #dd0000; color: #ffffff; }
-        
         .modal-body { font-size: 14px; line-height: 1.6; }
         .modal-body h3 { font-size: 16px; color: #ffcc00; margin-top: 18px; margin-bottom: 8px; border-left: 3px solid #dd0000; padding-left: 8px; }
         .modal-body ul { margin: 0; padding-left: 20px; }
         .modal-body li { margin-bottom: 8px; }
-        
-        .btn-modal-close {
-            background: #1a1a1a; color: #ffcc00; border: none;
-            padding: 12px; border-radius: 12px; font-weight: 700;
-            width: 100%; margin-top: 20px; cursor: pointer; transition: 0.2s;
-        }
+        .btn-modal-close { background: #1a1a1a; color: #ffcc00; border: none; padding: 12px; border-radius: 12px; font-weight: 700; width: 100%; margin-top: 20px; cursor: pointer; transition: 0.2s; }
         .btn-modal-close:hover { background: #dd0000; color: #ffffff; }
 
-        /* Embed Iframe Saweria */
         .saweria-container { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 10px; }
     </style>
 </head>
@@ -429,7 +317,6 @@
         <div class="card-container" id="cardContainer" onclick="flipCard()">
             <div class="card" id="flashcard">
                 <div class="card-face card-front">
-                    <!-- Baris Kata Minimalis -->
                     <div class="word-row">
                         <span class="article" id="wordArticle">-</span>
                         <div class="word-audio-wrapper">
@@ -443,11 +330,7 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- Teks Fonetik IPA -->
                     <div class="ipa-text" id="wordIpa">-</div>
-
-                    <!-- Baris Plural dengan Audio Mini -->
                     <div class="plural-row" id="pluralContainer">
                         <span class="plural-text" id="wordPlural">-</span>
                         <button class="speak-btn-plural" id="audioBtnPlural" onclick="speakPlural(event)" title="Dengarkan pelafalan plural" style="display: none;">
@@ -475,11 +358,21 @@
         <div class="progress" id="progressText">1 / 10</div>
     </div>
 
-    <!-- UI Kuis Mingguan -->
+    <!-- UI Transisi Pre-Quiz (Setelah Hafalan Selesai) -->
+    <div id="preQuizMessage">
+        <div style="font-size: 60px; margin-bottom: 10px;">🎉🇩🇪</div>
+        <h2 id="preQuizTitle">Selamat!</h2>
+        <p id="preQuizDesc">Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!</p>
+        
+        <button class="btn-start-quiz" id="btnStartQuiz" onclick="startDailyQuiz()">📝 Mulai Kuis Harian</button>
+        <button class="btn-skip-quiz" id="btnSkipQuiz" onclick="skipQuiz()">⏭️ Lewati Kuis</button>
+    </div>
+
+    <!-- UI Kuis Harian -->
     <div id="quizContainer">
-        <h2 style="color: #dd0000;" id="quizTitle">Ujian Mingguan! 📝</h2>
-        <p id="quizDesc">Apa arti dari kata bahasa Jerman ini?</p>
-        <div class="word-row" style="margin: 20px 0 25px 0;">
+        <h2 style="color: #dd0000;" id="quizTitle">Kuis Harian! 📝</h2>
+        <p id="quizDesc" style="margin-bottom: 5px;">-</p>
+        <div class="word-row" style="margin: 15px 0 25px 0;">
             <span class="article" id="quizArticle" style="color: var(--text-color); font-size: 28px;">-</span>
             <span class="word" id="quizWord" style="font-size: 36px;">-</span>
         </div>
@@ -487,12 +380,13 @@
         <div class="progress" id="quizProgressText">Sisa soal: 0</div>
     </div>
 
-    <!-- Pesan Selesai -->
+    <!-- Pesan Selesai Akhir (Post-Quiz / Skip) -->
     <div id="doneMessage">
-        <div style="font-size: 60px; margin-bottom: 10px;">🎉🇩🇪</div>
-        <h2 id="doneTitle">Selamat!</h2>
-        <p id="doneDesc">Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!</p>
-        <button class="btn-restart" id="btnRestart" onclick="restartWithRandomOrder()">🔄 Mengulang Kembali (Acak Urutan)</button>
+        <div style="font-size: 60px; margin-bottom: 10px;">🏆✨</div>
+        <h2 id="doneTitle">Kuis Selesai!</h2>
+        <p id="doneDesc">-</p>
+        <button class="btn-restart" id="btnRestartNormal" onclick="restartNormal()">📚 Ulangi Hafalan Flashcard</button>
+        <button class="btn-skip-quiz" id="btnRestartQuiz" onclick="startDailyQuiz()" style="margin-top: 5px;">🔄 Ulangi Kuis</button>
     </div>
 
     <!-- MENU PANDUAN & TRAKTIR KOPI -->
@@ -504,7 +398,7 @@
 
     <div class="copyright">© 2026 <a href="https://www.instagram.com/nuari_chester/" target="_blank">Chester</a></div>
 
-    <!-- ================= MODAL / POP-UP PANDUAN ================= -->
+    <!-- MODAL PANDUAN -->
     <div class="modal-overlay" id="panduanModal" onclick="closeModalOnBackdrop(event, 'panduanModal')">
         <div class="modal-card">
             <div class="modal-header">
@@ -514,31 +408,24 @@
             <div class="modal-body">
                 <h3 id="hHowTo">💡 Cara Penggunaan</h3>
                 <ul>
-                    <li id="liHow1"><strong>Balik Kartu:</strong> Klik tepat di area kartu atau tekan tombol <strong>Spasi</strong> di keyboard untuk melihat arti kata.</li>
-                    <li id="liHow2"><strong>Suara Audio:</strong> Klik ikon gelombang suara 🔊 di samping kata untuk mendengarkan pelafalan asli Jerman (Hybrid MP3 & TTS).</li>
-                    <li id="liHow3"><strong>Navigasi:</strong> Gunakan tombol <strong>Lanjut</strong> (atau panah kanan &#8594;), <strong>Mundur</strong> (panah kiri &#8592;), atau tombol <strong>Acak</strong>.</li>
+                    <li id="liHow1"><strong>Balik Kartu:</strong> Klik tepat di area kartu atau tekan tombol <strong>Spasi</strong> di keyboard.</li>
+                    <li id="liHow2"><strong>Suara Audio:</strong> Klik ikon gelombang suara 🔊 di samping kata.</li>
+                    <li id="liHow3"><strong>Navigasi:</strong> Gunakan tombol <strong>Lanjut</strong> (&#8594;), <strong>Mundur</strong> (&#8592;), atau <strong>Acak</strong>.</li>
                 </ul>
 
                 <h3 id="hFeatures">🌟 Fitur Saat Ini</h3>
                 <ul>
-                    <li>🇩🇪 <strong>280+ Kosakata:</strong> Terbagi rata untuk tingkat A1 & A2 beserta artikel, fonetik IPA, dan bentuk jamak (*Plural*).</li>
-                    <li>🎨 <strong>Pewarnaan Gender:</strong> Kata otomatis berwarna Biru (*Der*), Hijau (*Das*), dan Merah (*Die*) untuk mempercepat daya ingat otak.</li>
-                    <li>📝 <strong>Ujian Mingguan:</strong> Sistem kuis otomatis muncul setiap hari ke-7 (kelipatan 7) untuk menguji hafalanmu.</li>
-                    <li>🔥 <strong>Streak & PWA:</strong> Menghitung konsistensi belajar harian dan web bisa di-install langsung ke layar HP (Offline Mode).</li>
-                </ul>
-
-                <h3 id="hRoadmap">🚀 Roadmap (Update Kedepan)</h3>
-                <ul>
-                    <li>⭐ <strong>Fitur Bookmark:</strong> Tombol bintang untuk menyimpan kata-kata yang sulit ke dalam daftar khusus.</li>
-                    <li>💬 <strong>Contoh Kalimat:</strong> Penambahan kalimat pendek di belakang kartu untuk memahami konteks penggunaan kata.</li>
-                    <li>📊 <strong>Dashboard Statistik:</strong> Visualisasi grafik progress berapa banyak kata yang sudah dimasteri.</li>
+                    <li>🇩🇪 <strong>Kosakata Harian:</strong> Sistem pintar pembagian A1/A2 (Fonetik IPA, Plural).</li>
+                    <li>🎨 <strong>Pewarnaan Gender:</strong> Biru (*Der*), Hijau (*Das*), Merah (*Die*).</li>
+                    <li>📝 <strong>Kuis Harian Dinamis:</strong> Beragam variasi soal (Artikel, Arti, Reverse, Plural) untuk mengasah ingatan setelah hafalan.</li>
+                    <li>🔥 <strong>Streak & PWA:</strong> Hitung konsistensi & bisa di-install langsung.</li>
                 </ul>
             </div>
             <button class="btn-modal-close" onclick="closeModal('panduanModal')" id="btnGuideClose">Tutup Panduan</button>
         </div>
     </div>
 
-    <!-- ================= MODAL / POP-UP TRAKTIR KOPI ================= -->
+    <!-- MODAL TRAKTIR KOPI -->
     <div class="modal-overlay" id="saweriaModal" onclick="closeModalOnBackdrop(event, 'saweriaModal')">
         <div class="modal-card">
             <div class="modal-header">
@@ -546,123 +433,86 @@
                 <button class="btn-close-icon" onclick="closeModal('saweriaModal')">✕</button>
             </div>
             <div class="modal-body" style="text-align: center;">
-                <p id="txtCoffeeDesc" style="margin-top: 0;">Dukunganmu sangat berarti agar aplikasi Flashcard Jerman ini terus berkembang, bebas iklan, dan server audio tetap terjaga!</p>
-                
+                <p id="txtCoffeeDesc" style="margin-top: 0;">Dukunganmu sangat berarti agar aplikasi ini terus berkembang & bebas iklan!</p>
                 <div class="saweria-container">
                     <img src="Saweria.png" alt="QR Code Saweria" style="width: 100%; max-width: 300px; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); margin: 10px 0;">
                 </div>
-
-                <a href="https://saweria.co/widgets/qr?streamKey=86409b8c3c225bab62543679ea79431f" target="_blank" style="display: inline-block; background: #ffcc00; color: #1a1a1a; text-decoration: none; font-weight: 700; padding: 10px 20px; border-radius: 20px; font-size: 13px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.2s;">
+                <a href="https://saweria.co/widgets/qr?streamKey=86409b8c3c225bab62543679ea79431f" target="_blank" style="display: inline-block; background: #ffcc00; color: #1a1a1a; text-decoration: none; font-weight: 700; padding: 10px 20px; border-radius: 20px; font-size: 13px; margin-top: 10px;">
                     👉 Buka Langsung di Saweria
                 </a>
-
-                <p style="font-size: 11px; color: #7f8c8d; margin-top: 15px; margin-bottom: 0;">Scan QR Code di atas yang mendukung QRIS atau aplikasi OVO, GoPay, Dana, ShopeePay, dan LinkAja.</p>
             </div>
             <button class="btn-modal-close" onclick="closeModal('saweriaModal')" id="btnCoffeeClose">Tutup Jendela</button>
         </div>
     </div>
 
-     <!-- ================= MODAL / POP-UP INSTALL PWA ================= -->
+    <!-- MODAL INSTALL PWA -->
     <div class="modal-overlay" id="installModal" onclick="handleSnoozeInstall(event, 'installModal')">
         <div class="modal-card" style="text-align: center; border: 2px solid #ffcc00;">
             <div style="font-size: 50px; margin-bottom: 10px;">📲</div>
             <h2 style="color: #dd0000; margin: 0 0 10px 0; font-size: 22px;" id="installTitle">Install Aplikasi Sekarang!</h2>
             <p style="font-size: 14px; line-height: 1.5; margin-bottom: 20px;" id="installDesc">
-                Biar akses belajar lebih cepat tanpa repot buka browser, install web app ini langsung ke layar utama HP kamu sekarang!
+                Biar akses belajar lebih cepat tanpa repot buka browser!
             </p>
-            
-            <button class="nav-btn btn-random" style="width: 100%; padding: 14px; margin-bottom: 10px; font-size: 16px;" onclick="triggerInstallPWA()">
-                <span id="btnInstallText">🚀 Install Sekarang</span>
-            </button>
-            
-            <button style="background: transparent; border: none; color: #95a5a6; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 8px;" onclick="snoozeInstallPWA()">
-                <span id="btnSkipText">Lewati (Ingatkan 2 Hari Lagi)</span>
-            </button>
+            <button class="btn-start-quiz" onclick="triggerInstallPWA()"><span id="btnInstallText">🚀 Install Sekarang</span></button>
+            <button class="btn-skip-quiz" style="border:none;" onclick="snoozeInstallPWA()"><span id="btnSkipText">Lewati (Ingatkan 2 Hari Lagi)</span></button>
         </div>
     </div>
 
-    <!-- PANGGIL DATABASE EKSTERNAL DI SINI -->
     <script src="words.js"></script>
 
-    <!-- SCRIPT LOGIKA UTAMA -->
     <script>
-        // --- 1. FITUR PWA (Service Worker) ---
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
 
-        // Variabel Data Global Baru
         let dailySelection = []; 
         let quizScore = 0;
         let totalQuizQuestions = 0;
 
-        // --- 2. FITUR MULTI-BAHASA (ID & DE) ---
         let currentLang = localStorage.getItem('appLang') || 'id';
 
         const i18n = {
             id: {
-                title: "🇩🇪 Flashcard Jerman",
-                prev: "Mundur",
-                random: "Acak",
-                next: "Lanjut",
-                hintFront: "Klik ikon gelombang suara untuk mendengarkan",
-                hintBack: "Klik untuk membalik kembali",
-                quizTitle: "Ujian Mingguan! 📝",
-                quizDesc: "Apa arti dari kata bahasa Jerman ini?",
-                quizRemaining: "Sisa soal",
-                doneTitle: "Selamat!",
-                doneDesc: "Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!",
-                restart: "🔄 Mengulang Kembali (Acak Urutan)",
-                streakDays: "Hari",
-                guide: "📖 Panduan",
-                coffee: "☕ Traktir Kopi",
-                modalGuideTitle: "📖 Panduan & Roadmap",
-                hHowTo: "💡 Cara Penggunaan",
-                liHow1: "<strong>Balik Kartu:</strong> Klik kartu atau tekan tombol <strong>Spasi</strong> untuk melihat arti.",
-                liHow2: "<strong>Suara Audio:</strong> Klik ikon gelombang suara 🔊 di samping kata untuk mendengarkan.",
-                liHow3: "<strong>Navigasi:</strong> Gunakan tombol <strong>Lanjut</strong> (&#8594;), <strong>Mundur</strong> (&#8592;), atau <strong>Acak</strong>.",
-                hFeatures: "🌟 Fitur Saat Ini",
-                hRoadmap: "🚀 Roadmap (Update Kedepan)",
-                btnGuideClose: "Tutup Panduan",
-                modalCoffeeTitle: "☕ Traktir Kopi Chester",
-                txtCoffeeDesc: "Dukunganmu sangat berarti agar aplikasi Flashcard Jerman ini terus berkembang dan bebas iklan!",
-                btnCoffeeClose: "Tutup Jendela",
-                installTitle: "Install Aplikasi Sekarang!",
-                installDesc: "Biar akses belajar lebih cepat tanpa repot buka browser, install web app ini langsung ke layar utama HP kamu sekarang!",
-                btnInstallText: "🚀 Install Sekarang",
-                btnSkipText: "Lewati"
+                title: "🇩🇪 Flashcard Jerman", prev: "Mundur", random: "Acak", next: "Lanjut",
+                hintFront: "Klik ikon gelombang suara untuk mendengarkan", hintBack: "Klik untuk membalik kembali",
+                quizTitle: "Kuis Harian! 📝", quizRemaining: "Sisa soal",
+                preQuizTitle: "Selamat!", preQuizDesc: "Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!",
+                btnStartQuiz: "📝 Mulai Kuis Harian", btnSkipQuiz: "⏭️ Lewati Kuis",
+                doneTitleQuiz: "Kuis Selesai! 🎉", doneTitleSkip: "Hafalan Selesai! ✨",
+                btnRestartNormal: "📚 Ulangi Hafalan Flashcard", btnRestartQuiz: "🔄 Ulangi Kuis",
+                streakDays: "Hari", guide: "📖 Panduan", coffee: "☕ Traktir Kopi",
+                modalGuideTitle: "📖 Panduan & Roadmap", hHowTo: "💡 Cara Penggunaan",
+                liHow1: "<strong>Balik Kartu:</strong> Klik kartu atau tekan tombol <strong>Spasi</strong>.",
+                liHow2: "<strong>Suara Audio:</strong> Klik ikon gelombang suara 🔊.",
+                liHow3: "<strong>Navigasi:</strong> Gunakan tombol Lanjut/Mundur.",
+                hFeatures: "🌟 Fitur Saat Ini", hRoadmap: "🚀 Roadmap (Update Kedepan)",
+                btnGuideClose: "Tutup Panduan", modalCoffeeTitle: "☕ Traktir Kopi Chester",
+                txtCoffeeDesc: "Dukunganmu sangat berarti agar aplikasi ini terus berkembang!", btnCoffeeClose: "Tutup Jendela",
+                installTitle: "Install Aplikasi Sekarang!", installDesc: "Biar akses belajar lebih cepat!",
+                btnInstallText: "🚀 Install Sekarang", btnSkipText: "Lewati",
+                // Quiz Prompts
+                qArticle: "Pilih artikel yang tepat!", qMeaning: "Apa arti dari kata ini?",
+                qReverse: "Apa bahasa Jermannya?", qPlural: "Apa bentuk jamaknya (Plural)?"
             },
             de: {
-                title: "🇩🇪 Deutsch Karteikarten",
-                prev: "Zurück",
-                random: "Mischen",
-                next: "Weiter",
-                hintFront: "Klicke auf das Wellensymbol für die Aussprache",
-                hintBack: "Klicke, um die Karte umzudrehen",
-                quizTitle: "Wöchentlicher Test! 📝",
-                quizDesc: "Was bedeutet dieses deutsche Wort?",
-                quizRemaining: "Verbleibend",
-                doneTitle: "Herzlichen Glückwunsch!",
-                doneDesc: "Du hast deine heutigen <strong>10 Wörter</strong> hervorragend gemeistert!",
-                restart: "🔄 Noch einmal üben (Zufällige Reihenfolge)",
-                streakDays: "Tage",
-                guide: "📖 Anleitung",
-                coffee: "☕ Kaffee ausgeben",
-                modalGuideTitle: "📖 Anleitung & Roadmap",
-                hHowTo: "💡 Bedienungsanleitung",
+                title: "🇩🇪 Deutsch Karteikarten", prev: "Zurück", random: "Mischen", next: "Weiter",
+                hintFront: "Klicke auf das Wellensymbol für die Aussprache", hintBack: "Klicke, um die Karte umzudrehen",
+                quizTitle: "Tägliches Quiz! 📝", quizRemaining: "Verbleibend",
+                preQuizTitle: "Glückwunsch!", preQuizDesc: "Du hast deine heutigen <strong>10 Wörter</strong> hervorragend gemeistert!",
+                btnStartQuiz: "📝 Tägliches Quiz starten", btnSkipQuiz: "⏭️ Quiz überspringen",
+                doneTitleQuiz: "Quiz Beendet! 🎉", doneTitleSkip: "Lernen Beendet! ✨",
+                btnRestartNormal: "📚 Karteikarten wiederholen", btnRestartQuiz: "🔄 Quiz wiederholen",
+                streakDays: "Tage", guide: "📖 Anleitung", coffee: "☕ Kaffee ausgeben",
+                modalGuideTitle: "📖 Anleitung & Roadmap", hHowTo: "💡 Bedienungsanleitung",
                 liHow1: "<strong>Karte umdrehen:</strong> Klicke auf die Karte oder drücke die <strong>Leertaste</strong>.",
-                liHow2: "<strong>Aussprache:</strong> Klicke auf das Tonsymbol 🔊 neben dem Wort.",
-                liHow3: "<strong>Navigation:</strong> Nutze die Tasten <strong>Weiter</strong> (&#8594;), <strong>Zurück</strong> (&#8592;) oder <strong>Mischen</strong>.",
-                hFeatures: "🌟 Aktuelle Funktionen",
-                hRoadmap: "🚀 Geplante Updates",
-                btnGuideClose: "Schließen",
-                modalCoffeeTitle: "☕ Kaffee für Chester",
-                txtCoffeeDesc: "Deine Unterstützung hilft dabei, diese Karteikarten-App werbefrei und aktuell zu halten!",
-                btnCoffeeClose: "Schließen",
-                installTitle: "Jetzt die App installieren!",
-                installDesc: "Für schnelleren Zugriff ohne Browser: Installiere diese Web-App jetzt direkt auf deinem Startbildschirm!",
-                btnInstallText: "🚀 Jetzt Installieren",
-                btnSkipText: "Überspringen"
+                liHow2: "<strong>Aussprache:</strong> Klicke auf das Tonsymbol 🔊.",
+                liHow3: "<strong>Navigation:</strong> Nutze die Tasten Weiter/Zurück.",
+                hFeatures: "🌟 Aktuelle Funktionen", hRoadmap: "🚀 Geplante Updates",
+                btnGuideClose: "Schließen", modalCoffeeTitle: "☕ Kaffee für Chester",
+                txtCoffeeDesc: "Deine Unterstützung hilft dabei, diese App werbefrei zu halten!", btnCoffeeClose: "Schließen",
+                installTitle: "Jetzt installieren!", installDesc: "Für schnelleren Zugriff ohne Browser!",
+                btnInstallText: "🚀 Installieren", btnSkipText: "Überspringen",
+                // Quiz Prompts
+                qArticle: "Wähle den richtigen Artikel!", qMeaning: "Was bedeutet dieses Wort?",
+                qReverse: "Was ist das auf Deutsch?", qPlural: "Wie lautet die Pluralform?"
             }
         };
 
@@ -671,11 +521,7 @@
             localStorage.setItem('appLang', lang);
 
             const slider = document.getElementById('langSlider');
-            if(lang === 'de') {
-                slider.style.transform = 'translateX(45px)';
-            } else {
-                slider.style.transform = 'translateX(0)';
-            }
+            if(lang === 'de') { slider.style.transform = 'translateX(45px)'; } else { slider.style.transform = 'translateX(0)'; }
 
             document.getElementById('btnLangID').classList.toggle('active', lang === 'id');
             document.getElementById('btnLangDE').classList.toggle('active', lang === 'de');
@@ -687,27 +533,16 @@
             document.getElementById('hintFront').textContent = i18n[lang].hintFront;
             document.getElementById('hintBack').textContent = i18n[lang].hintBack;
             document.getElementById('quizTitle').textContent = i18n[lang].quizTitle;
-            document.getElementById('quizDesc').textContent = i18n[lang].quizDesc;
             
-            // Logika pintar untuk menentukan teks layar akhir
-            const doneTitle = document.getElementById('doneTitle');
-            const doneDesc = document.getElementById('doneDesc');
-            const btnRestart = document.getElementById('btnRestart');
+            document.getElementById('preQuizTitle').textContent = i18n[lang].preQuizTitle;
+            document.getElementById('preQuizDesc').innerHTML = i18n[lang].preQuizDesc;
+            document.getElementById('btnStartQuiz').textContent = i18n[lang].btnStartQuiz;
+            document.getElementById('btnSkipQuiz').textContent = i18n[lang].btnSkipQuiz;
 
-            // Cek apakah kita sedang berada di layar penyelesaian Kuis
-            if (document.getElementById('quizContainer').style.display === 'none' && document.getElementById('mainUI').style.display === 'none' && (btnRestart.textContent.includes('Normal') || btnRestart.textContent.includes('Karteikarten'))) {
-                doneTitle.textContent = lang === 'id' ? "Kuis Selesai! 🎉" : "Quiz Beendet! 🎉";
-                doneDesc.innerHTML = lang === 'id' ? 
-                    `Skor kamu: <strong>${quizScore} / ${totalQuizQuestions}</strong> benar pada tebakan pertama.<br><br>Sekarang mari kita lanjut ke mode hafalan kartu normal!` : 
-                    `Dein Ergebnis: <strong>${quizScore} / ${totalQuizQuestions}</strong> beim ersten Versuch richtig.<br><br>Lass uns nun zum normalen Karteikarten-Modus wechseln!`;
-                btnRestart.textContent = lang === 'id' ? "Lanjut ke Hafalan Normal ➔" : "Weiter zu Karteikarten ➔";
-            } else {
-                doneTitle.textContent = i18n[lang].doneTitle;
-                doneDesc.innerHTML = i18n[lang].doneDesc;
-                btnRestart.textContent = i18n[lang].restart;
-            }
+            document.getElementById('btnRestartNormal').textContent = i18n[lang].btnRestartNormal;
+            document.getElementById('btnRestartQuiz').textContent = i18n[lang].btnRestartQuiz;
 
-            // Update Teks Modal & Footer
+            // Static modals update
             document.getElementById('txtGuide').textContent = i18n[lang].guide;
             document.getElementById('txtCoffee').textContent = i18n[lang].coffee;
             document.getElementById('modalGuideTitle').textContent = i18n[lang].modalGuideTitle;
@@ -726,9 +561,8 @@
             document.getElementById('btnInstallText').textContent = i18n[lang].btnInstallText;
             document.getElementById('btnSkipText').textContent = i18n[lang].btnSkipText;
 
-            updateStreak();
-            updateDateDisplay();
-            if (isQuizDay && quizQueue.length > 0) {
+            updateStreak(); updateDateDisplay();
+            if (document.getElementById('quizContainer').style.display === 'block') {
                 document.getElementById('quizProgressText').textContent = `${i18n[currentLang].quizRemaining}: ${quizQueue.length}`;
             }
         }
@@ -739,7 +573,6 @@
             document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString(locale, options);
         }
 
-        // --- 3. FITUR DARK MODE ---
         const darkModeToggle = document.getElementById('darkModeToggle');
         let isDark = localStorage.getItem('darkMode') === 'true';
         if(isDark) document.body.classList.add('dark-mode');
@@ -752,7 +585,6 @@
         });
         darkModeToggle.textContent = isDark ? '☀️' : '🌙';
 
-        // --- 4. FITUR STREAK ---
         function updateStreak() {
             const todayStr = new Date().toDateString();
             let lastVisit = localStorage.getItem('lastVisit');
@@ -763,138 +595,74 @@
                     let diffTime = Math.abs(new Date(todayStr) - new Date(lastVisit));
                     let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                     if (diffDays === 1) streak++; else streak = 1;
-                } else {
-                    streak = 1;
-                }
+                } else { streak = 1; }
                 localStorage.setItem('lastVisit', todayStr);
                 localStorage.setItem('streak', streak);
             }
             document.getElementById('streakDisplay').textContent = `🔥 ${streak} ${i18n[currentLang].streakDays}`;
         }
 
-        // --- 5. FITUR SOUND EFFECT ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSound(type) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
             
             if(type === 'correct') { 
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
             } else { 
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(250, audioCtx.currentTime);
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(250, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
             }
             osc.start(); osc.stop(audioCtx.currentTime + 0.15);
         }
 
-        // --- 6. AUDIO HYBRID ---
         let currentAudio = null;
-
-        function mapGermanToFilename(str) {
-            return str
-                .replace(/ß/g, 's5')
-                .replace(/ä/g, 'a3')
-                .replace(/ö/g, 'o3')
-                .replace(/ü/g, 'u3')
-                .replace(/Ä/g, 'A3')
-                .replace(/Ö/g, 'O3')
-                .replace(/Ü/g, 'U3');
-        }
-
+        function mapGermanToFilename(str) { return str.replace(/ß/g, 's5').replace(/ä/g, 'a3').replace(/ö/g, 'o3').replace(/ü/g, 'u3').replace(/Ä/g, 'A3').replace(/Ö/g, 'O3').replace(/Ü/g, 'U3'); }
         function getPluralAudioFilename(pluralStr) {
-            let bersih = pluralStr.replace(/\*/g, "");
-            let mapped = mapGermanToFilename(bersih);
-            mapped = mapped.replace(/[^a-zA-Z0-9]/g, '_');
-            mapped = mapped.replace(/_+/g, '_').replace(/^_|_$/g, '');
-            return `${mapped}.mp3`;
+            let bersih = pluralStr.replace(/\*/g, ""); let mapped = mapGermanToFilename(bersih);
+            mapped = mapped.replace(/[^a-zA-Z0-9]/g, '_'); mapped = mapped.replace(/_+/g, '_').replace(/^_|_$/g, ''); return `${mapped}.mp3`;
         }
 
         function speakWord(event) {
-            event.stopPropagation();
-            if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-
-            const article = document.getElementById('wordArticle').textContent.trim();
-            const word = document.getElementById('wordText').textContent.trim();
-            const fullText = `${article} ${word}`;
-            
-            const mappedWord = mapGermanToFilename(word);
-            const repoAudioUrl = `audio/${mappedWord}.mp3`;
-            
-            currentAudio = new Audio(repoAudioUrl);
-            currentAudio.onerror = () => {
-                if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                    const msg = new SpeechSynthesisUtterance(fullText);
-                    msg.lang = 'de-DE';
-                    msg.rate = 0.88;
-                    window.speechSynthesis.speak(msg);
-                }
-            };
+            event.stopPropagation(); if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+            const fullText = `${document.getElementById('wordArticle').textContent.trim()} ${document.getElementById('wordText').textContent.trim()}`;
+            const mappedWord = mapGermanToFilename(document.getElementById('wordText').textContent.trim());
+            currentAudio = new Audio(`audio/${mappedWord}.mp3`);
+            currentAudio.onerror = () => { if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); const msg = new SpeechSynthesisUtterance(fullText); msg.lang = 'de-DE'; msg.rate = 0.88; window.speechSynthesis.speak(msg); } };
             currentAudio.play();
         }
 
         function speakPlural(event) {
-            event.stopPropagation();
-            if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-
-            const data = currentWords[currentIndex];
-            if (!data || !data.plural || data.plural === '-') return;
-
-            const cleanPluralText = data.plural.replace(/\*/g, "");
-            const filename = getPluralAudioFilename(data.plural);
-            const repoAudioUrl = `audio/stammformen/${filename}`;
-            
-            currentAudio = new Audio(repoAudioUrl);
-            currentAudio.onerror = () => {
-                if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                    const msg = new SpeechSynthesisUtterance(cleanPluralText);
-                    msg.lang = 'de-DE';
-                    msg.rate = 0.88;
-                    window.speechSynthesis.speak(msg);
-                }
-            };
+            event.stopPropagation(); if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+            const data = currentWords[currentIndex]; if (!data || !data.plural || data.plural === '-') return;
+            const cleanPluralText = data.plural.replace(/\*/g, ""); const filename = getPluralAudioFilename(data.plural);
+            currentAudio = new Audio(`audio/stammformen/${filename}`);
+            currentAudio.onerror = () => { if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); const msg = new SpeechSynthesisUtterance(cleanPluralText); msg.lang = 'de-DE'; msg.rate = 0.88; window.speechSynthesis.speak(msg); } };
             currentAudio.play();
         }
 
-        // --- 7. LOGIKA HARI & NAVIGASI KATA TERBARU (SCATTERED THEMES) ---
+        // --- LOGIKA HARI & NAVIGASI KATA (SCATTERED THEMES) ---
         const today = new Date();
         const dayNumber = Math.floor(today.getTime() / (1000 * 60 * 60 * 24)); 
-        const isQuizDay = (dayNumber % 7 === 0); 
 
-        let currentLevel = "A1";
-        let currentIndex = 0;
-        let currentWords = [];
-        let quizQueue = [];
+        let currentLevel = "A1"; let currentIndex = 0; let currentWords = []; let quizQueue = [];
 
         function getArticleColor(article) {
-            if (article === "der") return "#0172b7"; // Biru
-            if (article === "das") return "#358732"; // Hijau
-            if (article === "die") return "#d3302f"; // Merah
-            return "#ffffff";
+            if (article === "der") return "#0172b7"; 
+            if (article === "das") return "#358732"; 
+            if (article === "die") return "#d3302f"; 
+            return "var(--text-color)";
         }
 
         function initDailyData(level) {
-            currentLevel = level;
-            currentIndex = 0;
-            const limit = 10;
+            currentLevel = level; currentIndex = 0; const limit = 10;
+            const filteredWords = database.filter(item => item.level === level); const total = filteredWords.length;
+            let startIdx = (dayNumber * limit) % total; let selection = [];
             
-            const filteredWords = database.filter(item => item.level === level);
-            const total = filteredWords.length;
-            
-            let startIdx = (dayNumber * limit) % total;
-            let selection = [];
-            
-            // LOMPATAN MATEMATIKA (PRIME STEP JUMPS)
             const primeStep = 37; 
             for(let i = 0; i < limit; i++) {
                 let scatteredIndex = (startIdx + (i * primeStep)) % total;
@@ -902,53 +670,25 @@
             }
             dailySelection = selection; 
             
-            if(isQuizDay) {
-                document.getElementById('mainUI').style.display = 'none';
-                document.getElementById('quizContainer').style.display = 'block';
-                document.getElementById('doneMessage').style.display = 'none';
-                
-                quizScore = 0;
-                totalQuizQuestions = selection.length;
-                quizQueue = [...selection].sort(() => Math.random() - 0.5); 
-                loadNextQuiz();
-            } else {
-                document.getElementById('mainUI').style.display = 'flex';
-                document.getElementById('quizContainer').style.display = 'none';
-                document.getElementById('doneMessage').style.display = 'none';
-                currentWords = [...selection];
-                updateCard();
-            }
+            // Selalu mulai dari Flashcard
+            document.getElementById('mainUI').style.display = 'flex';
+            document.getElementById('preQuizMessage').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('doneMessage').style.display = 'none';
+            currentWords = [...selection];
+            updateCard();
         }
 
         const flashcard = document.getElementById('flashcard');
 
         function updateCard() {
+            // Flashcard Selesai -> Tampilkan Layar Transisi Kuis
             if(currentIndex >= currentWords.length) {
                 document.getElementById('mainUI').style.display = 'none';
-                document.getElementById('doneMessage').style.display = 'block';
+                document.getElementById('preQuizMessage').style.display = 'block';
                 playSound('correct');
                 
-                const doneTitle = document.getElementById('doneTitle');
-                const doneDesc = document.getElementById('doneDesc');
-                const btnRestart = document.getElementById('btnRestart');
-
-                if (currentLang === 'id') {
-                    doneTitle.textContent = "Selamat!";
-                    doneDesc.innerHTML = "Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!";
-                    btnRestart.textContent = "🔄 Mengulang Kembali (Acak Urutan)";
-                } else {
-                    doneTitle.textContent = "Herzlichen Glückwunsch!";
-                    doneDesc.innerHTML = "Du hast deine heutigen <strong>10 Wörter</strong> hervorragend gemeistert!";
-                    btnRestart.textContent = "🔄 Noch einmal üben (Zufällige Reihenfolge)";
-                }
-                btnRestart.onclick = restartWithRandomOrder;
-
-                confetti({
-                    particleCount: 150,
-                    spread: 80,
-                    origin: { y: 0.6 },
-                    colors: ['#ff0000', '#ffcc00', '#000000', '#ffffff']
-                });
+                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#ff0000', '#ffcc00', '#000000', '#ffffff'] });
                 checkAndShowPwaPrompt();
                 return;
             }
@@ -958,41 +698,20 @@
                 const data = currentWords[currentIndex];
                 const wordColor = getArticleColor(data.article);
                 
-                const articleEl = document.getElementById('wordArticle');
-                const wordEl = document.getElementById('wordText');
+                document.getElementById('wordArticle').textContent = data.article; document.getElementById('wordArticle').style.color = "#ffffff";
+                document.getElementById('wordText').textContent = data.word; document.getElementById('wordText').style.color = wordColor;
                 
-                articleEl.textContent = data.article;
-                articleEl.style.color = "#ffffff";
-                
-                wordEl.textContent = data.word;
-                wordEl.style.color = wordColor;
-
                 const ipaEl = document.getElementById('wordIpa');
-                if (data.ipa && data.ipa !== '-') {
-                    ipaEl.textContent = data.ipa;
-                    ipaEl.style.display = "block";
-                } else {
-                    ipaEl.style.display = "none";
-                }
+                if (data.ipa && data.ipa !== '-') { ipaEl.textContent = data.ipa; ipaEl.style.display = "block"; } else { ipaEl.style.display = "none"; }
                 
-                const pluralTextEl = document.getElementById('wordPlural');
-                const pluralAudioBtn = document.getElementById('audioBtnPlural');
-
+                const pluralTextEl = document.getElementById('wordPlural'); const pluralAudioBtn = document.getElementById('audioBtnPlural');
                 if (data.plural && data.plural !== '-') {
-                    const formattedPlural = data.plural.replace(
-                        /\*(.*?)\*/g, 
-                        `<span style="color: ${wordColor}; font-weight: 700;">$1</span>`
-                    );
-                    pluralTextEl.innerHTML = `Plural: ${formattedPlural}`;
-                    pluralAudioBtn.style.display = 'flex';
-                } else {
-                    pluralTextEl.innerHTML = `Plural: -`;
-                    pluralAudioBtn.style.display = 'none';
-                }
+                    const formattedPlural = data.plural.replace(/\*(.*?)\*/g, `<span style="color: ${wordColor}; font-weight: 700;">$1</span>`);
+                    pluralTextEl.innerHTML = `Plural: ${formattedPlural}`; pluralAudioBtn.style.display = 'flex';
+                } else { pluralTextEl.innerHTML = `Plural: -`; pluralAudioBtn.style.display = 'none'; }
                 
                 document.getElementById('wordMeaning').textContent = data.meaning;
                 document.getElementById('progressText').textContent = `${currentIndex + 1} / ${currentWords.length}`;
-                
                 document.getElementById('prevBtn').disabled = (currentIndex === 0);
             }, 150);
         }
@@ -1002,71 +721,121 @@
         function prevWord() { if (currentIndex > 0) { currentIndex--; updateCard(); } }
         function shuffleCurrentWords() { currentWords = currentWords.sort(() => Math.random() - 0.5); currentIndex = 0; updateCard(); }
 
-        function restartWithRandomOrder() {
-            currentWords = currentWords.sort(() => Math.random() - 0.5);
-            currentIndex = 0;
+        function restartNormal() {
             document.getElementById('doneMessage').style.display = 'none';
             document.getElementById('mainUI').style.display = 'flex';
+            currentWords = [...dailySelection].sort(() => Math.random() - 0.5); 
+            currentIndex = 0;
             updateCard();
         }
 
-        // --- 8. SISTEM KUIS MINGGUAN TERBARU ---
+        function skipQuiz() {
+            document.getElementById('preQuizMessage').style.display = 'none';
+            document.getElementById('doneMessage').style.display = 'block';
+            
+            document.getElementById('doneTitle').textContent = i18n[currentLang].doneTitleSkip;
+            document.getElementById('doneDesc').innerHTML = currentLang === 'id' ? 
+                "Tidak masalah! Kamu tetap bisa mengulang hafalan kartu atau mencoba kuis kapan saja." : 
+                "Kein Problem! Du kannst die Karteikarten jederzeit wiederholen oder das Quiz starten.";
+        }
+
+        // --- SISTEM KUIS HARIAN VARIASI BARU ---
+        function startDailyQuiz() {
+            quizScore = 0;
+            totalQuizQuestions = dailySelection.length; // Pasti 10
+            quizQueue = [];
+
+            let shuffledWords = [...dailySelection].sort(() => Math.random() - 0.5);
+
+            // Menentukan tipe kuis acak per kata
+            shuffledWords.forEach(wordObj => {
+                let availableTypes = ['article', 'meaning', 'reverse'];
+                if (wordObj.plural && wordObj.plural !== '-') { availableTypes.push('plural'); }
+                
+                let chosenType = availableTypes[Math.floor(Math.random() * availableTypes.length)];
+                quizQueue.push({ ...wordObj, quizType: chosenType, isRetry: false });
+            });
+
+            document.getElementById('preQuizMessage').style.display = 'none';
+            document.getElementById('doneMessage').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+            
+            loadNextQuiz();
+        }
+
         function loadNextQuiz() {
             if(quizQueue.length === 0) {
                 document.getElementById('quizContainer').style.display = 'none';
                 document.getElementById('doneMessage').style.display = 'block';
                 
-                const doneTitle = document.getElementById('doneTitle');
-                const doneDesc = document.getElementById('doneDesc');
-                const btnRestart = document.getElementById('btnRestart');
+                document.getElementById('doneTitle').textContent = i18n[currentLang].doneTitleQuiz;
+                document.getElementById('doneDesc').innerHTML = currentLang === 'id' ? 
+                    `Skor kamu: <strong>${quizScore} / ${totalQuizQuestions}</strong> benar pada tebakan pertama.` : 
+                    `Dein Ergebnis: <strong>${quizScore} / ${totalQuizQuestions}</strong> beim ersten Versuch richtig.`;
 
-                if (currentLang === 'id') {
-                    doneTitle.textContent = "Kuis Selesai! 🎉";
-                    doneDesc.innerHTML = `Skor kamu: <strong>${quizScore} / ${totalQuizQuestions}</strong> benar pada tebakan pertama.<br><br>Sekarang mari kita lanjut ke mode hafalan kartu normal!`;
-                    btnRestart.textContent = "Lanjut ke Hafalan Normal ➔";
-                } else {
-                    doneTitle.textContent = "Quiz Beendet! 🎉";
-                    doneDesc.innerHTML = `Dein Ergebnis: <strong>${quizScore} / ${totalQuizQuestions}</strong> beim ersten Versuch richtig.<br><br>Lass uns nun zum normalen Karteikarten-Modus wechseln!`;
-                    btnRestart.textContent = "Weiter zu Karteikarten ➔";
-                }
-                
-                btnRestart.onclick = function() {
-                    document.getElementById('doneMessage').style.display = 'none';
-                    document.getElementById('mainUI').style.display = 'flex';
-                    currentWords = [...dailySelection]; 
-                    currentIndex = 0;
-                    updateCard();
-                };
-
-                confetti({
-                    particleCount: 200,
-                    spread: 100,
-                    origin: { y: 0.6 },
-                    colors: ['#ff0000', '#ffcc00', '#000000', '#ffffff']
-                });
+                confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, colors: ['#ff0000', '#ffcc00', '#000000', '#ffffff'] });
                 return;
             }
 
             const currentQ = quizQueue[0];
-            const qColor = getArticleColor(currentQ.article);
-            
             const qArticleEl = document.getElementById('quizArticle');
             const qWordEl = document.getElementById('quizWord');
+            const qDescEl = document.getElementById('quizDesc');
             
-            qArticleEl.textContent = currentQ.article;
-            qArticleEl.style.color = "var(--text-color)";
-            qWordEl.textContent = currentQ.word;
-            qWordEl.style.color = qColor;
-            
-            let optionsSet = new Set([currentQ.meaning]);
+            let optionsSet = new Set();
+            let correctOption = "";
             const currentLevelWords = database.filter(item => item.level === currentLevel);
 
-            while(optionsSet.size < 3) {
-                let randomItem = currentLevelWords[Math.floor(Math.random() * currentLevelWords.length)];
-                optionsSet.add(randomItem.meaning);
+            // Reset Warna Default
+            qArticleEl.style.color = "var(--text-color)";
+            qWordEl.style.color = "var(--text-color)";
+
+            // Variasi Kuis
+            if (currentQ.quizType === 'article') {
+                qDescEl.textContent = i18n[currentLang].qArticle;
+                qArticleEl.textContent = "___";
+                qWordEl.textContent = currentQ.word;
+                correctOption = currentQ.article;
+                optionsSet = new Set(['der', 'die', 'das']);
+                
+            } else if (currentQ.quizType === 'meaning') {
+                qDescEl.textContent = i18n[currentLang].qMeaning;
+                qArticleEl.textContent = currentQ.article;
+                qWordEl.textContent = currentQ.word;
+                qWordEl.style.color = getArticleColor(currentQ.article);
+                correctOption = currentQ.meaning;
+                optionsSet.add(correctOption);
+                while(optionsSet.size < 3) {
+                    optionsSet.add(currentLevelWords[Math.floor(Math.random() * currentLevelWords.length)].meaning);
+                }
+
+            } else if (currentQ.quizType === 'reverse') {
+                qDescEl.textContent = i18n[currentLang].qReverse;
+                qArticleEl.textContent = "";
+                qWordEl.textContent = `"${currentQ.meaning}"`;
+                correctOption = `${currentQ.article} ${currentQ.word}`;
+                optionsSet.add(correctOption);
+                while(optionsSet.size < 3) {
+                    let rndObj = currentLevelWords[Math.floor(Math.random() * currentLevelWords.length)];
+                    optionsSet.add(`${rndObj.article} ${rndObj.word}`);
+                }
+
+            } else if (currentQ.quizType === 'plural') {
+                qDescEl.textContent = i18n[currentLang].qPlural;
+                qArticleEl.textContent = currentQ.article;
+                qWordEl.textContent = currentQ.word;
+                qWordEl.style.color = getArticleColor(currentQ.article);
+                correctOption = currentQ.plural.replace(/\*/g, ""); 
+                optionsSet.add(correctOption);
+                while(optionsSet.size < 3) {
+                    let rndObj = currentLevelWords[Math.floor(Math.random() * currentLevelWords.length)];
+                    if(rndObj.plural && rndObj.plural !== '-') {
+                        optionsSet.add(rndObj.plural.replace(/\*/g, ""));
+                    }
+                }
             }
+
             let optionsArr = Array.from(optionsSet).sort(() => Math.random() - 0.5);
-            
             const optionsDiv = document.getElementById('quizOptions');
             optionsDiv.innerHTML = '';
             
@@ -1074,7 +843,7 @@
                 let btn = document.createElement('button');
                 btn.className = 'quiz-option';
                 btn.textContent = opt;
-                btn.onclick = function() { checkQuiz(opt, currentQ.meaning, this, currentQ); };
+                btn.onclick = function() { checkQuiz(opt, correctOption, this, currentQ); };
                 optionsDiv.appendChild(btn);
             });
             document.getElementById('quizProgressText').textContent = `${i18n[currentLang].quizRemaining}: ${quizQueue.length}`;
@@ -1085,151 +854,52 @@
             allBtns.forEach(b => b.style.pointerEvents = 'none');
 
             if(selected === correct) {
-                btnElement.classList.add('correct');
-                playSound('correct');
-                
+                btnElement.classList.add('correct'); playSound('correct');
                 if(!currentQ.isRetry) quizScore++;
-
                 quizQueue.shift(); 
                 setTimeout(loadNextQuiz, 1000); 
             } else {
-                btnElement.classList.add('wrong');
-                playSound('wrong');
-                
-                allBtns.forEach(b => {
-                    if(b.textContent === correct) {
-                        b.classList.add('correct');
-                    }
-                });
-
-                let q = quizQueue.shift();
-                q.isRetry = true; 
-                quizQueue.push(q); 
-                
+                btnElement.classList.add('wrong'); playSound('wrong');
+                allBtns.forEach(b => { if(b.textContent === correct) { b.classList.add('correct'); } });
+                let q = quizQueue.shift(); q.isRetry = true; quizQueue.push(q); 
                 setTimeout(loadNextQuiz, 1500); 
             }
         }
 
-        // --- 9. PINTASAN KEYBOARD ---
+        // --- PINTASAN KEYBOARD ---
         document.addEventListener('keydown', (e) => {
-            const isModalOpen = document.querySelector('.modal-overlay.show');
-            if (isModalOpen) return;
-
+            if (document.querySelector('.modal-overlay.show')) return;
             if (document.getElementById('mainUI').style.display === 'flex') {
-                if (e.code === 'Space') {
-                    e.preventDefault();
-                    flipCard();
-                } else if (e.code === 'ArrowRight') {
-                    nextWord();
-                } else if (e.code === 'ArrowLeft') {
-                    prevWord();
-                }
+                if (e.code === 'Space') { e.preventDefault(); flipCard(); } 
+                else if (e.code === 'ArrowRight') { nextWord(); } 
+                else if (e.code === 'ArrowLeft') { prevWord(); }
             }
         });
 
-        // --- 10. KONTROL MODAL ---
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.add('show');
-                document.body.style.overflow = 'hidden'; 
-            }
-        }
+        // --- MODAL ---
+        function openModal(modalId) { const modal = document.getElementById(modalId); if (modal) { modal.classList.add('show'); document.body.style.overflow = 'hidden'; } }
+        function closeModal(modalId) { const modal = document.getElementById(modalId); if (modal) { modal.classList.remove('show'); document.body.style.overflow = 'auto'; } }
+        function closeModalOnBackdrop(event, modalId) { if (event.target.id === modalId) { closeModal(modalId); } }
 
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('show');
-                document.body.style.overflow = 'auto';
-            }
-        }
-
-        function closeModalOnBackdrop(event, modalId) {
-            if (event.target.id === modalId) {
-                closeModal(modalId);
-            }
-        }
-
-        // --- 11. EVENT LISTENER LEVEL ---
         document.querySelectorAll('.level-btn').forEach(button => {
             button.addEventListener('click', (e) => {
-                document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
-                e.target.classList.add('active');
+                document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active')); e.target.classList.add('active');
                 initDailyData(e.target.getAttribute('data-level'));
             });
         });
 
-        // Inisialisasi awal
-        setLanguage(currentLang);
-        initDailyData("A1");
+        // Init
+        setLanguage(currentLang); initDailyData("A1");
 
-        // --- 12. FITUR PWA SMART PROMPT ---
-        let deferredPrompt;
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-        });
-
-        function isPwaInstalled() {
-            return window.matchMedia('(display-mode: standalone)').matches || 
-                   window.navigator.standalone === true || 
-                   localStorage.getItem('pwaInstalledPermanently') === 'true';
-        }
-
-        function canShowInstallPrompt() {
-            if (isPwaInstalled()) return false; 
-            const nextShowTime = localStorage.getItem('pwaPromptNextShow');
-            if (!nextShowTime) return true; 
-            return Date.now() > parseInt(nextShowTime); 
-        }
-
-        function checkAndShowPwaPrompt() {
-            setTimeout(() => {
-                if (canShowInstallPrompt()) {
-                    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                    if (deferredPrompt || isIOS) {
-                        if (isIOS) {
-                            document.getElementById('btnInstallText').textContent = " Cara Install di iPhone";
-                        }
-                        openModal('installModal');
-                    }
-                }
-            }, 1500);
-        }
-
-        async function triggerInstallPWA() {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            if (isIOS) {
-                alert('📲 Langkah Mudah Install di iPhone/iOS:\n\n1. Klik ikon Share (panah ke atas) di menu tengah bawah Safari.\n2. Scroll ke bawah dan klik "Add to Home Screen" (Tambahkan ke Layar Utama).\n3. Klik "Add" di kanan atas.');
-                snoozeInstallPWA(); 
-            } else if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    localStorage.setItem('pwaInstalledPermanently', 'true'); 
-                    closeModal('installModal');
-                }
-                deferredPrompt = null;
-            }
-        }
-
-        function snoozeInstallPWA() {
-            const duaHariDalamMs = 2 * 24 * 60 * 60 * 1000; 
-            localStorage.setItem('pwaPromptNextShow', Date.now() + duaHariDalamMs);
-            closeModal('installModal');
-        }
-
-        function handleSnoozeInstall(event, modalId) {
-            if (event.target.id === modalId) {
-                snoozeInstallPWA();
-            }
-        }
-
-        window.addEventListener('appinstalled', () => {
-            localStorage.setItem('pwaInstalledPermanently', 'true');
-            closeModal('installModal');
-        });
+        // --- PWA ---
+        let deferredPrompt; window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+        function isPwaInstalled() { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true || localStorage.getItem('pwaInstalledPermanently') === 'true'; }
+        function canShowInstallPrompt() { if (isPwaInstalled()) return false; const nextShowTime = localStorage.getItem('pwaPromptNextShow'); if (!nextShowTime) return true; return Date.now() > parseInt(nextShowTime); }
+        function checkAndShowPwaPrompt() { setTimeout(() => { if (canShowInstallPrompt()) { const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; if (deferredPrompt || isIOS) { if (isIOS) { document.getElementById('btnInstallText').textContent = " Cara Install di iPhone"; } openModal('installModal'); } } }, 1500); }
+        async function triggerInstallPWA() { const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; if (isIOS) { alert('📲 Langkah Mudah Install di iPhone/iOS:\n\n1. Klik ikon Share (panah ke atas) di menu tengah bawah Safari.\n2. Scroll ke bawah dan klik "Add to Home Screen".\n3. Klik "Add".'); snoozeInstallPWA(); } else if (deferredPrompt) { deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; if (outcome === 'accepted') { localStorage.setItem('pwaInstalledPermanently', 'true'); closeModal('installModal'); } deferredPrompt = null; } }
+        function snoozeInstallPWA() { const duaHariDalamMs = 2 * 24 * 60 * 60 * 1000; localStorage.setItem('pwaPromptNextShow', Date.now() + duaHariDalamMs); closeModal('installModal'); }
+        function handleSnoozeInstall(event, modalId) { if (event.target.id === modalId) { snoozeInstallPWA(); } }
+        window.addEventListener('appinstalled', () => { localStorage.setItem('pwaInstalledPermanently', 'true'); closeModal('installModal'); });
     </script>
 </body>
 </html>
