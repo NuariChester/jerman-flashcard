@@ -7,7 +7,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-K43HSM32VH');
     </script>
     <meta charset="UTF-8">
@@ -18,7 +17,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#dd0000">
     <meta name="referrer" content="no-referrer">
-    <!-- Library Confetti untuk Animasi Ledakan Kertas -->
+    <!-- Library Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
@@ -58,58 +57,30 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        .header-bar {
-            width: 100%; max-width: 400px;
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
-        }
-
+        .header-bar { width: 100%; max-width: 400px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .header-left { display: flex; align-items: center; gap: 10px; }
 
         .icon-btn {
             background: var(--btn-bg); border: none; border-radius: 50%;
             width: 40px; height: 40px; font-size: 20px; cursor: pointer;
             color: var(--text-color); transition: 0.3s; display: flex;
-            align-items: center; justify-content: center;
-            box-shadow: 0 2px 5px var(--shadow);
+            align-items: center; justify-content: center; box-shadow: 0 2px 5px var(--shadow);
         }
         .icon-btn:hover { transform: scale(1.05); }
 
         .lang-switch {
-            position: relative;
-            background: var(--btn-bg);
-            border-radius: 20px;
-            padding: 3px;
-            display: flex;
-            align-items: center;
-            width: 96px;
-            height: 34px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-            cursor: pointer;
-            user-select: none;
-            box-sizing: border-box;
+            position: relative; background: var(--btn-bg); border-radius: 20px; padding: 3px;
+            display: flex; align-items: center; width: 96px; height: 34px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; user-select: none; box-sizing: border-box;
         }
         .lang-slider {
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 45px;
-            height: calc(100% - 6px);
-            background: #1a1a1a;
-            border-radius: 17px;
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            position: absolute; top: 3px; left: 3px; width: 45px; height: calc(100% - 6px);
+            background: #1a1a1a; border-radius: 17px; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
         .lang-opt {
-            position: relative;
-            z-index: 2;
-            flex: 1;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-color);
-            opacity: 0.6;
-            transition: color 0.3s, opacity 0.3s;
+            position: relative; z-index: 2; flex: 1; text-align: center; font-size: 13px;
+            font-weight: 700; color: var(--text-color); opacity: 0.6; transition: color 0.3s, opacity 0.3s;
         }
         .lang-opt.active { color: #ffcc00; opacity: 1; }
 
@@ -124,40 +95,25 @@
         
         .date-badge {
             background-color: #1a1a1a; color: #ffcc00; padding: 5px 15px;
-            border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 20px;
-            border: 1px solid #ffcc00;
+            border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 20px; border: 1px solid #ffcc00;
         }
 
         .level-selector { display: flex; gap: 10px; margin-bottom: 20px; }
         .level-btn {
             background-color: var(--btn-bg); border: none; padding: 8px 25px;
-            border-radius: 20px; font-weight: 600; color: var(--text-color);
-            cursor: pointer; transition: 0.3s; font-size: 15px;
+            border-radius: 20px; font-weight: 600; color: var(--text-color); cursor: pointer; transition: 0.3s; font-size: 15px;
         }
         .level-btn.active { background-color: var(--btn-active); color: #ffffff; box-shadow: 0 4px 10px rgba(221,0,0,0.3); }
 
-        .card-container {
-            width: 100%; max-width: 400px; height: 300px; perspective: 1000px;
-            margin-bottom: 20px; cursor: pointer;
-        }
-        .card {
-            width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
-            transform-style: preserve-3d; border-radius: 20px; box-shadow: 0 12px 24px var(--shadow);
-        }
+        .card-container { width: 100%; max-width: 400px; height: 300px; perspective: 1000px; margin-bottom: 20px; cursor: pointer; }
+        .card { width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; border-radius: 20px; box-shadow: 0 12px 24px var(--shadow); }
         .card.is-flipped { transform: rotateY(180deg); }
 
-        .card-face {
-            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            border-radius: 20px; padding: 25px; box-sizing: border-box; text-align: center;
-        }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px; padding: 25px; box-sizing: border-box; text-align: center; }
         .card-front { background: var(--card-front); color: var(--card-front-text); border-bottom: 5px solid #ffcc00; }
         .card-back { background: var(--card-back); color: var(--card-back-text); transform: rotateY(180deg); border-bottom: 5px solid #1a1a1a; }
 
-        .word-row {
-            display: flex; align-items: center; justify-content: center;
-            flex-wrap: wrap; gap: 0px 10px; margin: 10px 0; width: 100%;
-        }
+        .word-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0px 10px; margin: 10px 0; width: 100%; }
         .word-audio-wrapper { display: inline-flex; align-items: center; gap: 0px; }
         
         .article { font-size: 32px; font-weight: 400; color: #ffffff; transition: opacity 0.3s; opacity: 0.9; line-height: 1.1; }
@@ -168,90 +124,55 @@
         .plural-row { display: flex; align-items: center; justify-content: center; gap: 2px; margin-top: 10px; }
         .plural-text { font-size: 14px; opacity: 0.75; font-style: italic; color: #cccccc; }
 
-        .speak-btn-minimal, .speak-btn-plural {
-            background: transparent; border: none; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; outline: none;
-        }
+        .speak-btn-minimal, .speak-btn-plural { background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; outline: none; }
         .speak-btn-minimal { padding: 4px 0px 4px 2px; margin-left: -6px; }
         .speak-btn-plural { padding: 2px 0px 2px 2px; margin-left: -2px; }
         
         .wave-element { stroke: #95a5a6; transition: stroke 0.3s ease, transform 0.3s ease, opacity 0.3s ease; }
-        
         .speak-btn-minimal:hover .wave-1, .speak-btn-minimal:active .wave-1, .speak-btn-plural:hover .wave-1, .speak-btn-plural:active .wave-1 { animation: waterRipple 1s infinite 0.0s; }
         .speak-btn-minimal:hover .wave-2, .speak-btn-minimal:active .wave-2, .speak-btn-plural:hover .wave-2, .speak-btn-plural:active .wave-2 { animation: waterRipple 1s infinite 0.15s; }
         .speak-btn-minimal:hover .wave-3, .speak-btn-minimal:active .wave-3, .speak-btn-plural:hover .wave-3, .speak-btn-plural:active .wave-3 { animation: waterRipple 1s infinite 0.3s; }
 
-        @keyframes waterRipple {
-            0%, 100% { stroke: #95a5a6; transform: translateX(0); opacity: 0.6; }
-            50% { stroke: #ffcc00; transform: translateX(2px); opacity: 1; filter: drop-shadow(0 0 3px rgba(255, 204, 0, 0.8)); }
-        }
+        @keyframes waterRipple { 0%, 100% { stroke: #95a5a6; transform: translateX(0); opacity: 0.6; } 50% { stroke: #ffcc00; transform: translateX(2px); opacity: 1; filter: drop-shadow(0 0 3px rgba(255, 204, 0, 0.8)); } }
         
         .meaning { font-size: 32px; font-weight: 700; color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
         .hint { font-size: 12px; opacity: 0.55; margin-top: 20px; }
         .card-back .hint { color: #ffffff; }
 
         .controls { display: flex; gap: 10px; width: 100%; max-width: 400px; justify-content: space-between; }
-        .nav-btn {
-            background-color: #1a1a1a; color: #ffffff; border: none; padding: 14px 18px;
-            border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s;
-            flex: 1; display: flex; justify-content: center; align-items: center; gap: 5px;
-        }
+        .nav-btn { background-color: #1a1a1a; color: #ffffff; border: none; padding: 14px 18px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; flex: 1; display: flex; justify-content: center; align-items: center; gap: 5px; }
         .nav-btn:hover { background-color: #333333; transform: translateY(-1px); }
         .nav-btn:disabled { background-color: #cccccc; color: #666666; cursor: not-allowed; transform: none; }
         
         .btn-random { background-color: #ffcc00; color: #1a1a1a; font-weight: 700; flex: 0.8; }
         .btn-random:hover { background-color: #e6b800; }
-
         .progress { margin-top: 15px; font-size: 15px; font-weight: 600; opacity: 0.8; }
         
-        /* Layar Transisi Pre-Quiz */
         #preQuizMessage { display: none; text-align: center; margin-top: 10px; max-width: 400px; width: 100%; }
         #preQuizMessage h2 { color: #dd0000; font-size: 26px; margin-bottom: 10px; }
         #preQuizMessage p { font-size: 16px; margin-bottom: 25px; line-height: 1.5; }
 
-        /* Quiz Mode Styles */
         #quizContainer { display: none; width: 100%; max-width: 400px; text-align: center; margin-top: 10px; }
-        .quiz-option {
-            background: var(--btn-bg); color: var(--text-color); border: 2px solid #ccc;
-            padding: 15px; width: 100%; margin-bottom: 10px; border-radius: 12px;
-            font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: none;
-        }
+        .quiz-option { background: var(--btn-bg); color: var(--text-color); border: 2px solid #ccc; padding: 15px; width: 100%; margin-bottom: 10px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: none; }
         @media (hover: hover) { .quiz-option:hover { border-color: #dd0000; background: rgba(221,0,0,0.05); } }
 
         .quiz-option.correct { background-color: #358732 !important; color: #ffffff !important; border-color: #358732 !important; transform: scale(1.02); box-shadow: 0 4px 10px rgba(53, 135, 50, 0.4) !important; }
         .quiz-option.wrong { background-color: #d3302f !important; color: #ffffff !important; border-color: #d3302f !important; animation: shake 0.4s; box-shadow: 0 4px 10px rgba(211, 48, 47, 0.4) !important; }
-
         @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
 
-        /* Pesan Selesai Akhir (Post-Quiz / Skip) */
         #doneMessage { display: none; text-align: center; margin-top: 10px; max-width: 400px; width: 100%; }
         #doneMessage h2 { color: #dd0000; font-size: 26px; margin-bottom: 10px; }
         #doneMessage p { font-size: 16px; margin-bottom: 25px; line-height: 1.5; }
         
-        .btn-start-quiz {
-            background: linear-gradient(135deg, #ffcc00 0%, #ff9900 100%);
-            color: #1a1a1a; border: none; padding: 16px 20px;
-            border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer;
-            box-shadow: 0 6px 15px rgba(255, 204, 0, 0.3); transition: 0.3s; width: 100%; margin-bottom: 12px;
-        }
+        .btn-start-quiz { background: linear-gradient(135deg, #ffcc00 0%, #ff9900 100%); color: #1a1a1a; border: none; padding: 16px 20px; border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 15px rgba(255, 204, 0, 0.3); transition: 0.3s; width: 100%; margin-bottom: 12px; }
         .btn-start-quiz:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 204, 0, 0.4); }
 
-        .btn-skip-quiz {
-            background: transparent; color: var(--text-color); border: 2px solid var(--text-color);
-            padding: 14px 20px; border-radius: 30px; font-size: 15px; font-weight: 600; cursor: pointer;
-            transition: 0.3s; width: 100%; opacity: 0.7;
-        }
+        .btn-skip-quiz { background: transparent; color: var(--text-color); border: 2px solid var(--text-color); padding: 14px 20px; border-radius: 30px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; width: 100%; opacity: 0.7; }
         .btn-skip-quiz:hover { opacity: 1; }
 
-        .btn-restart {
-            background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
-            color: #ffcc00; border: 2px solid #ffcc00; padding: 15px 30px;
-            border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2); transition: 0.3s; width: 100%; margin-bottom: 10px;
-        }
+        .btn-restart { background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%); color: #ffcc00; border: 2px solid #ffcc00; padding: 15px 30px; border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.2); transition: 0.3s; width: 100%; margin-bottom: 10px; }
         .btn-restart:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); background: #000000; }
 
-        /* Area Menu Panduan & Traktir Kopi */
         .footer-links { margin-top: 12px; display: flex; gap: 12px; align-items: center; font-size: 14px; font-weight: 700; }
         .footer-link { color: #dd0000; cursor: pointer; transition: color 0.2s, transform: scale(1.05); text-decoration: none; display: flex; align-items: center; gap: 4px; }
         .footer-link:hover { color: #ffcc00; transform: scale(1.05); }
@@ -261,20 +182,9 @@
         .copyright a { color: #dd0000; text-decoration: none; font-weight: bold; }
         .copyright a:hover { text-decoration: underline; }
 
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px);
-            z-index: 2000; display: none; justify-content: center; align-items: center;
-            padding: 20px; box-sizing: border-box; opacity: 0; transition: opacity 0.3s ease;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; opacity: 0; transition: opacity 0.3s ease; }
         .modal-overlay.show { display: flex; opacity: 1; }
-        .modal-card {
-            background: var(--modal-bg); color: var(--text-color); width: 100%; max-width: 420px; max-height: 85vh; border-radius: 24px;
-            padding: 25px; box-sizing: border-box; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            overflow-y: auto; position: relative; transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 204, 0, 0.2);
-        }
+        .modal-card { background: var(--modal-bg); color: var(--text-color); width: 100%; max-width: 420px; max-height: 85vh; border-radius: 24px; padding: 25px; box-sizing: border-box; box-shadow: 0 20px 40px rgba(0,0,0,0.4); overflow-y: auto; position: relative; transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255, 204, 0, 0.2); }
         .modal-overlay.show .modal-card { transform: translateY(0); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--btn-bg); padding-bottom: 12px; margin-bottom: 18px; }
         .modal-header h2 { margin: 0; font-size: 20px; color: #dd0000; display: flex; align-items: center; gap: 8px; }
@@ -312,7 +222,6 @@
         <button class="level-btn" data-level="A2">Level A2</button>
     </div>
 
-    <!-- UI Kartu Utama -->
     <div id="mainUI" style="width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center;">
         <div class="card-container" id="cardContainer" onclick="flipCard()">
             <div class="card" id="flashcard">
@@ -358,7 +267,7 @@
         <div class="progress" id="progressText">1 / 10</div>
     </div>
 
-    <!-- UI Transisi Pre-Quiz (Setelah Hafalan Selesai) -->
+    <!-- UI Transisi Pre-Quiz -->
     <div id="preQuizMessage">
         <div style="font-size: 60px; margin-bottom: 10px;">🎉🇩🇪</div>
         <h2 id="preQuizTitle">Selamat!</h2>
@@ -380,7 +289,7 @@
         <div class="progress" id="quizProgressText">Sisa soal: 0</div>
     </div>
 
-    <!-- Pesan Selesai Akhir (Post-Quiz / Skip) -->
+    <!-- Pesan Selesai Akhir -->
     <div id="doneMessage">
         <div style="font-size: 60px; margin-bottom: 10px;">🏆✨</div>
         <h2 id="doneTitle">Kuis Selesai!</h2>
@@ -417,8 +326,14 @@
                 <ul>
                     <li>🇩🇪 <strong>Kosakata Harian:</strong> Sistem pintar pembagian A1/A2 (Fonetik IPA, Plural).</li>
                     <li>🎨 <strong>Pewarnaan Gender:</strong> Biru (*Der*), Hijau (*Das*), Merah (*Die*).</li>
-                    <li>📝 <strong>Kuis Harian Dinamis:</strong> Beragam variasi soal (Artikel, Arti, Reverse, Plural) untuk mengasah ingatan setelah hafalan.</li>
+                    <li>📝 <strong>Kuis Harian Dinamis:</strong> Beragam variasi soal (Artikel, Arti, Reverse, Plural) untuk mengasah ingatan.</li>
                     <li>🔥 <strong>Streak & PWA:</strong> Hitung konsistensi & bisa di-install langsung.</li>
+                </ul>
+
+                <h3 id="hRoadmap">🚀 Roadmap (Update Kedepan)</h3>
+                <ul>
+                    <li>⭐ <strong>Fitur Bookmark:</strong> Tombol bintang untuk menyimpan kata-kata yang sulit ke dalam daftar khusus.</li>
+                    <li>💬 <strong>Contoh Kalimat:</strong> Penambahan kalimat pendek di belakang kartu untuk memahami konteks penggunaan kata.</li>
                 </ul>
             </div>
             <button class="btn-modal-close" onclick="closeModal('panduanModal')" id="btnGuideClose">Tutup Panduan</button>
@@ -458,8 +373,10 @@
         </div>
     </div>
 
+    <!-- DATA KATA -->
     <script src="words.js"></script>
 
+    <!-- LOGIKA UTAMA -->
     <script>
         if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
 
@@ -467,7 +384,8 @@
         let quizScore = 0;
         let totalQuizQuestions = 0;
 
-        let currentLang = localStorage.getItem('appLang') || 'id';
+        let currentLang = localStorage.getItem('appLang');
+        if (!currentLang) { currentLang = 'id'; }
 
         const i18n = {
             id: {
@@ -488,7 +406,6 @@
                 txtCoffeeDesc: "Dukunganmu sangat berarti agar aplikasi ini terus berkembang!", btnCoffeeClose: "Tutup Jendela",
                 installTitle: "Install Aplikasi Sekarang!", installDesc: "Biar akses belajar lebih cepat!",
                 btnInstallText: "🚀 Install Sekarang", btnSkipText: "Lewati",
-                // Quiz Prompts
                 qArticle: "Pilih artikel yang tepat!", qMeaning: "Apa arti dari kata ini?",
                 qReverse: "Apa bahasa Jermannya?", qPlural: "Apa bentuk jamaknya (Plural)?"
             },
@@ -510,7 +427,6 @@
                 txtCoffeeDesc: "Deine Unterstützung hilft dabei, diese App werbefrei zu halten!", btnCoffeeClose: "Schließen",
                 installTitle: "Jetzt installieren!", installDesc: "Für schnelleren Zugriff ohne Browser!",
                 btnInstallText: "🚀 Installieren", btnSkipText: "Überspringen",
-                // Quiz Prompts
                 qArticle: "Wähle den richtigen Artikel!", qMeaning: "Was bedeutet dieses Wort?",
                 qReverse: "Was ist das auf Deutsch?", qPlural: "Wie lautet die Pluralform?"
             }
@@ -523,47 +439,61 @@
             const slider = document.getElementById('langSlider');
             if(lang === 'de') { slider.style.transform = 'translateX(45px)'; } else { slider.style.transform = 'translateX(0)'; }
 
-            document.getElementById('btnLangID').classList.toggle('active', lang === 'id');
-            document.getElementById('btnLangDE').classList.toggle('active', lang === 'de');
+            document.getElementById('btnLangID').classList.remove('active');
+            document.getElementById('btnLangDE').classList.remove('active');
+            if(lang === 'id') { document.getElementById('btnLangID').classList.add('active'); }
+            if(lang === 'de') { document.getElementById('btnLangDE').classList.add('active'); }
 
-            document.getElementById('appTitle').textContent = i18n[lang].title;
-            document.getElementById('txtPrev').textContent = i18n[lang].prev;
-            document.getElementById('txtRandom').textContent = i18n[lang].random;
-            document.getElementById('txtNext').textContent = i18n[lang].next;
-            document.getElementById('hintFront').textContent = i18n[lang].hintFront;
-            document.getElementById('hintBack').textContent = i18n[lang].hintBack;
-            document.getElementById('quizTitle').textContent = i18n[lang].quizTitle;
+            // Helper function super aman tanpa operator fancy
+            function setTxt(id, text) {
+                var element = document.getElementById(id);
+                if (element) { element.textContent = text; }
+            }
+            function setHTML(id, html) {
+                var element = document.getElementById(id);
+                if (element) { element.innerHTML = html; }
+            }
+
+            setTxt('appTitle', i18n[lang].title);
+            setTxt('txtPrev', i18n[lang].prev);
+            setTxt('txtRandom', i18n[lang].random);
+            setTxt('txtNext', i18n[lang].next);
+            setTxt('hintFront', i18n[lang].hintFront);
+            setTxt('hintBack', i18n[lang].hintBack);
+            setTxt('quizTitle', i18n[lang].quizTitle);
             
-            document.getElementById('preQuizTitle').textContent = i18n[lang].preQuizTitle;
-            document.getElementById('preQuizDesc').innerHTML = i18n[lang].preQuizDesc;
-            document.getElementById('btnStartQuiz').textContent = i18n[lang].btnStartQuiz;
-            document.getElementById('btnSkipQuiz').textContent = i18n[lang].btnSkipQuiz;
+            setTxt('preQuizTitle', i18n[lang].preQuizTitle);
+            setHTML('preQuizDesc', i18n[lang].preQuizDesc);
+            setTxt('btnStartQuiz', i18n[lang].btnStartQuiz);
+            setTxt('btnSkipQuiz', i18n[lang].btnSkipQuiz);
 
-            document.getElementById('btnRestartNormal').textContent = i18n[lang].btnRestartNormal;
-            document.getElementById('btnRestartQuiz').textContent = i18n[lang].btnRestartQuiz;
+            setTxt('btnRestartNormal', i18n[lang].btnRestartNormal);
+            setTxt('btnRestartQuiz', i18n[lang].btnRestartQuiz);
 
-            // Static modals update
-            document.getElementById('txtGuide').textContent = i18n[lang].guide;
-            document.getElementById('txtCoffee').textContent = i18n[lang].coffee;
-            document.getElementById('modalGuideTitle').textContent = i18n[lang].modalGuideTitle;
-            document.getElementById('hHowTo').textContent = i18n[lang].hHowTo;
-            document.getElementById('liHow1').innerHTML = i18n[lang].liHow1;
-            document.getElementById('liHow2').innerHTML = i18n[lang].liHow2;
-            document.getElementById('liHow3').innerHTML = i18n[lang].liHow3;
-            document.getElementById('hFeatures').textContent = i18n[lang].hFeatures;
-            document.getElementById('hRoadmap').textContent = i18n[lang].hRoadmap;
-            document.getElementById('btnGuideClose').textContent = i18n[lang].btnGuideClose;
-            document.getElementById('modalCoffeeTitle').textContent = i18n[lang].modalCoffeeTitle;
-            document.getElementById('txtCoffeeDesc').textContent = i18n[lang].txtCoffeeDesc;
-            document.getElementById('btnCoffeeClose').textContent = i18n[lang].btnCoffeeClose;
-            document.getElementById('installTitle').textContent = i18n[lang].installTitle;
-            document.getElementById('installDesc').textContent = i18n[lang].installDesc;
-            document.getElementById('btnInstallText').textContent = i18n[lang].btnInstallText;
-            document.getElementById('btnSkipText').textContent = i18n[lang].btnSkipText;
+            setTxt('txtGuide', i18n[lang].guide);
+            setTxt('txtCoffee', i18n[lang].coffee);
+            setTxt('modalGuideTitle', i18n[lang].modalGuideTitle);
+            setTxt('hHowTo', i18n[lang].hHowTo);
+            setHTML('liHow1', i18n[lang].liHow1);
+            setHTML('liHow2', i18n[lang].liHow2);
+            setHTML('liHow3', i18n[lang].liHow3);
+            setTxt('hFeatures', i18n[lang].hFeatures);
+            setTxt('hRoadmap', i18n[lang].hRoadmap);
+            setTxt('btnGuideClose', i18n[lang].btnGuideClose);
+            setTxt('modalCoffeeTitle', i18n[lang].modalCoffeeTitle);
+            setTxt('txtCoffeeDesc', i18n[lang].txtCoffeeDesc);
+            setTxt('btnCoffeeClose', i18n[lang].btnCoffeeClose);
+            setTxt('installTitle', i18n[lang].installTitle);
+            setTxt('installDesc', i18n[lang].installDesc);
+            setTxt('btnInstallText', i18n[lang].btnInstallText);
+            setTxt('btnSkipText', i18n[lang].btnSkipText);
 
-            updateStreak(); updateDateDisplay();
-            if (document.getElementById('quizContainer').style.display === 'block') {
-                document.getElementById('quizProgressText').textContent = `${i18n[currentLang].quizRemaining}: ${quizQueue.length}`;
+            updateStreak(); 
+            updateDateDisplay();
+            
+            var quizContainer = document.getElementById('quizContainer');
+            if (quizContainer && quizContainer.style.display === 'block') {
+                setTxt('quizProgressText', i18n[currentLang].quizRemaining + ': ' + quizQueue.length);
             }
         }
 
@@ -577,7 +507,7 @@
         let isDark = localStorage.getItem('darkMode') === 'true';
         if(isDark) document.body.classList.add('dark-mode');
         
-        darkModeToggle.addEventListener('click', () => {
+        darkModeToggle.addEventListener('click', function() {
             document.body.classList.toggle('dark-mode');
             isDark = document.body.classList.contains('dark-mode');
             localStorage.setItem('darkMode', isDark);
@@ -594,19 +524,21 @@
                 if (lastVisit) {
                     let diffTime = Math.abs(new Date(todayStr) - new Date(lastVisit));
                     let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    if (diffDays === 1) streak++; else streak = 1;
+                    if (diffDays === 1) { streak++; } else { streak = 1; }
                 } else { streak = 1; }
                 localStorage.setItem('lastVisit', todayStr);
                 localStorage.setItem('streak', streak);
             }
-            document.getElementById('streakDisplay').textContent = `🔥 ${streak} ${i18n[currentLang].streakDays}`;
+            document.getElementById('streakDisplay').textContent = '🔥 ' + streak + ' ' + i18n[currentLang].streakDays;
         }
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSound(type) {
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
+            if(audioCtx.state === 'suspended') { audioCtx.resume(); }
+            const osc = audioCtx.createOscillator(); 
+            const gain = audioCtx.createGain();
+            osc.connect(gain); 
+            gain.connect(audioCtx.destination);
             
             if(type === 'correct') { 
                 osc.type = 'sine'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
@@ -617,39 +549,63 @@
                 osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.15);
                 gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
             }
-            osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+            osc.start(); 
+            osc.stop(audioCtx.currentTime + 0.15);
         }
 
         let currentAudio = null;
         function mapGermanToFilename(str) { return str.replace(/ß/g, 's5').replace(/ä/g, 'a3').replace(/ö/g, 'o3').replace(/ü/g, 'u3').replace(/Ä/g, 'A3').replace(/Ö/g, 'O3').replace(/Ü/g, 'U3'); }
         function getPluralAudioFilename(pluralStr) {
-            let bersih = pluralStr.replace(/\*/g, ""); let mapped = mapGermanToFilename(bersih);
-            mapped = mapped.replace(/[^a-zA-Z0-9]/g, '_'); mapped = mapped.replace(/_+/g, '_').replace(/^_|_$/g, ''); return `${mapped}.mp3`;
+            let bersih = pluralStr.replace(/\*/g, ""); 
+            let mapped = mapGermanToFilename(bersih);
+            mapped = mapped.replace(/[^a-zA-Z0-9]/g, '_'); 
+            mapped = mapped.replace(/_+/g, '_').replace(/^_|_$/g, ''); 
+            return mapped + '.mp3';
         }
 
         function speakWord(event) {
-            event.stopPropagation(); if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-            const fullText = `${document.getElementById('wordArticle').textContent.trim()} ${document.getElementById('wordText').textContent.trim()}`;
+            event.stopPropagation(); 
+            if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+            const fullText = document.getElementById('wordArticle').textContent.trim() + ' ' + document.getElementById('wordText').textContent.trim();
             const mappedWord = mapGermanToFilename(document.getElementById('wordText').textContent.trim());
-            currentAudio = new Audio(`audio/${mappedWord}.mp3`);
-            currentAudio.onerror = () => { if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); const msg = new SpeechSynthesisUtterance(fullText); msg.lang = 'de-DE'; msg.rate = 0.88; window.speechSynthesis.speak(msg); } };
+            currentAudio = new Audio('audio/' + mappedWord + '.mp3');
+            currentAudio.onerror = function() { 
+                if ('speechSynthesis' in window) { 
+                    window.speechSynthesis.cancel(); 
+                    const msg = new SpeechSynthesisUtterance(fullText); 
+                    msg.lang = 'de-DE'; msg.rate = 0.88; 
+                    window.speechSynthesis.speak(msg); 
+                } 
+            };
             currentAudio.play();
         }
 
         function speakPlural(event) {
-            event.stopPropagation(); if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-            const data = currentWords[currentIndex]; if (!data || !data.plural || data.plural === '-') return;
-            const cleanPluralText = data.plural.replace(/\*/g, ""); const filename = getPluralAudioFilename(data.plural);
-            currentAudio = new Audio(`audio/stammformen/${filename}`);
-            currentAudio.onerror = () => { if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); const msg = new SpeechSynthesisUtterance(cleanPluralText); msg.lang = 'de-DE'; msg.rate = 0.88; window.speechSynthesis.speak(msg); } };
+            event.stopPropagation(); 
+            if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+            const data = currentWords[currentIndex]; 
+            if (!data || !data.plural || data.plural === '-') return;
+            const cleanPluralText = data.plural.replace(/\*/g, ""); 
+            const filename = getPluralAudioFilename(data.plural);
+            currentAudio = new Audio('audio/stammformen/' + filename);
+            currentAudio.onerror = function() { 
+                if ('speechSynthesis' in window) { 
+                    window.speechSynthesis.cancel(); 
+                    const msg = new SpeechSynthesisUtterance(cleanPluralText); 
+                    msg.lang = 'de-DE'; msg.rate = 0.88; 
+                    window.speechSynthesis.speak(msg); 
+                } 
+            };
             currentAudio.play();
         }
 
-        // --- LOGIKA HARI & NAVIGASI KATA (SCATTERED THEMES) ---
         const today = new Date();
         const dayNumber = Math.floor(today.getTime() / (1000 * 60 * 60 * 24)); 
 
-        let currentLevel = "A1"; let currentIndex = 0; let currentWords = []; let quizQueue = [];
+        let currentLevel = "A1"; 
+        let currentIndex = 0; 
+        let currentWords = []; 
+        let quizQueue = [];
 
         function getArticleColor(article) {
             if (article === "der") return "#0172b7"; 
@@ -659,30 +615,38 @@
         }
 
         function initDailyData(level) {
-            currentLevel = level; currentIndex = 0; const limit = 10;
-            const filteredWords = database.filter(item => item.level === level); const total = filteredWords.length;
-            let startIdx = (dayNumber * limit) % total; let selection = [];
+            currentLevel = level; 
+            currentIndex = 0; 
+            const limit = 10;
+            const filteredWords = [];
+            for (let i = 0; i < database.length; i++) {
+                if (database[i].level === level) { filteredWords.push(database[i]); }
+            }
+            
+            const total = filteredWords.length;
+            let startIdx = (dayNumber * limit) % total; 
+            let selection = [];
             
             const primeStep = 37; 
             for(let i = 0; i < limit; i++) {
                 let scatteredIndex = (startIdx + (i * primeStep)) % total;
-                selection.push({...filteredWords[scatteredIndex], isRetry: false});
+                let copiedItem = Object.assign({}, filteredWords[scatteredIndex]);
+                copiedItem.isRetry = false;
+                selection.push(copiedItem);
             }
             dailySelection = selection; 
             
-            // Selalu mulai dari Flashcard
             document.getElementById('mainUI').style.display = 'flex';
             document.getElementById('preQuizMessage').style.display = 'none';
             document.getElementById('quizContainer').style.display = 'none';
             document.getElementById('doneMessage').style.display = 'none';
-            currentWords = [...selection];
+            currentWords = selection.slice();
             updateCard();
         }
 
         const flashcard = document.getElementById('flashcard');
 
         function updateCard() {
-            // Flashcard Selesai -> Tampilkan Layar Transisi Kuis
             if(currentIndex >= currentWords.length) {
                 document.getElementById('mainUI').style.display = 'none';
                 document.getElementById('preQuizMessage').style.display = 'block';
@@ -694,24 +658,37 @@
             }
 
             flashcard.classList.remove('is-flipped');
-            setTimeout(() => {
+            setTimeout(function() {
                 const data = currentWords[currentIndex];
                 const wordColor = getArticleColor(data.article);
                 
-                document.getElementById('wordArticle').textContent = data.article; document.getElementById('wordArticle').style.color = "#ffffff";
-                document.getElementById('wordText').textContent = data.word; document.getElementById('wordText').style.color = wordColor;
+                document.getElementById('wordArticle').textContent = data.article; 
+                document.getElementById('wordArticle').style.color = "#ffffff";
+                
+                document.getElementById('wordText').textContent = data.word; 
+                document.getElementById('wordText').style.color = wordColor;
                 
                 const ipaEl = document.getElementById('wordIpa');
-                if (data.ipa && data.ipa !== '-') { ipaEl.textContent = data.ipa; ipaEl.style.display = "block"; } else { ipaEl.style.display = "none"; }
+                if (data.ipa && data.ipa !== '-') { 
+                    ipaEl.textContent = data.ipa; 
+                    ipaEl.style.display = "block"; 
+                } else { 
+                    ipaEl.style.display = "none"; 
+                }
                 
-                const pluralTextEl = document.getElementById('wordPlural'); const pluralAudioBtn = document.getElementById('audioBtnPlural');
+                const pluralTextEl = document.getElementById('wordPlural'); 
+                const pluralAudioBtn = document.getElementById('audioBtnPlural');
                 if (data.plural && data.plural !== '-') {
-                    const formattedPlural = data.plural.replace(/\*(.*?)\*/g, `<span style="color: ${wordColor}; font-weight: 700;">$1</span>`);
-                    pluralTextEl.innerHTML = `Plural: ${formattedPlural}`; pluralAudioBtn.style.display = 'flex';
-                } else { pluralTextEl.innerHTML = `Plural: -`; pluralAudioBtn.style.display = 'none'; }
+                    const formattedPlural = data.plural.replace(/\*(.*?)\*/g, '<span style="color: ' + wordColor + '; font-weight: 700;">$1</span>');
+                    pluralTextEl.innerHTML = 'Plural: ' + formattedPlural; 
+                    pluralAudioBtn.style.display = 'flex';
+                } else { 
+                    pluralTextEl.innerHTML = 'Plural: -'; 
+                    pluralAudioBtn.style.display = 'none'; 
+                }
                 
                 document.getElementById('wordMeaning').textContent = data.meaning;
-                document.getElementById('progressText').textContent = `${currentIndex + 1} / ${currentWords.length}`;
+                document.getElementById('progressText').textContent = (currentIndex + 1) + ' / ' + currentWords.length;
                 document.getElementById('prevBtn').disabled = (currentIndex === 0);
             }, 150);
         }
@@ -719,12 +696,16 @@
         function flipCard() { flashcard.classList.toggle('is-flipped'); }
         function nextWord() { if (currentIndex < currentWords.length) { currentIndex++; updateCard(); } }
         function prevWord() { if (currentIndex > 0) { currentIndex--; updateCard(); } }
-        function shuffleCurrentWords() { currentWords = currentWords.sort(() => Math.random() - 0.5); currentIndex = 0; updateCard(); }
+        function shuffleCurrentWords() { 
+            currentWords = currentWords.sort(function() { return Math.random() - 0.5; }); 
+            currentIndex = 0; 
+            updateCard(); 
+        }
 
         function restartNormal() {
             document.getElementById('doneMessage').style.display = 'none';
             document.getElementById('mainUI').style.display = 'flex';
-            currentWords = [...dailySelection].sort(() => Math.random() - 0.5); 
+            currentWords = dailySelection.slice().sort(function() { return Math.random() - 0.5; }); 
             currentIndex = 0;
             updateCard();
         }
@@ -734,27 +715,31 @@
             document.getElementById('doneMessage').style.display = 'block';
             
             document.getElementById('doneTitle').textContent = i18n[currentLang].doneTitleSkip;
-            document.getElementById('doneDesc').innerHTML = currentLang === 'id' ? 
-                "Tidak masalah! Kamu tetap bisa mengulang hafalan kartu atau mencoba kuis kapan saja." : 
-                "Kein Problem! Du kannst die Karteikarten jederzeit wiederholen oder das Quiz starten.";
+            if (currentLang === 'id') {
+                document.getElementById('doneDesc').innerHTML = "Tidak masalah! Kamu tetap bisa mengulang hafalan kartu atau mencoba kuis kapan saja.";
+            } else {
+                document.getElementById('doneDesc').innerHTML = "Kein Problem! Du kannst die Karteikarten jederzeit wiederholen oder das Quiz starten.";
+            }
         }
 
-        // --- SISTEM KUIS HARIAN VARIASI BARU ---
         function startDailyQuiz() {
             quizScore = 0;
-            totalQuizQuestions = dailySelection.length; // Pasti 10
+            totalQuizQuestions = dailySelection.length; 
             quizQueue = [];
 
-            let shuffledWords = [...dailySelection].sort(() => Math.random() - 0.5);
+            let shuffledWords = dailySelection.slice().sort(function() { return Math.random() - 0.5; });
 
-            // Menentukan tipe kuis acak per kata
-            shuffledWords.forEach(wordObj => {
+            for (let i = 0; i < shuffledWords.length; i++) {
+                let wordObj = shuffledWords[i];
                 let availableTypes = ['article', 'meaning', 'reverse'];
                 if (wordObj.plural && wordObj.plural !== '-') { availableTypes.push('plural'); }
                 
                 let chosenType = availableTypes[Math.floor(Math.random() * availableTypes.length)];
-                quizQueue.push({ ...wordObj, quizType: chosenType, isRetry: false });
-            });
+                let newQ = Object.assign({}, wordObj);
+                newQ.quizType = chosenType;
+                newQ.isRetry = false;
+                quizQueue.push(newQ);
+            }
 
             document.getElementById('preQuizMessage').style.display = 'none';
             document.getElementById('doneMessage').style.display = 'none';
@@ -769,9 +754,11 @@
                 document.getElementById('doneMessage').style.display = 'block';
                 
                 document.getElementById('doneTitle').textContent = i18n[currentLang].doneTitleQuiz;
-                document.getElementById('doneDesc').innerHTML = currentLang === 'id' ? 
-                    `Skor kamu: <strong>${quizScore} / ${totalQuizQuestions}</strong> benar pada tebakan pertama.` : 
-                    `Dein Ergebnis: <strong>${quizScore} / ${totalQuizQuestions}</strong> beim ersten Versuch richtig.`;
+                if (currentLang === 'id') {
+                    document.getElementById('doneDesc').innerHTML = 'Skor kamu: <strong>' + quizScore + ' / ' + totalQuizQuestions + '</strong> benar pada tebakan pertama.';
+                } else {
+                    document.getElementById('doneDesc').innerHTML = 'Dein Ergebnis: <strong>' + quizScore + ' / ' + totalQuizQuestions + '</strong> beim ersten Versuch richtig.';
+                }
 
                 confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, colors: ['#ff0000', '#ffcc00', '#000000', '#ffffff'] });
                 return;
@@ -782,21 +769,26 @@
             const qWordEl = document.getElementById('quizWord');
             const qDescEl = document.getElementById('quizDesc');
             
-            let optionsSet = new Set();
+            let optionsSet = [];
             let correctOption = "";
-            const currentLevelWords = database.filter(item => item.level === currentLevel);
+            const currentLevelWords = [];
+            for (let j = 0; j < database.length; j++) {
+                if (database[j].level === currentLevel) { currentLevelWords.push(database[j]); }
+            }
 
-            // Reset Warna Default
             qArticleEl.style.color = "var(--text-color)";
             qWordEl.style.color = "var(--text-color)";
 
-            // Variasi Kuis
+            function addUnique(arr, val) {
+                if (arr.indexOf(val) === -1) { arr.push(val); }
+            }
+
             if (currentQ.quizType === 'article') {
                 qDescEl.textContent = i18n[currentLang].qArticle;
                 qArticleEl.textContent = "___";
                 qWordEl.textContent = currentQ.word;
                 correctOption = currentQ.article;
-                optionsSet = new Set(['der', 'die', 'das']);
+                optionsSet = ['der', 'die', 'das'];
                 
             } else if (currentQ.quizType === 'meaning') {
                 qDescEl.textContent = i18n[currentLang].qMeaning;
@@ -804,20 +796,20 @@
                 qWordEl.textContent = currentQ.word;
                 qWordEl.style.color = getArticleColor(currentQ.article);
                 correctOption = currentQ.meaning;
-                optionsSet.add(correctOption);
-                while(optionsSet.size < 3) {
-                    optionsSet.add(currentLevelWords[Math.floor(Math.random() * currentLevelWords.length)].meaning);
+                optionsSet.push(correctOption);
+                while(optionsSet.length < 3) {
+                    addUnique(optionsSet, currentLevelWords[Math.floor(Math.random() * currentLevelWords.length)].meaning);
                 }
 
             } else if (currentQ.quizType === 'reverse') {
                 qDescEl.textContent = i18n[currentLang].qReverse;
                 qArticleEl.textContent = "";
-                qWordEl.textContent = `"${currentQ.meaning}"`;
-                correctOption = `${currentQ.article} ${currentQ.word}`;
-                optionsSet.add(correctOption);
-                while(optionsSet.size < 3) {
+                qWordEl.textContent = '"' + currentQ.meaning + '"';
+                correctOption = currentQ.article + ' ' + currentQ.word;
+                optionsSet.push(correctOption);
+                while(optionsSet.length < 3) {
                     let rndObj = currentLevelWords[Math.floor(Math.random() * currentLevelWords.length)];
-                    optionsSet.add(`${rndObj.article} ${rndObj.word}`);
+                    addUnique(optionsSet, rndObj.article + ' ' + rndObj.word);
                 }
 
             } else if (currentQ.quizType === 'plural') {
@@ -826,48 +818,56 @@
                 qWordEl.textContent = currentQ.word;
                 qWordEl.style.color = getArticleColor(currentQ.article);
                 correctOption = currentQ.plural.replace(/\*/g, ""); 
-                optionsSet.add(correctOption);
-                while(optionsSet.size < 3) {
+                optionsSet.push(correctOption);
+                while(optionsSet.length < 3) {
                     let rndObj = currentLevelWords[Math.floor(Math.random() * currentLevelWords.length)];
                     if(rndObj.plural && rndObj.plural !== '-') {
-                        optionsSet.add(rndObj.plural.replace(/\*/g, ""));
+                        addUnique(optionsSet, rndObj.plural.replace(/\*/g, ""));
                     }
                 }
             }
 
-            let optionsArr = Array.from(optionsSet).sort(() => Math.random() - 0.5);
+            let optionsArr = optionsSet.sort(function() { return Math.random() - 0.5; });
             const optionsDiv = document.getElementById('quizOptions');
             optionsDiv.innerHTML = '';
             
-            optionsArr.forEach(opt => {
+            for (let k = 0; k < optionsArr.length; k++) {
+                let opt = optionsArr[k];
                 let btn = document.createElement('button');
                 btn.className = 'quiz-option';
                 btn.textContent = opt;
                 btn.onclick = function() { checkQuiz(opt, correctOption, this, currentQ); };
                 optionsDiv.appendChild(btn);
-            });
-            document.getElementById('quizProgressText').textContent = `${i18n[currentLang].quizRemaining}: ${quizQueue.length}`;
+            }
+            document.getElementById('quizProgressText').textContent = i18n[currentLang].quizRemaining + ': ' + quizQueue.length;
         }
 
         function checkQuiz(selected, correct, btnElement, currentQ) {
             const allBtns = document.querySelectorAll('.quiz-option');
-            allBtns.forEach(b => b.style.pointerEvents = 'none');
+            for (let i = 0; i < allBtns.length; i++) {
+                allBtns[i].style.pointerEvents = 'none';
+            }
 
             if(selected === correct) {
-                btnElement.classList.add('correct'); playSound('correct');
-                if(!currentQ.isRetry) quizScore++;
+                btnElement.classList.add('correct'); 
+                playSound('correct');
+                if(!currentQ.isRetry) { quizScore++; }
                 quizQueue.shift(); 
                 setTimeout(loadNextQuiz, 1000); 
             } else {
-                btnElement.classList.add('wrong'); playSound('wrong');
-                allBtns.forEach(b => { if(b.textContent === correct) { b.classList.add('correct'); } });
-                let q = quizQueue.shift(); q.isRetry = true; quizQueue.push(q); 
+                btnElement.classList.add('wrong'); 
+                playSound('wrong');
+                for (let i = 0; i < allBtns.length; i++) {
+                    if(allBtns[i].textContent === correct) { allBtns[i].classList.add('correct'); }
+                }
+                let q = quizQueue.shift(); 
+                q.isRetry = true; 
+                quizQueue.push(q); 
                 setTimeout(loadNextQuiz, 1500); 
             }
         }
 
-        // --- PINTASAN KEYBOARD ---
-        document.addEventListener('keydown', (e) => {
+        document.addEventListener('keydown', function(e) {
             if (document.querySelector('.modal-overlay.show')) return;
             if (document.getElementById('mainUI').style.display === 'flex') {
                 if (e.code === 'Space') { e.preventDefault(); flipCard(); } 
@@ -876,30 +876,72 @@
             }
         });
 
-        // --- MODAL ---
-        function openModal(modalId) { const modal = document.getElementById(modalId); if (modal) { modal.classList.add('show'); document.body.style.overflow = 'hidden'; } }
-        function closeModal(modalId) { const modal = document.getElementById(modalId); if (modal) { modal.classList.remove('show'); document.body.style.overflow = 'auto'; } }
-        function closeModalOnBackdrop(event, modalId) { if (event.target.id === modalId) { closeModal(modalId); } }
+        function openModal(modalId) { 
+            const modal = document.getElementById(modalId); 
+            if (modal) { modal.classList.add('show'); document.body.style.overflow = 'hidden'; } 
+        }
+        function closeModal(modalId) { 
+            const modal = document.getElementById(modalId); 
+            if (modal) { modal.classList.remove('show'); document.body.style.overflow = 'auto'; } 
+        }
+        function closeModalOnBackdrop(event, modalId) { 
+            if (event.target.id === modalId) { closeModal(modalId); } 
+        }
 
-        document.querySelectorAll('.level-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active')); e.target.classList.add('active');
+        const levelBtns = document.querySelectorAll('.level-btn');
+        for (let i = 0; i < levelBtns.length; i++) {
+            levelBtns[i].addEventListener('click', function(e) {
+                for (let j = 0; j < levelBtns.length; j++) { levelBtns[j].classList.remove('active'); } 
+                e.target.classList.add('active');
                 initDailyData(e.target.getAttribute('data-level'));
             });
-        });
+        }
 
-        // Init
-        setLanguage(currentLang); initDailyData("A1");
+        setLanguage(currentLang); 
+        initDailyData("A1");
 
-        // --- PWA ---
-        let deferredPrompt; window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+        let deferredPrompt; 
+        window.addEventListener('beforeinstallprompt', function(e) { e.preventDefault(); deferredPrompt = e; });
         function isPwaInstalled() { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true || localStorage.getItem('pwaInstalledPermanently') === 'true'; }
         function canShowInstallPrompt() { if (isPwaInstalled()) return false; const nextShowTime = localStorage.getItem('pwaPromptNextShow'); if (!nextShowTime) return true; return Date.now() > parseInt(nextShowTime); }
-        function checkAndShowPwaPrompt() { setTimeout(() => { if (canShowInstallPrompt()) { const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; if (deferredPrompt || isIOS) { if (isIOS) { document.getElementById('btnInstallText').textContent = " Cara Install di iPhone"; } openModal('installModal'); } } }, 1500); }
-        async function triggerInstallPWA() { const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; if (isIOS) { alert('📲 Langkah Mudah Install di iPhone/iOS:\n\n1. Klik ikon Share (panah ke atas) di menu tengah bawah Safari.\n2. Scroll ke bawah dan klik "Add to Home Screen".\n3. Klik "Add".'); snoozeInstallPWA(); } else if (deferredPrompt) { deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; if (outcome === 'accepted') { localStorage.setItem('pwaInstalledPermanently', 'true'); closeModal('installModal'); } deferredPrompt = null; } }
-        function snoozeInstallPWA() { const duaHariDalamMs = 2 * 24 * 60 * 60 * 1000; localStorage.setItem('pwaPromptNextShow', Date.now() + duaHariDalamMs); closeModal('installModal'); }
-        function handleSnoozeInstall(event, modalId) { if (event.target.id === modalId) { snoozeInstallPWA(); } }
-        window.addEventListener('appinstalled', () => { localStorage.setItem('pwaInstalledPermanently', 'true'); closeModal('installModal'); });
+        function checkAndShowPwaPrompt() { 
+            setTimeout(function() { 
+                if (canShowInstallPrompt()) { 
+                    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; 
+                    if (deferredPrompt || isIOS) { 
+                        if (isIOS) { document.getElementById('btnInstallText').textContent = " Cara Install di iPhone"; } 
+                        openModal('installModal'); 
+                    } 
+                } 
+            }, 1500); 
+        }
+        async function triggerInstallPWA() { 
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; 
+            if (isIOS) { 
+                alert('📲 Langkah Mudah Install di iPhone/iOS:\n\n1. Klik ikon Share (panah ke atas) di menu tengah bawah Safari.\n2. Scroll ke bawah dan klik "Add to Home Screen".\n3. Klik "Add".'); 
+                snoozeInstallPWA(); 
+            } else if (deferredPrompt) { 
+                deferredPrompt.prompt(); 
+                const { outcome } = await deferredPrompt.userChoice; 
+                if (outcome === 'accepted') { 
+                    localStorage.setItem('pwaInstalledPermanently', 'true'); 
+                    closeModal('installModal'); 
+                } 
+                deferredPrompt = null; 
+            } 
+        }
+        function snoozeInstallPWA() { 
+            const duaHariDalamMs = 2 * 24 * 60 * 60 * 1000; 
+            localStorage.setItem('pwaPromptNextShow', Date.now() + duaHariDalamMs); 
+            closeModal('installModal'); 
+        }
+        function handleSnoozeInstall(event, modalId) { 
+            if (event.target.id === modalId) { snoozeInstallPWA(); } 
+        }
+        window.addEventListener('appinstalled', function() { 
+            localStorage.setItem('pwaInstalledPermanently', 'true'); 
+            closeModal('installModal'); 
+        });
     </script>
 </body>
 </html>
