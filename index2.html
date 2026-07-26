@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K43HSM32VH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-K43HSM32VH');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Deutsch — Kartu Kosakata Harian</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
+    <link rel="apple-touch-icon" href="favicon.svg?v=2">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FFF3E4" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#17130E" media="(prefers-color-scheme: dark)">
+    <meta name="referrer" content="no-referrer">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+    /* ==========================================================
+       TOKEN WARNA
+       Palet ceria. Warna gender (der/die/das) sengaja sama di
+       mode terang maupun gelap supaya jadi kode hafalan tetap.
+       ========================================================== */
+    :root {
+        --cream:    #FFF3E4;
+        --surface:  #FFFFFF;
+        --ink:      #17130E;
+        --ink-2:    #8B7C6D;
+
+        --orange:   #FF5A1F;
+        --pink:     #FF4D94;
+        --yellow:   #FFC831;
+        --flag-red: #FF3B2F;
+
+        --der: #2F5BFF;
+        --das: #00A878;
+        --die: #FF4D94;
+
+        --accent:      #FF5A1F;
+        --accent-text: #FF5A1F;
+
+        --ok: #00A878;
+        --no: #FF3B2F;
+
+        --sh-sm: 0 4px 14px -6px rgba(23,19,14,.28);
+        --sh-md: 0 14px 30px -14px rgba(23,19,14,.38);
+        --sh-lg: 0 26px 50px -24px rgba(23,19,14,.5);
+
+        --r-block: 30px;
+        --r-card:  22px;
+
+        --f-display: 'Fredoka', 'Trebuchet MS', sans-serif;
+        --f-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        --f-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+    }
+
+    body.dark {
+        --cream:   #17130E;
+        --surface: #241E17;
+        --ink:     #FFF3E4;
+        --ink-2:   #A08F7E;
+        --accent-text: #FF7A45;
+        --sh-sm: 0 4px 14px -6px rgba(0,0,0,.6);
+        --sh-md: 0 14px 30px -14px rgba(0,0,0,.75);
+        --sh-lg: 0 26px 50px -24px rgba(0,0,0,.9);
+    }
+
+    /* ==========================================================
+       DASAR
+       ========================================================== */
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+        margin: 0;
+        padding: 20px 18px calc(30px + env(safe-area-inset-bottom));
+        min-height: 100vh;
+        background: var(--cream);
+        color: var(--ink);
+        font-family: var(--f-body);
+        font-size: 15px;
+        line-height: 1.5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        -webkit-font-smoothing: antialiased;
+        transition: background-color .3s ease, color .3s ease;
+    }
+
+    .shell { width: 100%; max-width: 430px; }
+    button { font-family: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+    :focus-visible { outline: 3px solid var(--accent-text); outline-offset: 3px; border-radius: 8px; }
+
+    .label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+
+    /* ==========================================================
+       HEADER
+       ========================================================== */
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+
+    .flagmark { display: flex; flex-direction: column; gap: 2.5px; flex: none; }
+    .flagmark i { width: 22px; height: 6px; border-radius: 3px; }
+    .flagmark i:nth-child(1) { background: var(--ink); }
+    .flagmark i:nth-child(2) { background: var(--flag-red); }
+    .flagmark i:nth-child(3) { background: var(--yellow); }
+
+    .brand h1 { font-family: var(--f-display); font-weight: 600; font-size: 25px; margin: 0; line-height: 1; letter-spacing: -.01em; }
+
+    .tools { display: flex; align-items: center; gap: 8px; }
+
+    .pillgroup { display: flex; background: var(--surface); border-radius: 999px; padding: 3px; box-shadow: var(--sh-sm); }
+    .pillgroup button {
+        border-radius: 999px; padding: 7px 13px;
+        font-family: var(--f-display); font-size: 13px; font-weight: 600;
+        color: var(--ink-2); transition: background .2s, color .2s;
+    }
+    .pillgroup button[aria-pressed="true"] { background: var(--ink); color: var(--cream); }
+
+    .round-btn {
+        width: 40px; height: 40px; border-radius: 50%; flex: none;
+        background: var(--surface); box-shadow: var(--sh-sm);
+        display: grid; place-items: center; transition: transform .18s ease;
+    }
+    .round-btn:active { transform: scale(.92); }
+    .round-btn svg { width: 18px; height: 18px; stroke: var(--ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .datestamp { color: var(--ink-2); font-size: 13px; font-weight: 500; margin: 6px 0 18px 32px; }
+
+    /* ==========================================================
+       KARTU STATISTIK
+       ========================================================== */
+    .stats { display: grid; grid-template-columns: 1fr 1.25fr; gap: 12px; margin-bottom: 20px; }
+
+    .stat {
+        border-radius: var(--r-block); padding: 16px;
+        position: relative; overflow: hidden;
+        box-shadow: var(--sh-md); min-height: 122px;
+        display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .stat-streak { background: var(--orange); color: #FFF3E4; }
+    .stat-progress { background: var(--yellow); color: #17130E; }
+    .stat .label { opacity: .85; position: relative; z-index: 1; }
+    .stat .figure { font-family: var(--f-display); font-weight: 600; font-size: 40px; line-height: 1; letter-spacing: -.02em; position: relative; z-index: 1; }
+    .stat .figure small { font-size: 16px; font-weight: 500; opacity: .85; margin-left: 3px; }
+
+    .blob-corner { position: absolute; right: -12px; bottom: -14px; width: 78px; height: 78px; }
+
+    .bar { height: 10px; border-radius: 999px; background: rgba(23,19,14,.18); overflow: hidden; margin-top: 10px; position: relative; z-index: 1; }
+    .bar span { display: block; height: 100%; border-radius: 999px; background: #17130E; transition: width .45s cubic-bezier(.2,.8,.2,1); }
+
+    /* ==========================================================
+       LEVEL
+       ========================================================== */
+    .levels { display: flex; gap: 8px; margin-bottom: 16px; }
+    .levels button {
+        border-radius: 999px; padding: 10px 22px;
+        font-family: var(--f-display); font-weight: 600; font-size: 15px;
+        background: var(--surface); color: var(--ink-2); box-shadow: var(--sh-sm);
+        transition: background .2s, color .2s, transform .15s;
+    }
+    .levels button:active { transform: scale(.95); }
+    .levels button[aria-pressed="true"] { background: var(--ink); color: var(--cream); }
+
+    /* ==========================================================
+       FLASHCARD
+       ========================================================== */
+    .stage { perspective: 1600px; margin-bottom: 18px; }
+    .card {
+        position: relative; width: 100%; min-height: 344px;
+        transform-style: preserve-3d;
+        transition: transform .6s cubic-bezier(.2,.8,.2,1);
+        cursor: pointer;
+    }
+    .card.flipped { transform: rotateY(180deg); }
+
+    .face {
+        position: absolute; inset: 0;
+        backface-visibility: hidden;
+        border-radius: var(--r-block);
+        padding: 20px;
+        display: flex; flex-direction: column; align-items: flex-start;
+        box-shadow: var(--sh-lg);
+        overflow: hidden;
+    }
+
+    .face-front { background: var(--accent); color: #FFFFFF; transition: background-color .4s ease; }
+    .face-front::after {
+        content: ""; position: absolute; right: -56px; top: -66px;
+        width: 200px; height: 200px; border-radius: 50%;
+        background: rgba(255,255,255,.11); pointer-events: none;
+    }
+    .face-back { transform: rotateY(180deg); background: var(--surface); color: var(--ink); }
+
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; position: relative; z-index: 1; }
+
+    .tag {
+        border-radius: 999px; padding: 7px 14px;
+        background: rgba(255,255,255,.22);
+        font-family: var(--f-display); font-weight: 600; font-size: 13px;
+    }
+    .face-back .tag { background: var(--cream); color: var(--accent-text); transition: color .4s ease; }
+
+    .card-mid { margin-top: auto; margin-bottom: auto; padding: 20px 0; width: 100%; position: relative; z-index: 1; }
+
+    .word {
+        font-family: var(--f-display); font-weight: 600;
+        font-size: clamp(2.5rem, 11.5vw, 3.5rem);
+        line-height: 1; letter-spacing: -.025em; margin: 0;
+        word-break: break-word; hyphens: auto;
+    }
+    .ipa { font-family: var(--f-mono); font-size: 14px; opacity: .8; margin-top: 10px; }
+
+    .meaning {
+        font-family: var(--f-display); font-weight: 600;
+        font-size: clamp(2rem, 9vw, 2.8rem);
+        line-height: 1.05; letter-spacing: -.02em; margin: 0;
+        color: var(--accent-text); transition: color .4s ease;
+    }
+
+    .plural-chip {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: rgba(255,255,255,.2); border-radius: 999px;
+        padding: 7px 7px 7px 15px; font-size: 14px; font-weight: 500;
+        max-width: 100%; position: relative; z-index: 1;
+    }
+    .plural-chip > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .plural-chip b { font-weight: 700; }
+
+    .card-hint { font-size: 12.5px; opacity: .75; margin: 14px 0 0; font-weight: 500; position: relative; z-index: 1; }
+
+    .sound {
+        width: 42px; height: 42px; border-radius: 50%; flex: none;
+        background: #17130E; display: grid; place-items: center;
+        transition: transform .18s ease;
+    }
+    .sound:active { transform: scale(.9); }
+    .sound.sm { width: 30px; height: 30px; }
+    .sound svg { width: 18px; height: 18px; fill: none; stroke: #FFF3E4; stroke-width: 2.2; stroke-linecap: round; }
+    .sound.sm svg { width: 14px; height: 14px; }
+    .sound.playing .w1 { animation: ripple .9s ease-in-out infinite; }
+    .sound.playing .w2 { animation: ripple .9s ease-in-out .13s infinite; }
+    .sound.playing .w3 { animation: ripple .9s ease-in-out .26s infinite; }
+    @keyframes ripple { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
+
+    /* ==========================================================
+       KONTROL
+       ========================================================== */
+    .controls { display: flex; align-items: center; gap: 10px; }
+    .ctrl {
+        width: 54px; height: 54px; border-radius: 50%; flex: none;
+        background: var(--surface); box-shadow: var(--sh-sm);
+        display: grid; place-items: center; transition: transform .16s ease, opacity .2s;
+    }
+    .ctrl:active { transform: scale(.9); }
+    .ctrl:disabled { opacity: .35; }
+    .ctrl svg { width: 20px; height: 20px; stroke: var(--ink); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .cta {
+        flex: 1; min-height: 54px; border-radius: 999px; padding: 0 22px;
+        background: var(--ink); color: var(--cream);
+        font-family: var(--f-display); font-weight: 600; font-size: 16px;
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        box-shadow: var(--sh-md); transition: transform .16s ease, opacity .2s;
+    }
+    .cta:active { transform: scale(.97); }
+    .cta:disabled { opacity: .4; }
+    .cta svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .cta-accent { background: var(--accent); color: #fff; transition: background-color .4s ease, transform .16s ease; }
+    .cta-ghost { background: transparent; color: var(--ink-2); box-shadow: none; }
+    .cta-ghost:hover { color: var(--ink); }
+
+    /* ==========================================================
+       PANEL
+       ========================================================== */
+    .panel { display: none; }
+    .panel.show { display: block; }
+
+    .scene { background: var(--orange); border-radius: var(--r-block); padding: 22px 20px 0; margin-bottom: 22px; box-shadow: var(--sh-md); }
+    .scene svg { display: block; width: 100%; height: auto; }
+
+    .panel-kicker { color: var(--accent-text); margin-bottom: 8px; transition: color .4s ease; }
+    .panel-title { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.9rem,8.5vw,2.4rem); line-height: 1.05; letter-spacing: -.02em; margin: 0 0 10px; }
+    .panel-text { color: var(--ink-2); margin: 0 0 24px; max-width: 32ch; }
+    .stack { display: flex; flex-direction: column; gap: 10px; }
+    .stack .cta { width: 100%; }
+
+    .qprompt { font-size: 15px; color: var(--ink-2); font-weight: 500; margin: 0 0 4px; }
+    .qsubject { font-family: var(--f-display); font-weight: 600; font-size: clamp(2rem,9.5vw,2.8rem); line-height: 1.05; letter-spacing: -.025em; margin: 0 0 22px; }
+    .qsubject em { font-style: normal; color: var(--accent-text); transition: color .4s ease; }
+
+    .option {
+        width: 100%; display: flex; align-items: center; gap: 14px;
+        background: var(--surface); border-radius: var(--r-card);
+        padding: 14px 16px; margin-bottom: 10px;
+        font-size: 16px; font-weight: 600; text-align: left;
+        box-shadow: var(--sh-sm); transition: transform .15s ease, background .2s, color .2s;
+    }
+    .option .key {
+        width: 30px; height: 30px; border-radius: 50%; flex: none;
+        background: var(--cream); color: var(--ink-2);
+        display: grid; place-items: center;
+        font-family: var(--f-display); font-size: 14px; font-weight: 600;
+        transition: background .2s, color .2s;
+    }
+    .option:active { transform: scale(.98); }
+    .option.correct { background: var(--ok); color: #fff; }
+    .option.wrong { background: var(--no); color: #fff; animation: shake .35s ease; }
+    .option.correct .key, .option.wrong .key { background: rgba(255,255,255,.28); color: #fff; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 30%{transform:translateX(-6px)} 70%{transform:translateX(6px)} }
+
+    .qmeta { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; color: var(--ink-2); }
+    .qmeta .score { background: var(--yellow); color: #17130E; border-radius: 999px; padding: 6px 14px; }
+
+    .match-row {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        background: var(--surface); border-radius: var(--r-card);
+        padding: 11px 11px 11px 18px; margin-bottom: 10px; box-shadow: var(--sh-sm);
+    }
+    .match-word { font-family: var(--f-display); font-weight: 600; font-size: 19px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .match-group { display: flex; gap: 6px; flex: none; }
+    .match-group button {
+        border-radius: 12px; padding: 9px 11px;
+        background: var(--cream); color: var(--ink-2);
+        font-family: var(--f-display); font-weight: 600; font-size: 13px;
+        transition: background .18s, color .18s, transform .15s;
+    }
+    .match-group button:active { transform: scale(.92); }
+    .match-group button.picked { background: var(--ink); color: var(--cream); }
+    .match-group button.correct { background: var(--ok); color: #fff; }
+    .match-group button.wrong { background: var(--no); color: #fff; }
+
+    /* ==========================================================
+       FOOTER
+       ========================================================== */
+    .footer { margin-top: 34px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .footer-nav { display: flex; gap: 8px; }
+    .chip {
+        border-radius: 999px; padding: 9px 16px;
+        background: var(--surface); box-shadow: var(--sh-sm);
+        font-size: 13px; font-weight: 600; transition: transform .15s ease;
+    }
+    .chip:active { transform: scale(.95); }
+    .credit { color: var(--ink-2); font-size: 12.5px; font-weight: 500; }
+    .credit a { color: var(--accent-text); text-decoration: none; font-weight: 700; }
+
+    /* ==========================================================
+       MODAL
+       ========================================================== */
+    .overlay {
+        position: fixed; inset: 0; z-index: 999;
+        background: rgba(23,19,14,.5); backdrop-filter: blur(5px);
+        display: none; align-items: flex-end; justify-content: center;
+        opacity: 0; transition: opacity .25s ease;
+    }
+    .overlay.show { display: flex; opacity: 1; }
+    .sheet {
+        background: var(--cream); width: 100%; max-width: 440px; max-height: 88vh;
+        border-radius: 32px 32px 0 0; padding: 22px 20px calc(24px + env(safe-area-inset-bottom));
+        overflow-y: auto; transform: translateY(30px);
+        transition: transform .32s cubic-bezier(.2,.8,.2,1);
+    }
+    .overlay.show .sheet { transform: translateY(0); }
+    @media (min-width: 540px) {
+        .overlay { align-items: center; padding: 24px; }
+        .sheet { border-radius: 32px; }
+    }
+    .sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+    .sheet-head h2 { font-family: var(--f-display); font-weight: 600; font-size: 24px; margin: 0; letter-spacing: -.01em; }
+    .sheet h3 { font-family: var(--f-display); font-weight: 600; font-size: 15px; margin: 24px 0 10px; color: var(--accent-text); }
+    .sheet ul { list-style: none; margin: 0; padding: 0; }
+    .sheet li { background: var(--surface); border-radius: 16px; padding: 12px 14px; margin-bottom: 8px; font-size: 14.5px; box-shadow: var(--sh-sm); }
+    .sheet li b { font-weight: 700; }
+    .sheet p { font-size: 14.5px; color: var(--ink-2); margin: 0; }
+    .kbd { display: inline-block; background: var(--cream); border-radius: 7px; padding: 1px 8px; font-family: var(--f-mono); font-size: 12px; }
+    .dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; vertical-align: -1px; margin-right: 7px; }
+    .qr { width: 100%; max-width: 250px; border-radius: 20px; display: block; margin: 18px auto; box-shadow: var(--sh-md); }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+    </style>
+</head>
+<body>
+
+<div class="shell">
+
+    <header class="topbar">
+        <div class="brand">
+            <span class="flagmark" aria-hidden="true"><i></i><i></i><i></i></span>
+            <h1>Deutsch</h1>
+        </div>
+        <div class="tools">
+            <div class="pillgroup" role="group" aria-label="Bahasa antarmuka">
+                <button id="langID" aria-pressed="true" onclick="setLanguage('id')">ID</button>
+                <button id="langDE" aria-pressed="false" onclick="setLanguage('de')">DE</button>
+            </div>
+            <button class="round-btn" id="themeToggle" aria-label="Ganti tema">
+                <svg id="themeIcon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+            </button>
+        </div>
+    </header>
+    <p class="datestamp" id="dateLabel">—</p>
+
+    <main id="studyView">
+        <div class="stats">
+            <div class="stat stat-streak">
+                <span class="label" id="streakLabel">Beruntun</span>
+                <span class="figure"><span id="streakValue">0</span><small id="streakUnit">hari</small></span>
+                <svg class="blob-corner" viewBox="0 0 80 80" aria-hidden="true">
+                    <rect x="10" y="16" width="62" height="62" rx="25" fill="#FFC831"/>
+                    <path d="M27 41q6-8 12 0M47 41q6-8 12 0" stroke="#17130E" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+                    <path d="M31 55q13 13 26 0" stroke="#17130E" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="stat stat-progress">
+                <span class="label" id="progressLabel">Kartu hari ini</span>
+                <div>
+                    <span class="figure"><span id="counterValue">01</span><small>/ 10</small></span>
+                    <div class="bar"><span id="barFill" style="width:10%"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="levels" role="group" aria-label="Level">
+            <button data-level="A1" aria-pressed="true">Level A1</button>
+            <button data-level="A2" aria-pressed="false">Level A2</button>
+        </div>
+
+        <div class="stage">
+            <div class="card" id="card" role="button" tabindex="0" aria-label="Kartu kosakata, ketuk untuk membalik">
+                <div class="face face-front">
+                    <div class="card-top">
+                        <span class="tag" id="genderTag">—</span>
+                        <button class="sound" id="audioWord" onclick="speakWord(event)" aria-label="Dengarkan pelafalan">
+                            <svg viewBox="0 0 24 24">
+                                <path class="w1" d="M7 9.5a3.2 3.2 0 0 1 0 5"/>
+                                <path class="w2" d="M11 6.5a7.2 7.2 0 0 1 0 11"/>
+                                <path class="w3" d="M15 3.5a11.2 11.2 0 0 1 0 17"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="card-mid">
+                        <h2 class="word" id="wordText">Memuat</h2>
+                        <div class="ipa" id="wordIpa"></div>
+                    </div>
+                    <div class="plural-chip" id="pluralChip">
+                        <span id="wordPlural">—</span>
+                        <button class="sound sm" id="audioPlural" onclick="speakPlural(event)" aria-label="Dengarkan bentuk plural">
+                            <svg viewBox="0 0 24 24">
+                                <path class="w1" d="M7 9.5a3.2 3.2 0 0 1 0 5"/>
+                                <path class="w2" d="M11 6.5a7.2 7.2 0 0 1 0 11"/>
+                                <path class="w3" d="M15 3.5a11.2 11.2 0 0 1 0 17"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="card-hint" id="hintFront">Ketuk kartu untuk melihat arti</p>
+                </div>
+
+                <div class="face face-back">
+                    <div class="card-top">
+                        <span class="tag" id="backWord">—</span>
+                    </div>
+                    <div class="card-mid">
+                        <p class="label" id="backLabel" style="color:var(--ink-2);margin:0 0 8px">Arti</p>
+                        <p class="meaning" id="wordMeaning">—</p>
+                    </div>
+                    <p class="card-hint" id="hintBack" style="color:var(--ink-2)">Ketuk untuk kembali</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="ctrl" id="prevBtn" onclick="prevWord()" aria-label="Kata sebelumnya">
+                <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <button class="ctrl" onclick="shuffleWords()" aria-label="Acak urutan">
+                <svg viewBox="0 0 24 24"><path d="M4 7h4l8 10h4M4 17h4l2-2.5M16 7h4M18 5l2 2-2 2M18 15l2 2-2 2"/></svg>
+            </button>
+            <button class="cta" onclick="nextWord()">
+                <span id="txtNext">Lanjut</span><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+        </div>
+    </main>
+
+    <!-- SELESAI HAFALAN -->
+    <section class="panel" id="preQuizPanel">
+        <div class="scene" id="sceneHost"></div>
+        <p class="label panel-kicker" id="preQuizKicker">10 dari 10 kata</p>
+        <h2 class="panel-title" id="preQuizTitle">Kartu hari ini selesai</h2>
+        <p class="panel-text" id="preQuizText">Uji ingatanmu dengan sepuluh soal, atau simpan tenagamu untuk besok.</p>
+        <div class="stack">
+            <button class="cta cta-accent" id="btnStartQuiz" onclick="startQuiz()">Mulai kuis</button>
+            <button class="cta cta-ghost" id="btnSkipQuiz" onclick="skipQuiz()">Lewati kuis</button>
+        </div>
+    </section>
+
+    <!-- KUIS -->
+    <section class="panel" id="quizPanel">
+        <p class="label panel-kicker" id="quizKicker">Kuis harian</p>
+        <p class="qprompt" id="quizPrompt">—</p>
+        <h2 class="qsubject"><em id="quizArticle"></em> <span id="quizWord">—</span></h2>
+        <div id="quizOptions"></div>
+        <div class="qmeta">
+            <span class="label" id="quizRemaining">—</span>
+            <span class="label score" id="quizScore">—</span>
+        </div>
+    </section>
+
+    <!-- PENCOCOKAN -->
+    <section class="panel" id="matchPanel">
+        <p class="label panel-kicker" id="matchKicker">Soal terakhir</p>
+        <h2 class="panel-title" id="matchTitle">Pasangkan artikelnya</h2>
+        <p class="panel-text" id="matchText">Pilih der, die, atau das untuk kelima kata ini.</p>
+        <div id="matchList"></div>
+        <button class="cta cta-accent" id="btnSubmitMatch" style="width:100%;margin-top:16px" disabled>Cek jawaban</button>
+    </section>
+
+    <!-- HASIL -->
+    <section class="panel" id="resultPanel">
+        <div class="scene" id="sceneHost2"></div>
+        <p class="label panel-kicker" id="resultKicker">Hasil</p>
+        <h2 class="panel-title" id="resultTitle">Kuis selesai</h2>
+        <p class="panel-text" id="resultText">—</p>
+        <div class="stack">
+            <button class="cta cta-accent" id="btnRestartCards" onclick="restartCards()">Ulangi kartu</button>
+            <button class="cta cta-ghost" id="btnRestartQuiz" onclick="startQuiz()">Ulangi kuis</button>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <nav class="footer-nav">
+            <button class="chip" onclick="openModal('guideModal')" id="txtGuide">Panduan</button>
+            <button class="chip" onclick="openModal('coffeeModal')" id="txtCoffee">Traktir kopi</button>
+        </nav>
+        <span class="credit">© 2026 <a href="https://www.instagram.com/nuari_chester/" target="_blank" rel="noopener">Chester</a></span>
+    </footer>
+</div>
+
+<!-- MODAL PANDUAN -->
+<div class="overlay" id="guideModal" onclick="backdropClose(event,'guideModal')">
+    <div class="sheet">
+        <div class="sheet-head">
+            <h2 id="guideTitle">Panduan</h2>
+            <button class="round-btn" onclick="closeModal('guideModal')" aria-label="Tutup">
+                <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+        </div>
+        <h3 id="hHowTo">Cara pakai</h3>
+        <ul>
+            <li id="liHow1"><b>Balik kartu.</b> Ketuk kartu atau tekan <span class="kbd">Spasi</span>.</li>
+            <li id="liHow2"><b>Dengar pelafalan.</b> Ketuk tombol bulat hitam di sudut kartu.</li>
+            <li id="liHow3"><b>Pindah kata.</b> Tekan <span class="kbd">←</span> <span class="kbd">→</span> atau pakai tombol di bawah kartu.</li>
+        </ul>
+        <h3 id="hColor">Arti warnanya</h3>
+        <ul>
+            <li id="liColor1"><span class="dot" style="background:#2F5BFF"></span><b>der</b> — maskulin. Kartu jadi biru.</li>
+            <li id="liColor2"><span class="dot" style="background:#00A878"></span><b>das</b> — netral. Kartu jadi hijau.</li>
+            <li id="liColor3"><span class="dot" style="background:#FF4D94"></span><b>die</b> — feminin. Kartu jadi pink.</li>
+        </ul>
+        <h3 id="hNext">Sedang dikerjakan</h3>
+        <ul>
+            <li id="liNext1"><b>Tandai kata sulit.</b> Simpan kata yang sering meleset ke daftar sendiri.</li>
+            <li id="liNext2"><b>Contoh kalimat.</b> Satu kalimat pendek di balik kartu untuk melihat kata dipakai.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- MODAL KOPI -->
+<div class="overlay" id="coffeeModal" onclick="backdropClose(event,'coffeeModal')">
+    <div class="sheet">
+        <div class="sheet-head">
+            <h2 id="coffeeTitle">Traktir kopi</h2>
+            <button class="round-btn" onclick="closeModal('coffeeModal')" aria-label="Tutup">
+                <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+        </div>
+        <p id="coffeeText">Aplikasi ini gratis dan tanpa iklan. Dukunganmu membuatnya tetap begitu.</p>
+        <img class="qr" src="Saweria.png" alt="Kode QR Saweria">
+        <a class="cta cta-accent" style="width:100%;text-decoration:none" href="https://saweria.co/widgets/qr?streamKey=86409b8c3c225bab62543679ea79431f" target="_blank" rel="noopener" id="coffeeLink">Buka di Saweria</a>
+    </div>
+</div>
+
+<!-- MODAL INSTALL -->
+<div class="overlay" id="installModal" onclick="backdropSnooze(event,'installModal')">
+    <div class="sheet">
+        <div class="sheet-head">
+            <h2 id="installTitle">Pasang di layar utama</h2>
+            <button class="round-btn" onclick="snoozeInstall()" aria-label="Tutup">
+                <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+        </div>
+        <p id="installText">Buka langsung dari layar utama, tanpa lewat browser. Kartu tetap bisa dibuka saat offline.</p>
+        <div class="stack" style="margin-top:20px">
+            <button class="cta cta-accent" onclick="triggerInstall()" id="btnInstall">Pasang sekarang</button>
+            <button class="cta cta-ghost" onclick="snoozeInstall()" id="btnInstallLater">Nanti saja</button>
+        </div>
+    </div>
+</div>
+
+<script src="words.js"></script>
+
+<script>
+/* ==========================================================
+   ADEGAN BLOB — layar selesai
+   ========================================================== */
+const SCENE = `
+<svg viewBox="0 0 320 232" role="img" aria-label="Wajah-wajah ceria">
+  <path d="M34 118V96a59 59 0 0 1 118 0v22Z" fill="#FF8A00"/>
+  <ellipse cx="72" cy="80" rx="15" ry="17" fill="#FFF6EC"/>
+  <ellipse cx="110" cy="80" rx="15" ry="17" fill="#FFF6EC"/>
+  <circle cx="76" cy="84" r="9" fill="#17130E"/>
+  <circle cx="114" cy="84" r="9" fill="#17130E"/>
+
+  <circle cx="228" cy="86" r="60" fill="#FFC831"/>
+  <path d="M198 72q10-12 20 0M238 72q10-12 20 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+  <path d="M192 90q36 40 72 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+
+  <rect x="34" y="124" width="118" height="96" rx="24" fill="#FFF6EC"/>
+  <path d="M60 158q10-11 20 0M106 158q10-11 20 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+  <path d="M70 188h46" stroke="#17130E" stroke-width="5.5" stroke-linecap="round"/>
+
+  <rect x="164" y="126" width="126" height="94" rx="45" fill="#FF7FB4"/>
+  <path d="M192 164q10-11 20 0M240 164q10-11 20 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+  <path d="M204 186q23 20 46 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+</svg>`;
+document.getElementById('sceneHost').innerHTML = SCENE;
+document.getElementById('sceneHost2').innerHTML = SCENE;
+
+/* ==========================================================
+   TEKS ANTARMUKA
+   ========================================================== */
+const i18n = {
+    id: {
+        next: "Lanjut",
+        hintFront: "Ketuk kartu untuk melihat arti", hintBack: "Ketuk untuk kembali",
+        backLabel: "Arti", streakLabel: "Beruntun", streakUnit: "hari", progressLabel: "Kartu hari ini",
+        gender: { der: "der · maskulin", die: "die · feminin", das: "das · netral" },
+
+        preQuizKicker: "10 dari 10 kata",
+        preQuizTitle: "Kartu hari ini selesai",
+        preQuizText: "Uji ingatanmu dengan sepuluh soal, atau simpan tenagamu untuk besok.",
+        btnStartQuiz: "Mulai kuis", btnSkipQuiz: "Lewati kuis",
+
+        quizKicker: "Kuis harian",
+        qArticle: "Pilih artikel yang tepat", qMeaning: "Apa arti kata ini?",
+        qReverse: "Apa bahasa Jermannya?", qPlural: "Apa bentuk pluralnya?",
+        remaining: n => "Sisa " + n + " soal", score: n => "Skor " + n,
+
+        matchKicker: "Soal terakhir", matchTitle: "Pasangkan artikelnya",
+        matchText: "Pilih der, die, atau das untuk kelima kata ini.",
+        btnSubmitMatch: "Cek jawaban", btnMatchNext: "Lihat hasil",
+
+        resultKicker: "Hasil", resultTitle: "Kuis selesai",
+        resultText: (s, t) => "Kamu menjawab benar " + s + " dari " + t + " soal.",
+        skipKicker: "Selesai", skipTitle: "Hafalan selesai",
+        skipText: "Kartu hari ini sudah tuntas. Kuis bisa kamu mulai kapan saja.",
+        btnRestartCards: "Ulangi kartu", btnRestartQuiz: "Ulangi kuis",
+
+        guide: "Panduan", coffee: "Traktir kopi",
+        guideTitle: "Panduan", hHowTo: "Cara pakai", hColor: "Arti warnanya", hNext: "Sedang dikerjakan",
+        liHow1: "<b>Balik kartu.</b> Ketuk kartu atau tekan <span class='kbd'>Spasi</span>.",
+        liHow2: "<b>Dengar pelafalan.</b> Ketuk tombol bulat hitam di sudut kartu.",
+        liHow3: "<b>Pindah kata.</b> Tekan <span class='kbd'>&larr;</span> <span class='kbd'>&rarr;</span> atau pakai tombol di bawah kartu.",
+        liColor1: "<span class='dot' style='background:#2F5BFF'></span><b>der</b> — maskulin. Kartu jadi biru.",
+        liColor2: "<span class='dot' style='background:#00A878'></span><b>das</b> — netral. Kartu jadi hijau.",
+        liColor3: "<span class='dot' style='background:#FF4D94'></span><b>die</b> — feminin. Kartu jadi pink.",
+        liNext1: "<b>Tandai kata sulit.</b> Simpan kata yang sering meleset ke daftar sendiri.",
+        liNext2: "<b>Contoh kalimat.</b> Satu kalimat pendek di balik kartu untuk melihat kata dipakai.",
+        coffeeTitle: "Traktir kopi",
+        coffeeText: "Aplikasi ini gratis dan tanpa iklan. Dukunganmu membuatnya tetap begitu.",
+        coffeeLink: "Buka di Saweria",
+        installTitle: "Pasang di layar utama",
+        installText: "Buka langsung dari layar utama, tanpa lewat browser. Kartu tetap bisa dibuka saat offline.",
+        installTextIOS: "Di Safari: ketuk tombol Bagikan, pilih “Add to Home Screen”, lalu ketuk “Add”.",
+        btnInstall: "Pasang sekarang", btnInstallIOS: "Mengerti", btnInstallLater: "Nanti saja",
+        locale: "id-ID"
+    },
+    de: {
+        next: "Weiter",
+        hintFront: "Karte antippen für die Bedeutung", hintBack: "Antippen zum Zurückdrehen",
+        backLabel: "Bedeutung", streakLabel: "In Folge", streakUnit: "Tage", progressLabel: "Karten heute",
+        gender: { der: "der · maskulin", die: "die · feminin", das: "das · neutral" },
+
+        preQuizKicker: "10 von 10 Wörtern",
+        preQuizTitle: "Karten für heute geschafft",
+        preQuizText: "Teste dein Gedächtnis mit zehn Fragen — oder heb dir die Kraft für morgen auf.",
+        btnStartQuiz: "Quiz starten", btnSkipQuiz: "Quiz überspringen",
+
+        quizKicker: "Tägliches Quiz",
+        qArticle: "Wähle den richtigen Artikel", qMeaning: "Was bedeutet dieses Wort?",
+        qReverse: "Wie heißt das auf Deutsch?", qPlural: "Wie lautet der Plural?",
+        remaining: n => "Noch " + n + " Fragen", score: n => "Punkte " + n,
+
+        matchKicker: "Letzte Frage", matchTitle: "Ordne die Artikel zu",
+        matchText: "Wähle der, die oder das für diese fünf Wörter.",
+        btnSubmitMatch: "Antworten prüfen", btnMatchNext: "Ergebnis ansehen",
+
+        resultKicker: "Ergebnis", resultTitle: "Quiz beendet",
+        resultText: (s, t) => "Du hast " + s + " von " + t + " Fragen richtig beantwortet.",
+        skipKicker: "Fertig", skipTitle: "Lernen beendet",
+        skipText: "Die Karten von heute sind durch. Das Quiz kannst du jederzeit starten.",
+        btnRestartCards: "Karten wiederholen", btnRestartQuiz: "Quiz wiederholen",
+
+        guide: "Anleitung", coffee: "Kaffee ausgeben",
+        guideTitle: "Anleitung", hHowTo: "Bedienung", hColor: "Was die Farben bedeuten", hNext: "In Arbeit",
+        liHow1: "<b>Karte umdrehen.</b> Karte antippen oder <span class='kbd'>Leertaste</span> drücken.",
+        liHow2: "<b>Aussprache hören.</b> Auf den schwarzen Kreis in der Ecke tippen.",
+        liHow3: "<b>Wort wechseln.</b> <span class='kbd'>&larr;</span> <span class='kbd'>&rarr;</span> drücken oder die Tasten unter der Karte nutzen.",
+        liColor1: "<span class='dot' style='background:#2F5BFF'></span><b>der</b> — maskulin. Die Karte wird blau.",
+        liColor2: "<span class='dot' style='background:#00A878'></span><b>das</b> — neutral. Die Karte wird grün.",
+        liColor3: "<span class='dot' style='background:#FF4D94'></span><b>die</b> — feminin. Die Karte wird pink.",
+        liNext1: "<b>Schwere Wörter markieren.</b> Wörter, die oft danebengehen, in einer eigenen Liste sammeln.",
+        liNext2: "<b>Beispielsätze.</b> Ein kurzer Satz auf der Rückseite zeigt das Wort im Gebrauch.",
+        coffeeTitle: "Kaffee für Chester",
+        coffeeText: "Diese App ist kostenlos und werbefrei. Deine Unterstützung hält das so.",
+        coffeeLink: "Bei Saweria öffnen",
+        installTitle: "Auf dem Startbildschirm ablegen",
+        installText: "Direkt vom Startbildschirm öffnen, ohne Browser. Die Karten laufen auch offline.",
+        installTextIOS: "In Safari: auf Teilen tippen, „Zum Home-Bildschirm“ wählen, dann „Hinzufügen“.",
+        btnInstall: "Jetzt installieren", btnInstallIOS: "Verstanden", btnInstallLater: "Später",
+        locale: "de-DE"
+    }
+};
+
+let lang = localStorage.getItem('appLang') || 'id';
+
+/* ==========================================================
+   WARNA GENDER
+   ========================================================== */
+const BLOCK = { der: '#2F5BFF', das: '#00A878', die: '#FF4D94', none: '#FF5A1F' };
+const TEXT_LIGHT = { der: '#2F5BFF', das: '#00875F', die: '#E63A80', none: '#FF5A1F' };
+const TEXT_DARK  = { der: '#7B96FF', das: '#2ED9A3', die: '#FF7FB4', none: '#FF8A4A' };
+let currentArticle = 'none';
+
+const isDark = () => document.body.classList.contains('dark');
+
+function paint(article) {
+    currentArticle = BLOCK[article] ? article : 'none';
+    const root = document.documentElement.style;
+    root.setProperty('--accent', BLOCK[currentArticle]);
+    root.setProperty('--accent-text', (isDark() ? TEXT_DARK : TEXT_LIGHT)[currentArticle]);
+}
+
+const SUN = 'M12 4v2m0 12v2M4 12H2m20 0h-2M6.3 6.3 4.9 4.9m14.2 14.2-1.4-1.4M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z';
+const MOON = 'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z';
+
+function applyTheme(dark) {
+    document.body.classList.toggle('dark', dark);
+    document.getElementById('themeIcon').innerHTML = '<path d="' + (dark ? SUN : MOON) + '"/>';
+    paint(currentArticle);
+}
+applyTheme(localStorage.getItem('darkMode') === 'true');
+document.getElementById('themeToggle').addEventListener('click', () => {
+    const next = !isDark();
+    localStorage.setItem('darkMode', next);
+    applyTheme(next);
+});
+
+/* ==========================================================
+   BAHASA
+   ========================================================== */
+const txt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+const html = (id, v) => { const el = document.getElementById(id); if (el) el.innerHTML = v; };
+
+function setLanguage(next) {
+    lang = next;
+    localStorage.setItem('appLang', next);
+    const t = i18n[next];
+
+    document.getElementById('langID').setAttribute('aria-pressed', next === 'id');
+    document.getElementById('langDE').setAttribute('aria-pressed', next === 'de');
+    document.documentElement.lang = next;
+
+    txt('txtNext', t.next);
+    txt('hintFront', t.hintFront); txt('hintBack', t.hintBack); txt('backLabel', t.backLabel);
+    txt('streakLabel', t.streakLabel); txt('streakUnit', t.streakUnit); txt('progressLabel', t.progressLabel);
+
+    txt('preQuizKicker', t.preQuizKicker); txt('preQuizTitle', t.preQuizTitle); txt('preQuizText', t.preQuizText);
+    txt('btnStartQuiz', t.btnStartQuiz); txt('btnSkipQuiz', t.btnSkipQuiz);
+    txt('quizKicker', t.quizKicker);
+    txt('matchKicker', t.matchKicker); txt('matchTitle', t.matchTitle); txt('matchText', t.matchText);
+    txt('btnSubmitMatch', t.btnSubmitMatch);
+    txt('btnRestartCards', t.btnRestartCards); txt('btnRestartQuiz', t.btnRestartQuiz);
+
+    txt('txtGuide', t.guide); txt('txtCoffee', t.coffee);
+    txt('guideTitle', t.guideTitle); txt('hHowTo', t.hHowTo); txt('hColor', t.hColor); txt('hNext', t.hNext);
+    html('liHow1', t.liHow1); html('liHow2', t.liHow2); html('liHow3', t.liHow3);
+    html('liColor1', t.liColor1); html('liColor2', t.liColor2); html('liColor3', t.liColor3);
+    html('liNext1', t.liNext1); html('liNext2', t.liNext2);
+    txt('coffeeTitle', t.coffeeTitle); txt('coffeeText', t.coffeeText); txt('coffeeLink', t.coffeeLink);
+    txt('installTitle', t.installTitle); txt('installText', t.installText);
+    txt('btnInstall', t.btnInstall); txt('btnInstallLater', t.btnInstallLater);
+
+    txt('dateLabel', new Date().toLocaleDateString(t.locale, { weekday: 'long', day: 'numeric', month: 'long' }));
+    renderStreak();
+    if (studyVisible()) renderCard();
+    if (document.getElementById('quizPanel').classList.contains('show')) loadQuestion();
+}
+
+/* ==========================================================
+   STREAK
+   ========================================================== */
+function renderStreak() {
+    const today = new Date().toDateString();
+    const last = localStorage.getItem('lastVisit');
+    let streak = parseInt(localStorage.getItem('streak') || '0', 10);
+
+    if (last !== today) {
+        if (last) {
+            const gap = Math.round((new Date(today) - new Date(last)) / 86400000);
+            streak = gap === 1 ? streak + 1 : 1;
+        } else { streak = 1; }
+        localStorage.setItem('lastVisit', today);
+        localStorage.setItem('streak', streak);
+    }
+    txt('streakValue', streak);
+}
+
+/* ==========================================================
+   SUARA + PERAYAAN
+   ========================================================== */
+let ctx = null;
+function beep(kind) {
+    try {
+        if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        const now = ctx.currentTime;
+        if (kind === 'correct') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(620, now);
+            osc.frequency.exponentialRampToValueAtTime(980, now + .14);
+        } else {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(260, now);
+            osc.frequency.exponentialRampToValueAtTime(170, now + .14);
+        }
+        gain.gain.setValueAtTime(.08, now);
+        gain.gain.exponentialRampToValueAtTime(.001, now + .16);
+        osc.start(now); osc.stop(now + .17);
+    } catch (e) {}
+}
+
+function celebrate(count) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || typeof confetti !== 'function') return;
+    confetti({
+        particleCount: count, spread: 75, startVelocity: 38, ticks: 180,
+        origin: { y: .5 }, scalar: .95,
+        colors: ['#FF5A1F', '#FF4D94', '#FFC831', '#2F5BFF', '#00A878', '#FFF3E4']
+    });
+}
+
+/* ==========================================================
+   AUDIO PELAFALAN
+   ========================================================== */
+let audio = null;
+const mapName = s => s.replace(/ß/g,'s5').replace(/ä/g,'a3').replace(/ö/g,'o3').replace(/ü/g,'u3')
+                      .replace(/Ä/g,'A3').replace(/Ö/g,'O3').replace(/Ü/g,'U3');
+const pluralFile = p => mapName(p.replace(/\*/g,'')).replace(/[^a-zA-Z0-9]/g,'_')
+                        .replace(/_+/g,'_').replace(/^_|_$/g,'') + '.mp3';
+
+function play(src, fallback, btn) {
+    if (audio) { audio.pause(); audio = null; }
+    document.querySelectorAll('.sound').forEach(b => b.classList.remove('playing'));
+    if (btn) btn.classList.add('playing');
+    const stop = () => { if (btn) btn.classList.remove('playing'); };
+
+    audio = new Audio(src);
+    audio.onended = stop;
+    audio.onerror = () => {
+        stop();
+        if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(fallback);
+            u.lang = 'de-DE'; u.rate = .88;
+            if (btn) { btn.classList.add('playing'); u.onend = stop; }
+            speechSynthesis.speak(u);
+        }
+    };
+    audio.play().catch(stop);
+}
+function speakWord(e) {
+    e.stopPropagation();
+    const d = words[index]; if (!d) return;
+    play('audio/' + mapName(d.word) + '.mp3', d.article + ' ' + d.word, document.getElementById('audioWord'));
+}
+function speakPlural(e) {
+    e.stopPropagation();
+    const d = words[index];
+    if (!d || !d.plural || d.plural === '-') return;
+    play('audio/stammformen/' + pluralFile(d.plural), d.plural.replace(/\*/g,''), document.getElementById('audioPlural'));
+}
+
+/* ==========================================================
+   KATA HARIAN
+   ========================================================== */
+const DAY = Math.floor(Date.now() / 86400000);
+const TARGET = 10;
+
+let level = 'A1', daily = [], words = [], index = 0;
+
+function initDay(nextLevel) {
+    level = nextLevel;
+    document.querySelectorAll('[data-level]').forEach(b =>
+        b.setAttribute('aria-pressed', b.dataset.level === nextLevel));
+
+    const pool = database.filter(w => w.level === nextLevel);
+    const total = pool.length;
+    const start = (DAY * TARGET) % total;
+
+    daily = [];
+    for (let i = 0; i < TARGET; i++) daily.push(Object.assign({}, pool[(start + i * 37) % total]));
+
+    words = daily.slice();
+    index = 0;
+    showStudy();
+    renderCard();
+}
+
+/* ==========================================================
+   KARTU
+   ========================================================== */
+const card = document.getElementById('card');
+const PANELS = ['preQuizPanel','quizPanel','matchPanel','resultPanel'];
+
+const studyVisible = () => document.getElementById('studyView').style.display !== 'none';
+
+function showStudy() {
+    document.getElementById('studyView').style.display = '';
+    PANELS.forEach(p => document.getElementById(p).classList.remove('show'));
+}
+function showPanel(id) {
+    document.getElementById('studyView').style.display = 'none';
+    PANELS.forEach(p => document.getElementById(p).classList.toggle('show', p === id));
+}
+
+function renderCard() {
+    if (index >= words.length) return finishCards();
+
+    const d = words[index], t = i18n[lang];
+    card.classList.remove('flipped');
+
+    setTimeout(() => {
+        paint(d.article);
+        txt('genderTag', t.gender[d.article] || d.article);
+        txt('wordText', d.word);
+        txt('backWord', d.article + ' ' + d.word);
+        txt('wordMeaning', d.meaning);
+
+        const ipa = document.getElementById('wordIpa');
+        ipa.textContent = (d.ipa && d.ipa !== '-') ? d.ipa : '';
+        ipa.style.display = ipa.textContent ? 'block' : 'none';
+
+        const chip = document.getElementById('pluralChip');
+        if (d.plural && d.plural !== '-') {
+            chip.style.display = '';
+            html('wordPlural', d.plural.replace(/\*(.*?)\*/g, '<b>$1</b>'));
+        } else {
+            chip.style.display = 'none';
+        }
+
+        txt('counterValue', String(index + 1).padStart(2, '0'));
+        document.getElementById('barFill').style.width = ((index + 1) / words.length * 100) + '%';
+        document.getElementById('prevBtn').disabled = index === 0;
+    }, 150);
+}
+
+const flip = () => card.classList.toggle('flipped');
+card.addEventListener('click', flip);
+card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+});
+
+function nextWord() { if (index < words.length) { index++; renderCard(); } }
+function prevWord() { if (index > 0) { index--; renderCard(); } }
+function shuffleWords() { words = words.slice().sort(() => Math.random() - .5); index = 0; renderCard(); }
+
+function finishCards() {
+    const t = i18n[lang];
+    showPanel('preQuizPanel');
+    txt('preQuizKicker', t.preQuizKicker);
+    txt('preQuizTitle', t.preQuizTitle);
+    txt('preQuizText', t.preQuizText);
+    paint('none');
+    beep('correct');
+    celebrate(110);
+    maybeOfferInstall();
+}
+
+function restartCards() {
+    words = daily.slice().sort(() => Math.random() - .5);
+    index = 0;
+    showStudy();
+    renderCard();
+}
+
+function skipQuiz() {
+    const t = i18n[lang];
+    showPanel('resultPanel');
+    paint('none');
+    txt('resultKicker', t.skipKicker);
+    txt('resultTitle', t.skipTitle);
+    txt('resultText', t.skipText);
+    txt('btnRestartQuiz', t.btnStartQuiz);
+}
+
+/* ==========================================================
+   KUIS
+   ========================================================== */
+const TOTAL_POINTS = 14;
+let queue = [], score = 0, matchDone = false, matchWords = [], picks = {};
+
+function startQuiz() {
+    score = 0; matchDone = false; picks = {};
+    const shuffled = daily.slice().sort(() => Math.random() - .5);
+
+    queue = shuffled.slice(0, 9).map(w => {
+        const types = ['article', 'meaning', 'reverse'];
+        if (w.plural && w.plural !== '-') types.push('plural');
+        return Object.assign({}, w, { type: types[Math.floor(Math.random() * types.length)], retry: false });
+    });
+    matchWords = shuffled.slice().sort(() => Math.random() - .5).slice(0, 5);
+
+    showPanel('quizPanel');
+    txt('btnRestartQuiz', i18n[lang].btnRestartQuiz);
+    loadQuestion();
+}
+
+const pool = () => database.filter(w => w.level === level);
+
+function fillOptions(list, pick) {
+    let guard = 0;
+    while (list.length < 3 && guard++ < 200) {
+        const v = pick();
+        if (v && list.indexOf(v) === -1) list.push(v);
+    }
+    return list;
+}
+
+function loadQuestion() {
+    if (!queue.length) return matchDone ? showResult() : loadMatch();
+
+    const q = queue[0], t = i18n[lang], p = pool();
+    let options = [], answer = '';
+
+    paint(q.type === 'article' || q.type === 'reverse' ? 'none' : q.article);
+
+    if (q.type === 'article') {
+        txt('quizPrompt', t.qArticle); txt('quizArticle', ''); txt('quizWord', q.word);
+        answer = q.article; options = ['der', 'die', 'das'];
+    } else if (q.type === 'meaning') {
+        txt('quizPrompt', t.qMeaning); txt('quizArticle', q.article); txt('quizWord', q.word);
+        answer = q.meaning;
+        options = fillOptions([answer], () => p[Math.floor(Math.random() * p.length)].meaning);
+    } else if (q.type === 'reverse') {
+        txt('quizPrompt', t.qReverse); txt('quizArticle', ''); txt('quizWord', '“' + q.meaning + '”');
+        answer = q.article + ' ' + q.word;
+        options = fillOptions([answer], () => {
+            const r = p[Math.floor(Math.random() * p.length)];
+            return r.article + ' ' + r.word;
+        });
+    } else {
+        txt('quizPrompt', t.qPlural); txt('quizArticle', q.article); txt('quizWord', q.word);
+        answer = q.plural.replace(/\*/g, '');
+        options = fillOptions([answer], () => {
+            const r = p[Math.floor(Math.random() * p.length)];
+            return (r.plural && r.plural !== '-') ? r.plural.replace(/\*/g, '') : null;
+        });
+    }
+
+    const box = document.getElementById('quizOptions');
+    box.innerHTML = '';
+    options.sort(() => Math.random() - .5).forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.innerHTML = '<span class="key">' + 'ABC'[i] + '</span><span class="val"></span>';
+        btn.querySelector('.val').textContent = opt;
+        btn.onclick = () => answerQuestion(opt, answer, btn, q);
+        box.appendChild(btn);
+    });
+
+    txt('quizKicker', t.quizKicker);
+    txt('quizRemaining', t.remaining(queue.length));
+    txt('quizScore', t.score(score));
+}
+
+function answerQuestion(picked, answer, btn, q) {
+    document.querySelectorAll('.option').forEach(b => b.style.pointerEvents = 'none');
+
+    if (picked === answer) {
+        btn.classList.add('correct');
+        beep('correct');
+        if (!q.retry) score++;
+        queue.shift();
+        setTimeout(loadQuestion, 850);
+    } else {
+        btn.classList.add('wrong');
+        beep('wrong');
+        document.querySelectorAll('.option').forEach(b => {
+            if (b.querySelector('.val').textContent === answer) b.classList.add('correct');
+        });
+        const again = queue.shift();
+        again.retry = true;
+        queue.push(again);
+        setTimeout(loadQuestion, 1400);
+    }
+}
+
+function loadMatch() {
+    const t = i18n[lang];
+    picks = {};
+    paint('none');
+    showPanel('matchPanel');
+
+    const list = document.getElementById('matchList');
+    const submit = document.getElementById('btnSubmitMatch');
+    list.innerHTML = '';
+
+    matchWords.forEach((w, i) => {
+        const row = document.createElement('div');
+        row.className = 'match-row';
+
+        const name = document.createElement('span');
+        name.className = 'match-word';
+        name.textContent = w.word;
+
+        const group = document.createElement('div');
+        group.className = 'match-group';
+        ['der', 'die', 'das'].forEach(a => {
+            const b = document.createElement('button');
+            b.textContent = a;
+            b.onclick = () => {
+                [...group.children].forEach(c => c.classList.remove('picked'));
+                b.classList.add('picked');
+                picks[i] = a;
+                submit.disabled = Object.keys(picks).length !== matchWords.length;
+            };
+            group.appendChild(b);
+        });
+
+        row.append(name, group);
+        list.appendChild(row);
+    });
+
+    submit.textContent = t.btnSubmitMatch;
+    submit.disabled = true;
+    submit.onclick = checkMatch;
+}
+
+function checkMatch() {
+    const submit = document.getElementById('btnSubmitMatch');
+    submit.disabled = true;
+
+    const rows = document.querySelectorAll('#matchList .match-row');
+    let perfect = true;
+
+    matchWords.forEach((w, i) => {
+        [...rows[i].querySelector('.match-group').children].forEach(b => {
+            b.style.pointerEvents = 'none';
+            b.classList.remove('picked');
+            if (b.textContent === picks[i]) {
+                if (picks[i] === w.article) { b.classList.add('correct'); score++; }
+                else { b.classList.add('wrong'); perfect = false; }
+            }
+            if (picks[i] !== w.article && b.textContent === w.article) b.classList.add('correct');
+        });
+    });
+
+    beep(perfect ? 'correct' : 'wrong');
+    matchDone = true;
+    submit.textContent = i18n[lang].btnMatchNext;
+    submit.disabled = false;
+    submit.onclick = showResult;
+}
+
+function showResult() {
+    const t = i18n[lang];
+    showPanel('resultPanel');
+    paint('none');
+    txt('resultKicker', t.resultKicker);
+    txt('resultTitle', t.resultTitle);
+    txt('resultText', t.resultText(score, TOTAL_POINTS));
+    txt('btnRestartCards', t.btnRestartCards);
+    txt('btnRestartQuiz', t.btnRestartQuiz);
+    celebrate(140);
+}
+
+/* ==========================================================
+   MODAL + KEYBOARD
+   ========================================================== */
+function openModal(id) { document.getElementById(id).classList.add('show'); document.body.style.overflow = 'hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); document.body.style.overflow = ''; }
+function backdropClose(e, id) { if (e.target.id === id) closeModal(id); }
+
+document.addEventListener('keydown', e => {
+    const open = document.querySelector('.overlay.show');
+    if (open) {
+        if (e.key === 'Escape') { open.id === 'installModal' ? snoozeInstall() : closeModal(open.id); }
+        return;
+    }
+    if (!studyVisible()) return;
+    if (e.code === 'Space') { e.preventDefault(); flip(); }
+    else if (e.code === 'ArrowRight') nextWord();
+    else if (e.code === 'ArrowLeft') prevWord();
+});
+
+document.querySelectorAll('[data-level]').forEach(b =>
+    b.addEventListener('click', () => initDay(b.dataset.level)));
+
+/* ==========================================================
+   PWA
+   ========================================================== */
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+
+let installEvent = null;
+const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvent = e; });
+window.addEventListener('appinstalled', () => {
+    localStorage.setItem('pwaInstalled', 'true');
+    closeModal('installModal');
+});
+
+const installed = () => matchMedia('(display-mode: standalone)').matches
+    || navigator.standalone === true
+    || localStorage.getItem('pwaInstalled') === 'true';
+
+function maybeOfferInstall() {
+    if (installed()) return;
+    const next = localStorage.getItem('pwaPromptNextShow');
+    if (next && Date.now() < parseInt(next, 10)) return;
+    if (!installEvent && !IS_IOS) return;
+
+    setTimeout(() => {
+        const t = i18n[lang];
+        if (IS_IOS) { txt('installText', t.installTextIOS); txt('btnInstall', t.btnInstallIOS); }
+        openModal('installModal');
+    }, 1400);
+}
+async function triggerInstall() {
+    if (IS_IOS || !installEvent) return snoozeInstall();
+    installEvent.prompt();
+    const { outcome } = await installEvent.userChoice;
+    if (outcome === 'accepted') localStorage.setItem('pwaInstalled', 'true');
+    installEvent = null;
+    closeModal('installModal');
+}
+function snoozeInstall() {
+    localStorage.setItem('pwaPromptNextShow', Date.now() + 2 * 86400000);
+    closeModal('installModal');
+}
+function backdropSnooze(e, id) { if (e.target.id === id) snoozeInstall(); }
+
+/* ==========================================================
+   MULAI
+   ========================================================== */
+setLanguage(lang);
+initDay('A1');
+</script>
+</body>
+</html>
