@@ -160,6 +160,19 @@
         .quiz-option.wrong { background-color: #d3302f !important; color: #ffffff !important; border-color: #d3302f !important; animation: shake 0.4s; box-shadow: 0 4px 10px rgba(211, 48, 47, 0.4) !important; }
         @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
 
+        /* ====== UI KUIS MATCHING (SOAL TERAKHIR) ====== */
+        #quizMatchContainer { display: none; width: 100%; max-width: 400px; text-align: center; margin-top: 10px; }
+        .match-row { display: flex; justify-content: space-between; align-items: center; background: var(--modal-bg); padding: 15px; margin-bottom: 10px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 4px 6px var(--shadow); flex-wrap: wrap; gap: 10px; }
+        .match-word { font-size: 18px; font-weight: 700; color: var(--text-color); flex: 1; text-align: left; }
+        .match-btn-group { display: flex; gap: 5px; justify-content: flex-end; }
+        .match-btn { background: var(--btn-bg); border: 2px solid transparent; border-radius: 8px; padding: 8px 12px; font-size: 14px; font-weight: 600; color: var(--text-color); cursor: pointer; transition: 0.2s; outline: none; }
+        .match-btn.selected { border-color: #ffcc00; background: rgba(255, 204, 0, 0.15); }
+        .match-btn.correct { background: #358732 !important; color: #fff !important; border-color: #358732 !important; }
+        .match-btn.wrong { background: #d3302f !important; color: #fff !important; border-color: #d3302f !important; }
+        .btn-submit-match { background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%); color: #ffcc00; border: none; padding: 15px 30px; border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s; box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
+        .btn-submit-match:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); background: #000000; }
+        .btn-submit-match:disabled { background: #cccccc; color: #666666; cursor: not-allowed; box-shadow: none; transform: none; }
+
         #doneMessage { display: none; text-align: center; margin-top: 10px; max-width: 400px; width: 100%; }
         #doneMessage h2 { color: #dd0000; font-size: 26px; margin-bottom: 10px; }
         #doneMessage p { font-size: 16px; margin-bottom: 25px; line-height: 1.5; }
@@ -277,7 +290,7 @@
         <button class="btn-skip-quiz" id="btnSkipQuiz" onclick="skipQuiz()">⏭️ Lewati Kuis</button>
     </div>
 
-    <!-- UI Kuis Harian -->
+    <!-- UI Kuis Harian (Soal 1-9) -->
     <div id="quizContainer">
         <h2 style="color: #dd0000;" id="quizTitle">Kuis Harian! 📝</h2>
         <p id="quizDesc" style="margin-bottom: 5px;">-</p>
@@ -287,6 +300,15 @@
         </div>
         <div id="quizOptions"></div>
         <div class="progress" id="quizProgressText">Sisa soal: 0</div>
+    </div>
+
+    <!-- UI Kuis Matching (Final Boss Soal 10) -->
+    <div id="quizMatchContainer">
+        <h2 style="color: #dd0000;" id="matchTitle">Soal Terakhir! 👑</h2>
+        <p id="matchDesc" style="margin-bottom: 15px; font-size: 14px;">Cocokkan artikel yang tepat untuk 5 kata di bawah ini:</p>
+        <div id="matchList"></div>
+        <button class="btn-submit-match" id="btnSubmitMatch" onclick="checkMatchQuiz()" disabled>Cek Jawaban</button>
+        <div class="progress" id="matchProgressText" style="margin-top:15px;">Soal: 10 / 10</div>
     </div>
 
     <!-- Pesan Selesai Akhir -->
@@ -326,7 +348,7 @@
                 <ul>
                     <li>🇩🇪 <strong>Kosakata Harian:</strong> Sistem pintar pembagian A1/A2 (Fonetik IPA, Plural).</li>
                     <li>🎨 <strong>Pewarnaan Gender:</strong> Biru (*Der*), Hijau (*Das*), Merah (*Die*).</li>
-                    <li>📝 <strong>Kuis Harian Dinamis:</strong> Beragam variasi soal (Artikel, Arti, Reverse, Plural) untuk mengasah ingatan.</li>
+                    <li>📝 <strong>Kuis Harian Dinamis:</strong> Beragam variasi soal dan diakhiri dengan tantangan pencocokan.</li>
                     <li>🔥 <strong>Streak & PWA:</strong> Hitung konsistensi & bisa di-install langsung.</li>
                 </ul>
 
@@ -382,7 +404,11 @@
 
         let dailySelection = []; 
         let quizScore = 0;
-        let totalQuizQuestions = 0;
+        let totalQuizQuestions = 14; // 9 soal standar + 5 soal matching
+
+        let isMatchingBossDone = false;
+        let matchWordsList = [];
+        let matchAnswers = {};
 
         let currentLang = localStorage.getItem('appLang');
         if (!currentLang) { currentLang = 'id'; }
@@ -391,7 +417,7 @@
             id: {
                 title: "🇩🇪 Flashcard Jerman", prev: "Mundur", random: "Acak", next: "Lanjut",
                 hintFront: "Klik ikon gelombang suara untuk mendengarkan", hintBack: "Klik untuk membalik kembali",
-                quizTitle: "Kuis Harian! 📝", quizRemaining: "Sisa soal",
+                quizTitle: "Kuis Harian! 📝", quizRemaining: "Soal",
                 preQuizTitle: "Selamat!", preQuizDesc: "Kamu sudah menyelesaikan target <strong>10 kata</strong> hari ini dengan luar biasa!",
                 btnStartQuiz: "📝 Mulai Kuis Harian", btnSkipQuiz: "⏭️ Lewati Kuis",
                 doneTitleQuiz: "Kuis Selesai! 🎉", doneTitleSkip: "Hafalan Selesai! ✨",
@@ -407,12 +433,15 @@
                 installTitle: "Install Aplikasi Sekarang!", installDesc: "Biar akses belajar lebih cepat!",
                 btnInstallText: "🚀 Install Sekarang", btnSkipText: "Lewati",
                 qArticle: "Pilih artikel yang tepat!", qMeaning: "Apa arti dari kata ini?",
-                qReverse: "Apa bahasa Jermannya?", qPlural: "Apa bentuk jamaknya (Plural)?"
+                qReverse: "Apa bahasa Jermannya?", qPlural: "Apa bentuk jamaknya (Plural)?",
+                matchTitle: "Soal Terakhir! 👑", matchDesc: "Cocokkan artikel yang tepat untuk 5 kata di bawah ini:",
+                btnSubmitMatch: "Cek Jawaban", btnMatchNext: "Lihat Hasil Akhir ➔",
+                matchProgressText: "Soal: 10 / 10"
             },
             de: {
                 title: "🇩🇪 Deutsch Karteikarten", prev: "Zurück", random: "Mischen", next: "Weiter",
                 hintFront: "Klicke auf das Wellensymbol für die Aussprache", hintBack: "Klicke, um die Karte umzudrehen",
-                quizTitle: "Tägliches Quiz! 📝", quizRemaining: "Verbleibend",
+                quizTitle: "Tägliches Quiz! 📝", quizRemaining: "Frage",
                 preQuizTitle: "Glückwunsch!", preQuizDesc: "Du hast deine heutigen <strong>10 Wörter</strong> hervorragend gemeistert!",
                 btnStartQuiz: "📝 Tägliches Quiz starten", btnSkipQuiz: "⏭️ Quiz überspringen",
                 doneTitleQuiz: "Quiz Beendet! 🎉", doneTitleSkip: "Lernen Beendet! ✨",
@@ -428,7 +457,10 @@
                 installTitle: "Jetzt installieren!", installDesc: "Für schnelleren Zugriff ohne Browser!",
                 btnInstallText: "🚀 Installieren", btnSkipText: "Überspringen",
                 qArticle: "Wähle den richtigen Artikel!", qMeaning: "Was bedeutet dieses Wort?",
-                qReverse: "Was ist das auf Deutsch?", qPlural: "Wie lautet die Pluralform?"
+                qReverse: "Was ist das auf Deutsch?", qPlural: "Wie lautet die Pluralform?",
+                matchTitle: "Letzte Frage! 👑", matchDesc: "Ordne den 5 Wörtern die richtigen Artikel zu:",
+                btnSubmitMatch: "Antworten prüfen", btnMatchNext: "Ergebnis ansehen ➔",
+                matchProgressText: "Frage: 10 / 10"
             }
         };
 
@@ -444,7 +476,6 @@
             if(lang === 'id') { document.getElementById('btnLangID').classList.add('active'); }
             if(lang === 'de') { document.getElementById('btnLangDE').classList.add('active'); }
 
-            // Helper function super aman tanpa operator fancy
             function setTxt(id, text) {
                 var element = document.getElementById(id);
                 if (element) { element.textContent = text; }
@@ -467,8 +498,14 @@
             setTxt('btnStartQuiz', i18n[lang].btnStartQuiz);
             setTxt('btnSkipQuiz', i18n[lang].btnSkipQuiz);
 
+            setTxt('doneTitle', i18n[lang].doneTitleQuiz);
             setTxt('btnRestartNormal', i18n[lang].btnRestartNormal);
             setTxt('btnRestartQuiz', i18n[lang].btnRestartQuiz);
+
+            setTxt('matchTitle', i18n[lang].matchTitle);
+            setTxt('matchDesc', i18n[lang].matchDesc);
+            setTxt('btnSubmitMatch', i18n[lang].btnSubmitMatch);
+            setTxt('matchProgressText', i18n[lang].matchProgressText);
 
             setTxt('txtGuide', i18n[lang].guide);
             setTxt('txtCoffee', i18n[lang].coffee);
@@ -493,7 +530,8 @@
             
             var quizContainer = document.getElementById('quizContainer');
             if (quizContainer && quizContainer.style.display === 'block') {
-                setTxt('quizProgressText', i18n[currentLang].quizRemaining + ': ' + quizQueue.length);
+                let currentQuestionNum = 10 - quizQueue.length;
+                setTxt('quizProgressText', i18n[currentLang].quizRemaining + ': ' + currentQuestionNum + ' / 9');
             }
         }
 
@@ -639,6 +677,7 @@
             document.getElementById('mainUI').style.display = 'flex';
             document.getElementById('preQuizMessage').style.display = 'none';
             document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('quizMatchContainer').style.display = 'none';
             document.getElementById('doneMessage').style.display = 'none';
             currentWords = selection.slice();
             updateCard();
@@ -722,14 +761,17 @@
             }
         }
 
+        // --- SISTEM KUIS BARU ---
         function startDailyQuiz() {
             quizScore = 0;
-            totalQuizQuestions = dailySelection.length; 
+            totalQuizQuestions = 14; // 9 soal biasa + 5 dari soal terakhir (matching)
+            isMatchingBossDone = false;
             quizQueue = [];
 
             let shuffledWords = dailySelection.slice().sort(function() { return Math.random() - 0.5; });
 
-            for (let i = 0; i < shuffledWords.length; i++) {
+            // Ambil 9 kata untuk soal 1-9
+            for (let i = 0; i < 9; i++) {
                 let wordObj = shuffledWords[i];
                 let availableTypes = ['article', 'meaning', 'reverse'];
                 if (wordObj.plural && wordObj.plural !== '-') { availableTypes.push('plural'); }
@@ -741,23 +783,35 @@
                 quizQueue.push(newQ);
             }
 
+            // Pilih 5 kata acak untuk Soal 10 (Boss Level)
+            matchWordsList = shuffledWords.slice().sort(function() { return Math.random() - 0.5; }).slice(0, 5);
+
             document.getElementById('preQuizMessage').style.display = 'none';
             document.getElementById('doneMessage').style.display = 'none';
+            document.getElementById('quizMatchContainer').style.display = 'none';
             document.getElementById('quizContainer').style.display = 'block';
             
             loadNextQuiz();
         }
 
         function loadNextQuiz() {
+            // Jika antrian soal 1-9 habis
             if(quizQueue.length === 0) {
+                if (!isMatchingBossDone) {
+                    loadMatchQuiz();
+                    return;
+                }
+
+                // Jika soal matching (soal 10) juga sudah selesai
                 document.getElementById('quizContainer').style.display = 'none';
+                document.getElementById('quizMatchContainer').style.display = 'none';
                 document.getElementById('doneMessage').style.display = 'block';
                 
                 document.getElementById('doneTitle').textContent = i18n[currentLang].doneTitleQuiz;
                 if (currentLang === 'id') {
-                    document.getElementById('doneDesc').innerHTML = 'Skor kamu: <strong>' + quizScore + ' / ' + totalQuizQuestions + '</strong> benar pada tebakan pertama.';
+                    document.getElementById('doneDesc').innerHTML = 'Skor kamu: <strong>' + quizScore + ' / ' + totalQuizQuestions + '</strong> benar.';
                 } else {
-                    document.getElementById('doneDesc').innerHTML = 'Dein Ergebnis: <strong>' + quizScore + ' / ' + totalQuizQuestions + '</strong> beim ersten Versuch richtig.';
+                    document.getElementById('doneDesc').innerHTML = 'Dein Ergebnis: <strong>' + quizScore + ' / ' + totalQuizQuestions + '</strong> richtig.';
                 }
 
                 confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, colors: ['#ff0000', '#ffcc00', '#000000', '#ffffff'] });
@@ -839,7 +893,8 @@
                 btn.onclick = function() { checkQuiz(opt, correctOption, this, currentQ); };
                 optionsDiv.appendChild(btn);
             }
-            document.getElementById('quizProgressText').textContent = i18n[currentLang].quizRemaining + ': ' + quizQueue.length;
+            let currentQuestionNum = 10 - quizQueue.length;
+            document.getElementById('quizProgressText').textContent = i18n[currentLang].quizRemaining + ': ' + currentQuestionNum + ' / 9';
         }
 
         function checkQuiz(selected, correct, btnElement, currentQ) {
@@ -867,6 +922,113 @@
             }
         }
 
+        // --- FUNGSI KHUSUS SOAL KE-10 (MATCHING BOSS) ---
+        function loadMatchQuiz() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('quizMatchContainer').style.display = 'block';
+            
+            matchAnswers = {}; // Reset jawaban user
+            
+            const matchListEl = document.getElementById('matchList');
+            matchListEl.innerHTML = '';
+
+            for (let i = 0; i < matchWordsList.length; i++) {
+                let wordObj = matchWordsList[i];
+                
+                let row = document.createElement('div');
+                row.className = 'match-row';
+                
+                let wordSpan = document.createElement('span');
+                wordSpan.className = 'match-word';
+                wordSpan.textContent = wordObj.word;
+                
+                let btnGroup = document.createElement('div');
+                btnGroup.className = 'match-btn-group';
+                
+                let articles = ['der', 'die', 'das'];
+                for (let a = 0; a < articles.length; a++) {
+                    let btn = document.createElement('button');
+                    btn.className = 'match-btn';
+                    btn.textContent = articles[a];
+                    btn.onclick = function() { selectMatch(i, articles[a], btn, btnGroup); };
+                    btnGroup.appendChild(btn);
+                }
+                
+                row.appendChild(wordSpan);
+                row.appendChild(btnGroup);
+                matchListEl.appendChild(row);
+            }
+            
+            let btnSubmit = document.getElementById('btnSubmitMatch');
+            btnSubmit.textContent = i18n[currentLang].btnSubmitMatch;
+            checkMatchComplete();
+        }
+
+        function selectMatch(index, article, btnElement, groupElement) {
+            let btns = groupElement.getElementsByClassName('match-btn');
+            for(let i=0; i<btns.length; i++) {
+                btns[i].classList.remove('selected');
+            }
+            btnElement.classList.add('selected');
+            matchAnswers[index] = article;
+            checkMatchComplete();
+        }
+
+        function checkMatchComplete() {
+            let btnSubmit = document.getElementById('btnSubmitMatch');
+            // Cek apakah 5 kata sudah dipilih semua
+            if (Object.keys(matchAnswers).length === 5) {
+                btnSubmit.disabled = false;
+            } else {
+                btnSubmit.disabled = true;
+            }
+        }
+
+        function checkMatchQuiz() {
+            let btnSubmit = document.getElementById('btnSubmitMatch');
+            btnSubmit.disabled = true; // Cegah double klik
+
+            const rows = document.getElementById('matchList').getElementsByClassName('match-row');
+            let allCorrect = true;
+
+            for (let i = 0; i < matchWordsList.length; i++) {
+                let wordObj = matchWordsList[i];
+                let userAns = matchAnswers[i];
+                let correctAns = wordObj.article;
+                
+                let group = rows[i].getElementsByClassName('match-btn-group')[0];
+                let btns = group.getElementsByClassName('match-btn');
+                
+                for(let j=0; j<btns.length; j++) {
+                    btns[j].style.pointerEvents = 'none'; // Kunci tombol agar tidak bisa diklik lagi
+                    
+                    if (btns[j].textContent === userAns) {
+                        if (userAns === correctAns) {
+                            btns[j].classList.add('correct');
+                            quizScore++; // Tambah poin untuk tiap kata yang benar (Max 5 poin)
+                        } else {
+                            btns[j].classList.add('wrong');
+                            allCorrect = false;
+                        }
+                    }
+                    // Tunjukkan jawaban yang benar jika user salah menebak
+                    if (userAns !== correctAns && btns[j].textContent === correctAns) {
+                        btns[j].classList.add('correct');
+                    }
+                }
+            }
+            
+            if (allCorrect) { playSound('correct'); } else { playSound('wrong'); }
+
+            isMatchingBossDone = true;
+            
+            // Ubah tombol untuk lanjut melihat hasil akhir skor
+            btnSubmit.textContent = i18n[currentLang].btnMatchNext;
+            btnSubmit.disabled = false;
+            btnSubmit.onclick = function() { loadNextQuiz(); };
+        }
+
+        // --- PINTASAN KEYBOARD & MODAL ---
         document.addEventListener('keydown', function(e) {
             if (document.querySelector('.modal-overlay.show')) return;
             if (document.getElementById('mainUI').style.display === 'flex') {
@@ -897,9 +1059,11 @@
             });
         }
 
+        // INIT LOAD
         setLanguage(currentLang); 
         initDailyData("A1");
 
+        // --- PWA ---
         let deferredPrompt; 
         window.addEventListener('beforeinstallprompt', function(e) { e.preventDefault(); deferredPrompt = e; });
         function isPwaInstalled() { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true || localStorage.getItem('pwaInstalledPermanently') === 'true'; }
