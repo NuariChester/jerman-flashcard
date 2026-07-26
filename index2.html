@@ -27,9 +27,7 @@
 
     <style>
     /* ==========================================================
-       TOKEN WARNA
-       Palet ceria. Warna gender (der/die/das) sengaja sama di
-       mode terang maupun gelap supaya jadi kode hafalan tetap.
+       TOKEN
        ========================================================== */
     :root {
         --cream:    #FFF3E4;
@@ -38,13 +36,9 @@
         --ink-2:    #8B7C6D;
 
         --orange:   #FF5A1F;
-        --pink:     #FF4D94;
         --yellow:   #FFC831;
         --flag-red: #FF3B2F;
-
-        --der: #2F5BFF;
-        --das: #00A878;
-        --die: #FF4D94;
+        --plural-hl:#FFE066;
 
         --accent:      #FF5A1F;
         --accent-text: #FF5A1F;
@@ -56,8 +50,8 @@
         --sh-md: 0 14px 30px -14px rgba(23,19,14,.38);
         --sh-lg: 0 26px 50px -24px rgba(23,19,14,.5);
 
-        --r-block: 30px;
-        --r-card:  22px;
+        --r-block: 26px;
+        --r-card:  20px;
 
         --f-display: 'Fredoka', 'Trebuchet MS', sans-serif;
         --f-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
@@ -82,89 +76,119 @@
 
     body {
         margin: 0;
-        padding: 20px 18px calc(30px + env(safe-area-inset-bottom));
+        padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
         min-height: 100vh;
         background: var(--cream);
         color: var(--ink);
         font-family: var(--f-body);
-        font-size: 15px;
-        line-height: 1.5;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        font-size: 15px; line-height: 1.5;
+        display: flex; flex-direction: column; align-items: center;
         -webkit-font-smoothing: antialiased;
-        transition: background-color .3s ease, color .3s ease;
+        transition: background-color .45s ease, color .45s ease;
     }
 
     .shell { width: 100%; max-width: 430px; }
     button { font-family: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
     :focus-visible { outline: 3px solid var(--accent-text); outline-offset: 3px; border-radius: 8px; }
 
-    .label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .label { font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .minilabel { display: block; font-size: 10px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 6px; }
+
+    @keyframes swapIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .swap { animation: swapIn .36s cubic-bezier(.2,.8,.2,1) both; }
 
     /* ==========================================================
        HEADER
        ========================================================== */
     .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand { display: flex; align-items: center; gap: 9px; }
 
     .flagmark { display: flex; flex-direction: column; gap: 2.5px; flex: none; }
-    .flagmark i { width: 22px; height: 6px; border-radius: 3px; }
+    .flagmark i { width: 20px; height: 5.5px; border-radius: 3px; }
     .flagmark i:nth-child(1) { background: var(--ink); }
     .flagmark i:nth-child(2) { background: var(--flag-red); }
     .flagmark i:nth-child(3) { background: var(--yellow); }
 
-    .brand h1 { font-family: var(--f-display); font-weight: 600; font-size: 25px; margin: 0; line-height: 1; letter-spacing: -.01em; }
+    .brand h1 { font-family: var(--f-display); font-weight: 600; font-size: 23px; margin: 0; line-height: 1; letter-spacing: -.01em; }
 
     .tools { display: flex; align-items: center; gap: 8px; }
 
-    .pillgroup { display: flex; background: var(--surface); border-radius: 999px; padding: 3px; box-shadow: var(--sh-sm); }
-    .pillgroup button {
-        border-radius: 999px; padding: 7px 13px;
-        font-family: var(--f-display); font-size: 13px; font-weight: 600;
-        color: var(--ink-2); transition: background .2s, color .2s;
+    /* sakelar bahasa — easing tanpa overshoot supaya knob tidak
+       melewati tepi pill dan terlihat terpotong */
+    .langswitch {
+        position: relative; display: flex;
+        background: var(--surface); border-radius: 999px; padding: 3px;
+        box-shadow: var(--sh-sm); overflow: hidden;
     }
-    .pillgroup button[aria-pressed="true"] { background: var(--ink); color: var(--cream); }
+    .langswitch .knob {
+        position: absolute; top: 3px; left: 3px;
+        width: 42px; height: calc(100% - 6px);
+        border-radius: 999px; background: var(--ink);
+        transition: transform .4s cubic-bezier(.5,0,.15,1);
+    }
+    .langswitch[data-lang="de"] .knob { transform: translateX(42px); }
+    .langswitch button {
+        position: relative; z-index: 1; width: 42px;
+        border-radius: 999px; padding: 7px 0;
+        font-family: var(--f-display); font-size: 13px; font-weight: 600;
+        color: var(--ink-2); transition: color .3s ease .06s;
+    }
+    .langswitch button[aria-pressed="true"] { color: var(--cream); }
+
+    /* tombol tema */
+    .theme-btn {
+        width: 38px; height: 38px; border-radius: 50%; flex: none;
+        background: var(--surface); box-shadow: var(--sh-sm);
+        display: grid; place-items: center; overflow: hidden;
+        transition: transform .18s ease, background-color .45s ease;
+    }
+    .theme-btn:active { transform: scale(.9); }
+    .theme-btn svg { width: 20px; height: 20px; display: block; }
+    .sun-g, .moon-g {
+        transform-box: fill-box; transform-origin: center;
+        transition: transform .75s cubic-bezier(.45,.05,.2,1);
+    }
+    .moon-g { transform: translateY(30px) rotate(-45deg); }
+    body.dark .sun-g { transform: translateY(30px) rotate(75deg); }
+    body.dark .moon-g { transform: translateY(0) rotate(0deg); }
 
     .round-btn {
-        width: 40px; height: 40px; border-radius: 50%; flex: none;
+        width: 38px; height: 38px; border-radius: 50%; flex: none;
         background: var(--surface); box-shadow: var(--sh-sm);
         display: grid; place-items: center; transition: transform .18s ease;
     }
     .round-btn:active { transform: scale(.92); }
-    .round-btn svg { width: 18px; height: 18px; stroke: var(--ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .round-btn svg { width: 17px; height: 17px; stroke: var(--ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-    .datestamp { color: var(--ink-2); font-size: 13px; font-weight: 500; margin: 6px 0 18px 32px; }
+    .datestamp { color: var(--ink-2); font-size: 12.5px; font-weight: 500; margin: 5px 0 13px 29px; }
 
     /* ==========================================================
-       KARTU STATISTIK
+       KARTU STATISTIK — dipadatkan agar tombol Lanjut
+       tetap terjangkau tanpa scroll
        ========================================================== */
-    .stats { display: grid; grid-template-columns: 1fr 1.25fr; gap: 12px; margin-bottom: 20px; }
-
+    .stats { display: grid; grid-template-columns: 1fr 1.3fr; gap: 10px; margin-bottom: 13px; }
     .stat {
-        border-radius: var(--r-block); padding: 16px;
+        border-radius: var(--r-block); padding: 11px 13px;
         position: relative; overflow: hidden;
-        box-shadow: var(--sh-md); min-height: 122px;
+        box-shadow: var(--sh-md); min-height: 78px;
         display: flex; flex-direction: column; justify-content: space-between;
     }
     .stat-streak { background: var(--orange); color: #FFF3E4; }
     .stat-progress { background: var(--yellow); color: #17130E; }
     .stat .label { opacity: .85; position: relative; z-index: 1; }
-    .stat .figure { font-family: var(--f-display); font-weight: 600; font-size: 40px; line-height: 1; letter-spacing: -.02em; position: relative; z-index: 1; }
-    .stat .figure small { font-size: 16px; font-weight: 500; opacity: .85; margin-left: 3px; }
-
-    .blob-corner { position: absolute; right: -12px; bottom: -14px; width: 78px; height: 78px; }
-
-    .bar { height: 10px; border-radius: 999px; background: rgba(23,19,14,.18); overflow: hidden; margin-top: 10px; position: relative; z-index: 1; }
+    .stat .figure { font-family: var(--f-display); font-weight: 600; font-size: 27px; line-height: 1; letter-spacing: -.02em; position: relative; z-index: 1; }
+    .stat .figure small { font-size: 13px; font-weight: 500; opacity: .85; margin-left: 3px; }
+    .blob-corner { position: absolute; right: -9px; bottom: -11px; width: 54px; height: 54px; }
+    .bar { height: 7px; border-radius: 999px; background: rgba(23,19,14,.2); overflow: hidden; margin-top: 7px; position: relative; z-index: 1; }
     .bar span { display: block; height: 100%; border-radius: 999px; background: #17130E; transition: width .45s cubic-bezier(.2,.8,.2,1); }
 
     /* ==========================================================
        LEVEL
        ========================================================== */
-    .levels { display: flex; gap: 8px; margin-bottom: 16px; }
+    .levels { display: flex; gap: 8px; margin-bottom: 13px; }
     .levels button {
-        border-radius: 999px; padding: 10px 22px;
-        font-family: var(--f-display); font-weight: 600; font-size: 15px;
+        border-radius: 999px; padding: 9px 19px;
+        font-family: var(--f-display); font-weight: 600; font-size: 14px;
         background: var(--surface); color: var(--ink-2); box-shadow: var(--sh-sm);
         transition: background .2s, color .2s, transform .15s;
     }
@@ -173,80 +197,98 @@
 
     /* ==========================================================
        FLASHCARD
+       Jangan pasang overflow:hidden di .face — di dalam
+       preserve-3d hal itu mematikan backface-visibility.
        ========================================================== */
-    .stage { perspective: 1600px; margin-bottom: 18px; }
+    .stage { perspective: 1600px; margin-bottom: 14px; }
     .card {
-        position: relative; width: 100%; min-height: 344px;
+        position: relative; display: grid;
+        width: 100%; min-height: 296px;
         transform-style: preserve-3d;
-        transition: transform .6s cubic-bezier(.2,.8,.2,1);
+        transition: transform .62s cubic-bezier(.2,.8,.2,1);
         cursor: pointer;
     }
     .card.flipped { transform: rotateY(180deg); }
 
     .face {
-        position: absolute; inset: 0;
+        grid-area: 1 / 1;
         backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
         border-radius: var(--r-block);
-        padding: 20px;
+        padding: 17px;
         display: flex; flex-direction: column; align-items: flex-start;
         box-shadow: var(--sh-lg);
-        overflow: hidden;
     }
 
-    .face-front { background: var(--accent); color: #FFFFFF; transition: background-color .4s ease; }
-    .face-front::after {
-        content: ""; position: absolute; right: -56px; top: -66px;
-        width: 200px; height: 200px; border-radius: 50%;
-        background: rgba(255,255,255,.11); pointer-events: none;
+    .face-front {
+        transform: rotateY(0deg);
+        color: #FFFFFF;
+        background-color: var(--accent);
+        background-image: radial-gradient(circle at 116% -14%, rgba(255,255,255,.14) 0 46%, transparent 46%);
+        transition: background-color .45s ease;
     }
     .face-back { transform: rotateY(180deg); background: var(--surface); color: var(--ink); }
 
-    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; position: relative; z-index: 1; }
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; }
 
     .tag {
-        border-radius: 999px; padding: 7px 14px;
+        border-radius: 999px; padding: 6px 13px;
         background: rgba(255,255,255,.22);
-        font-family: var(--f-display); font-weight: 600; font-size: 13px;
+        font-family: var(--f-display); font-weight: 600; font-size: 12.5px;
     }
-    .face-back .tag { background: var(--cream); color: var(--accent-text); transition: color .4s ease; }
+    .face-back .tag { background: var(--cream); color: var(--accent-text); transition: color .45s ease; }
 
-    .card-mid { margin-top: auto; margin-bottom: auto; padding: 20px 0; width: 100%; position: relative; z-index: 1; }
+    .card-mid { margin: auto 0; padding: 12px 0; width: 100%; }
 
+    .article {
+        font-family: var(--f-display); font-weight: 500; font-size: 18px;
+        margin: 0 0 1px; opacity: .82; line-height: 1.1;
+    }
     .word {
         font-family: var(--f-display); font-weight: 600;
-        font-size: clamp(2.5rem, 11.5vw, 3.5rem);
+        font-size: clamp(2.1rem, 9.5vw, 2.9rem);
         line-height: 1; letter-spacing: -.025em; margin: 0;
         word-break: break-word; hyphens: auto;
     }
-    .ipa { font-family: var(--f-mono); font-size: 14px; opacity: .8; margin-top: 10px; }
+    .ipa { font-family: var(--f-mono); font-size: 13.5px; opacity: .8; margin-top: 8px; }
 
-    .meaning {
-        font-family: var(--f-display); font-weight: 600;
-        font-size: clamp(2rem, 9vw, 2.8rem);
-        line-height: 1.05; letter-spacing: -.02em; margin: 0;
-        color: var(--accent-text); transition: color .4s ease;
-    }
-
+    .plural-block { width: 100%; }
+    .face-front .minilabel { opacity: .72; }
     .plural-chip {
-        display: inline-flex; align-items: center; gap: 8px;
+        display: inline-flex; align-items: center; gap: 7px;
         background: rgba(255,255,255,.2); border-radius: 999px;
-        padding: 7px 7px 7px 15px; font-size: 14px; font-weight: 500;
-        max-width: 100%; position: relative; z-index: 1;
+        padding: 6px 6px 6px 14px; font-size: 14.5px; font-weight: 500;
+        max-width: 100%;
     }
     .plural-chip > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .plural-chip b { font-weight: 700; }
+    /* huruf yang berubah dari bentuk tunggal ke jamak */
+    .plural-chip b { color: var(--plural-hl); font-weight: 700; }
 
-    .card-hint { font-size: 12.5px; opacity: .75; margin: 14px 0 0; font-weight: 500; position: relative; z-index: 1; }
+    .card-hint { font-size: 12px; opacity: .75; margin: 12px 0 0; font-weight: 500; }
 
+    /* sisi belakang */
+    .meaning {
+        font-family: var(--f-display); font-weight: 600;
+        font-size: clamp(1.8rem, 8vw, 2.4rem);
+        line-height: 1.05; letter-spacing: -.02em; margin: 0;
+        color: var(--accent-text); transition: color .45s ease;
+    }
+    .face-back .minilabel { color: var(--ink-2); }
+
+    .example { width: 100%; background: var(--cream); border-radius: 18px; padding: 12px 14px; transition: background-color .45s ease; }
+    .ex-de { font-size: 15px; font-weight: 600; margin: 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .ex-id { font-size: 13px; color: var(--ink-2); margin: 3px 0 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* tombol suara */
     .sound {
-        width: 42px; height: 42px; border-radius: 50%; flex: none;
+        width: 40px; height: 40px; border-radius: 50%; flex: none;
         background: #17130E; display: grid; place-items: center;
         transition: transform .18s ease;
     }
     .sound:active { transform: scale(.9); }
-    .sound.sm { width: 30px; height: 30px; }
-    .sound svg { width: 18px; height: 18px; fill: none; stroke: #FFF3E4; stroke-width: 2.2; stroke-linecap: round; }
-    .sound.sm svg { width: 14px; height: 14px; }
+    .sound.sm { width: 28px; height: 28px; }
+    .sound svg { width: 17px; height: 17px; fill: none; stroke: #FFF3E4; stroke-width: 2.2; stroke-linecap: round; }
+    .sound.sm svg { width: 13px; height: 13px; }
     .sound.playing .w1 { animation: ripple .9s ease-in-out infinite; }
     .sound.playing .w2 { animation: ripple .9s ease-in-out .13s infinite; }
     .sound.playing .w3 { animation: ripple .9s ease-in-out .26s infinite; }
@@ -255,27 +297,27 @@
     /* ==========================================================
        KONTROL
        ========================================================== */
-    .controls { display: flex; align-items: center; gap: 10px; }
+    .controls { display: flex; align-items: center; gap: 9px; }
     .ctrl {
-        width: 54px; height: 54px; border-radius: 50%; flex: none;
+        width: 50px; height: 50px; border-radius: 50%; flex: none;
         background: var(--surface); box-shadow: var(--sh-sm);
         display: grid; place-items: center; transition: transform .16s ease, opacity .2s;
     }
     .ctrl:active { transform: scale(.9); }
     .ctrl:disabled { opacity: .35; }
-    .ctrl svg { width: 20px; height: 20px; stroke: var(--ink); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .ctrl svg { width: 19px; height: 19px; stroke: var(--ink); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
     .cta {
-        flex: 1; min-height: 54px; border-radius: 999px; padding: 0 22px;
+        flex: 1; min-height: 50px; border-radius: 999px; padding: 0 20px;
         background: var(--ink); color: var(--cream);
-        font-family: var(--f-display); font-weight: 600; font-size: 16px;
+        font-family: var(--f-display); font-weight: 600; font-size: 15.5px;
         display: flex; align-items: center; justify-content: center; gap: 8px;
         box-shadow: var(--sh-md); transition: transform .16s ease, opacity .2s;
     }
     .cta:active { transform: scale(.97); }
     .cta:disabled { opacity: .4; }
-    .cta svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-    .cta-accent { background: var(--accent); color: #fff; transition: background-color .4s ease, transform .16s ease; }
+    .cta svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .cta-accent { background: var(--accent); color: #fff; transition: background-color .45s ease, transform .16s ease; }
     .cta-ghost { background: transparent; color: var(--ink-2); box-shadow: none; }
     .cta-ghost:hover { color: var(--ink); }
 
@@ -284,32 +326,31 @@
        ========================================================== */
     .panel { display: none; }
     .panel.show { display: block; }
-
-    .scene { background: var(--orange); border-radius: var(--r-block); padding: 22px 20px 0; margin-bottom: 22px; box-shadow: var(--sh-md); }
+    .scene { background: var(--orange); border-radius: var(--r-block); padding: 20px 18px 0; margin-bottom: 20px; box-shadow: var(--sh-md); }
     .scene svg { display: block; width: 100%; height: auto; }
 
-    .panel-kicker { color: var(--accent-text); margin-bottom: 8px; transition: color .4s ease; }
-    .panel-title { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.9rem,8.5vw,2.4rem); line-height: 1.05; letter-spacing: -.02em; margin: 0 0 10px; }
-    .panel-text { color: var(--ink-2); margin: 0 0 24px; max-width: 32ch; }
+    .panel-kicker { color: var(--accent-text); margin-bottom: 8px; transition: color .45s ease; }
+    .panel-title { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.8rem,8vw,2.3rem); line-height: 1.05; letter-spacing: -.02em; margin: 0 0 10px; }
+    .panel-text { color: var(--ink-2); margin: 0 0 20px; max-width: 34ch; }
     .stack { display: flex; flex-direction: column; gap: 10px; }
     .stack .cta { width: 100%; }
 
     .qprompt { font-size: 15px; color: var(--ink-2); font-weight: 500; margin: 0 0 4px; }
-    .qsubject { font-family: var(--f-display); font-weight: 600; font-size: clamp(2rem,9.5vw,2.8rem); line-height: 1.05; letter-spacing: -.025em; margin: 0 0 22px; }
-    .qsubject em { font-style: normal; color: var(--accent-text); transition: color .4s ease; }
+    .qsubject { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.9rem,9vw,2.7rem); line-height: 1.05; letter-spacing: -.025em; margin: 0 0 20px; }
+    .qsubject em { font-style: normal; color: var(--accent-text); transition: color .45s ease; }
 
     .option {
-        width: 100%; display: flex; align-items: center; gap: 14px;
+        width: 100%; display: flex; align-items: center; gap: 13px;
         background: var(--surface); border-radius: var(--r-card);
-        padding: 14px 16px; margin-bottom: 10px;
+        padding: 13px 15px; margin-bottom: 9px;
         font-size: 16px; font-weight: 600; text-align: left;
         box-shadow: var(--sh-sm); transition: transform .15s ease, background .2s, color .2s;
     }
     .option .key {
-        width: 30px; height: 30px; border-radius: 50%; flex: none;
+        width: 29px; height: 29px; border-radius: 50%; flex: none;
         background: var(--cream); color: var(--ink-2);
         display: grid; place-items: center;
-        font-family: var(--f-display); font-size: 14px; font-weight: 600;
+        font-family: var(--f-display); font-size: 13.5px; font-weight: 600;
         transition: background .2s, color .2s;
     }
     .option:active { transform: scale(.98); }
@@ -318,44 +359,75 @@
     .option.correct .key, .option.wrong .key { background: rgba(255,255,255,.28); color: #fff; }
     @keyframes shake { 0%,100%{transform:translateX(0)} 30%{transform:translateX(-6px)} 70%{transform:translateX(6px)} }
 
-    .qmeta { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; color: var(--ink-2); }
-    .qmeta .score { background: var(--yellow); color: #17130E; border-radius: 999px; padding: 6px 14px; }
-
-    .match-row {
-        display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        background: var(--surface); border-radius: var(--r-card);
-        padding: 11px 11px 11px 18px; margin-bottom: 10px; box-shadow: var(--sh-sm);
-    }
-    .match-word { font-family: var(--f-display); font-weight: 600; font-size: 19px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .match-group { display: flex; gap: 6px; flex: none; }
-    .match-group button {
-        border-radius: 12px; padding: 9px 11px;
-        background: var(--cream); color: var(--ink-2);
-        font-family: var(--f-display); font-weight: 600; font-size: 13px;
-        transition: background .18s, color .18s, transform .15s;
-    }
-    .match-group button:active { transform: scale(.92); }
-    .match-group button.picked { background: var(--ink); color: var(--cream); }
-    .match-group button.correct { background: var(--ok); color: #fff; }
-    .match-group button.wrong { background: var(--no); color: #fff; }
+    .qmeta { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; color: var(--ink-2); }
+    .qmeta .score { background: var(--yellow); color: #17130E; border-radius: 999px; padding: 6px 13px; }
 
     /* ==========================================================
-       FOOTER
+       SOAL TERAKHIR — SERET & LEPAS
        ========================================================== */
-    .footer { margin-top: 34px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-    .footer-nav { display: flex; gap: 8px; }
-    .chip {
-        border-radius: 999px; padding: 9px 16px;
-        background: var(--surface); box-shadow: var(--sh-sm);
-        font-size: 13px; font-weight: 600; transition: transform .15s ease;
+    .tray {
+        display: flex; flex-wrap: wrap; gap: 8px;
+        align-items: center; justify-content: center;
+        background: var(--surface); border-radius: var(--r-card);
+        padding: 11px; margin-bottom: 14px; box-shadow: var(--sh-sm);
+        min-height: 60px;
     }
+    .cell {
+        width: 62px; height: 38px; border-radius: 12px; flex: none;
+        background: var(--cream); transition: outline-color .18s ease;
+        outline: 2px dashed transparent; outline-offset: 1px;
+    }
+    .cell.over { outline-color: var(--accent); }
+
+    .chip-drag {
+        width: 62px; height: 38px; border-radius: 12px;
+        background: var(--ink); color: var(--cream);
+        font-family: var(--f-display); font-weight: 600; font-size: 14px;
+        display: grid; place-items: center;
+        touch-action: none; user-select: none; -webkit-user-select: none;
+        cursor: grab; box-shadow: var(--sh-sm);
+        transition: background-color .2s ease, transform .16s ease;
+    }
+    .chip-drag.selected { background: var(--accent); color: #fff; transform: scale(1.07); }
+    .chip-drag.dragging {
+        position: fixed; z-index: 1200; pointer-events: none; margin: 0;
+        transform: scale(1.09) rotate(-3deg); box-shadow: var(--sh-lg);
+        cursor: grabbing; transition: none;
+    }
+    .chip-drag.ok { background: var(--ok); color: #fff; }
+    .chip-drag.no { background: var(--no); color: #fff; }
+
+    .drop-row {
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        background: var(--surface); border-radius: var(--r-card);
+        padding: 10px 10px 10px 16px; margin-bottom: 9px; box-shadow: var(--sh-sm);
+    }
+    .match-word { font-family: var(--f-display); font-weight: 600; font-size: 18px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .match-word .fix { color: var(--ok); font-size: 14px; margin-left: 8px; }
+
+    .slot {
+        width: 62px; height: 38px; border-radius: 12px; flex: none;
+        border: 2px dashed var(--ink-2);
+        display: grid; place-items: center;
+        transition: border-color .18s ease, background-color .18s ease;
+    }
+    .slot:not(.filled)::after {
+        content: ""; width: 12px; height: 2px; border-radius: 2px;
+        background: var(--ink-2); opacity: .55;
+    }
+    .slot.filled { border-color: transparent; }
+    .slot.over { border-color: var(--accent); background: rgba(255,90,31,.12); }
+
+    /* ==========================================================
+       FOOTER + MODAL
+       ========================================================== */
+    .footer { margin-top: 28px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .footer-nav { display: flex; gap: 8px; }
+    .chip { border-radius: 999px; padding: 8px 15px; background: var(--surface); box-shadow: var(--sh-sm); font-size: 13px; font-weight: 600; transition: transform .15s ease; }
     .chip:active { transform: scale(.95); }
     .credit { color: var(--ink-2); font-size: 12.5px; font-weight: 500; }
     .credit a { color: var(--accent-text); text-decoration: none; font-weight: 700; }
 
-    /* ==========================================================
-       MODAL
-       ========================================================== */
     .overlay {
         position: fixed; inset: 0; z-index: 999;
         background: rgba(23,19,14,.5); backdrop-filter: blur(5px);
@@ -365,25 +437,25 @@
     .overlay.show { display: flex; opacity: 1; }
     .sheet {
         background: var(--cream); width: 100%; max-width: 440px; max-height: 88vh;
-        border-radius: 32px 32px 0 0; padding: 22px 20px calc(24px + env(safe-area-inset-bottom));
+        border-radius: 30px 30px 0 0; padding: 20px 18px calc(22px + env(safe-area-inset-bottom));
         overflow-y: auto; transform: translateY(30px);
         transition: transform .32s cubic-bezier(.2,.8,.2,1);
     }
     .overlay.show .sheet { transform: translateY(0); }
     @media (min-width: 540px) {
         .overlay { align-items: center; padding: 24px; }
-        .sheet { border-radius: 32px; }
+        .sheet { border-radius: 30px; }
     }
     .sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
-    .sheet-head h2 { font-family: var(--f-display); font-weight: 600; font-size: 24px; margin: 0; letter-spacing: -.01em; }
-    .sheet h3 { font-family: var(--f-display); font-weight: 600; font-size: 15px; margin: 24px 0 10px; color: var(--accent-text); }
+    .sheet-head h2 { font-family: var(--f-display); font-weight: 600; font-size: 23px; margin: 0; letter-spacing: -.01em; }
+    .sheet h3 { font-family: var(--f-display); font-weight: 600; font-size: 15px; margin: 22px 0 9px; color: var(--accent-text); }
     .sheet ul { list-style: none; margin: 0; padding: 0; }
-    .sheet li { background: var(--surface); border-radius: 16px; padding: 12px 14px; margin-bottom: 8px; font-size: 14.5px; box-shadow: var(--sh-sm); }
+    .sheet li { background: var(--surface); border-radius: 15px; padding: 11px 13px; margin-bottom: 8px; font-size: 14px; box-shadow: var(--sh-sm); }
     .sheet li b { font-weight: 700; }
-    .sheet p { font-size: 14.5px; color: var(--ink-2); margin: 0; }
+    .sheet p { font-size: 14px; color: var(--ink-2); margin: 0; }
     .kbd { display: inline-block; background: var(--cream); border-radius: 7px; padding: 1px 8px; font-family: var(--f-mono); font-size: 12px; }
     .dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; vertical-align: -1px; margin-right: 7px; }
-    .qr { width: 100%; max-width: 250px; border-radius: 20px; display: block; margin: 18px auto; box-shadow: var(--sh-md); }
+    .qr { width: 100%; max-width: 240px; border-radius: 18px; display: block; margin: 16px auto; box-shadow: var(--sh-md); }
 
     @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
@@ -400,12 +472,25 @@
             <h1>Deutsch</h1>
         </div>
         <div class="tools">
-            <div class="pillgroup" role="group" aria-label="Bahasa antarmuka">
+            <div class="langswitch" id="langSwitch" data-lang="id" role="group" aria-label="Bahasa antarmuka">
+                <span class="knob" aria-hidden="true"></span>
                 <button id="langID" aria-pressed="true" onclick="setLanguage('id')">ID</button>
                 <button id="langDE" aria-pressed="false" onclick="setLanguage('de')">DE</button>
             </div>
-            <button class="round-btn" id="themeToggle" aria-label="Ganti tema">
-                <svg id="themeIcon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+            <button class="theme-btn" id="themeToggle" aria-label="Ganti tema">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <g class="sun-g">
+                        <g stroke="#FF8A1F" stroke-width="2.1" stroke-linecap="round">
+                            <path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"/>
+                        </g>
+                        <circle cx="12" cy="12" r="4.9" fill="#FFC831"/>
+                    </g>
+                    <g class="moon-g">
+                        <path d="M20.6 14.4A8.6 8.6 0 1 1 10.1 3.3a6.7 6.7 0 0 0 10.5 11.1Z" fill="#FFF3E4"/>
+                        <circle cx="7.6" cy="6.4" r="1.05" fill="#FFC831"/>
+                        <circle cx="17.6" cy="4.4" r="0.8" fill="#FFC831"/>
+                    </g>
+                </svg>
             </button>
         </div>
     </header>
@@ -438,6 +523,8 @@
 
         <div class="stage">
             <div class="card" id="card" role="button" tabindex="0" aria-label="Kartu kosakata, ketuk untuk membalik">
+
+                <!-- DEPAN -->
                 <div class="face face-front">
                     <div class="card-top">
                         <span class="tag" id="genderTag">—</span>
@@ -449,31 +536,47 @@
                             </svg>
                         </button>
                     </div>
+
                     <div class="card-mid">
+                        <p class="article" id="wordArticle">der</p>
                         <h2 class="word" id="wordText">Memuat</h2>
                         <div class="ipa" id="wordIpa"></div>
                     </div>
-                    <div class="plural-chip" id="pluralChip">
-                        <span id="wordPlural">—</span>
-                        <button class="sound sm" id="audioPlural" onclick="speakPlural(event)" aria-label="Dengarkan bentuk plural">
-                            <svg viewBox="0 0 24 24">
-                                <path class="w1" d="M7 9.5a3.2 3.2 0 0 1 0 5"/>
-                                <path class="w2" d="M11 6.5a7.2 7.2 0 0 1 0 11"/>
-                                <path class="w3" d="M15 3.5a11.2 11.2 0 0 1 0 17"/>
-                            </svg>
-                        </button>
+
+                    <div class="plural-block" id="pluralBlock">
+                        <span class="minilabel" id="pluralLabel">Bentuk jamak</span>
+                        <div class="plural-chip">
+                            <span id="wordPlural">—</span>
+                            <button class="sound sm" id="audioPlural" onclick="speakPlural(event)" aria-label="Dengarkan bentuk jamak">
+                                <svg viewBox="0 0 24 24">
+                                    <path class="w1" d="M7 9.5a3.2 3.2 0 0 1 0 5"/>
+                                    <path class="w2" d="M11 6.5a7.2 7.2 0 0 1 0 11"/>
+                                    <path class="w3" d="M15 3.5a11.2 11.2 0 0 1 0 17"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
+
                     <p class="card-hint" id="hintFront">Ketuk kartu untuk melihat arti</p>
                 </div>
 
+                <!-- BELAKANG -->
                 <div class="face face-back">
                     <div class="card-top">
                         <span class="tag" id="backWord">—</span>
                     </div>
+
                     <div class="card-mid">
-                        <p class="label" id="backLabel" style="color:var(--ink-2);margin:0 0 8px">Arti</p>
+                        <span class="minilabel" id="backLabel">Arti</span>
                         <p class="meaning" id="wordMeaning">—</p>
                     </div>
+
+                    <div class="example">
+                        <span class="minilabel" id="exampleLabel">Contoh kalimat</span>
+                        <p class="ex-de" id="exampleDe">—</p>
+                        <p class="ex-id" id="exampleId">—</p>
+                    </div>
+
                     <p class="card-hint" id="hintBack" style="color:var(--ink-2)">Ketuk untuk kembali</p>
                 </div>
             </div>
@@ -492,7 +595,6 @@
         </div>
     </main>
 
-    <!-- SELESAI HAFALAN -->
     <section class="panel" id="preQuizPanel">
         <div class="scene" id="sceneHost"></div>
         <p class="label panel-kicker" id="preQuizKicker">10 dari 10 kata</p>
@@ -504,7 +606,6 @@
         </div>
     </section>
 
-    <!-- KUIS -->
     <section class="panel" id="quizPanel">
         <p class="label panel-kicker" id="quizKicker">Kuis harian</p>
         <p class="qprompt" id="quizPrompt">—</p>
@@ -516,16 +617,15 @@
         </div>
     </section>
 
-    <!-- PENCOCOKAN -->
     <section class="panel" id="matchPanel">
         <p class="label panel-kicker" id="matchKicker">Soal terakhir</p>
-        <h2 class="panel-title" id="matchTitle">Pasangkan artikelnya</h2>
-        <p class="panel-text" id="matchText">Pilih der, die, atau das untuk kelima kata ini.</p>
+        <h2 class="panel-title" id="matchTitle">Seret artikelnya</h2>
+        <p class="panel-text" id="matchText">Seret setiap kartu artikel ke kata yang cocok. Bisa juga ketuk kartunya dulu, lalu ketuk kotak tujuan.</p>
+        <div class="tray" id="tray"></div>
         <div id="matchList"></div>
-        <button class="cta cta-accent" id="btnSubmitMatch" style="width:100%;margin-top:16px" disabled>Cek jawaban</button>
+        <button class="cta cta-accent" id="btnSubmitMatch" style="width:100%;margin-top:14px" disabled>Cek jawaban</button>
     </section>
 
-    <!-- HASIL -->
     <section class="panel" id="resultPanel">
         <div class="scene" id="sceneHost2"></div>
         <p class="label panel-kicker" id="resultKicker">Hasil</p>
@@ -560,17 +660,19 @@
             <li id="liHow1"><b>Balik kartu.</b> Ketuk kartu atau tekan <span class="kbd">Spasi</span>.</li>
             <li id="liHow2"><b>Dengar pelafalan.</b> Ketuk tombol bulat hitam di sudut kartu.</li>
             <li id="liHow3"><b>Pindah kata.</b> Tekan <span class="kbd">←</span> <span class="kbd">→</span> atau pakai tombol di bawah kartu.</li>
+            <li id="liHow4"><b>Soal terakhir.</b> Seret kartu artikel ke kata yang cocok, atau ketuk kartunya lalu ketuk kotak tujuan.</li>
         </ul>
         <h3 id="hColor">Arti warnanya</h3>
         <ul>
             <li id="liColor1"><span class="dot" style="background:#2F5BFF"></span><b>der</b> — maskulin. Kartu jadi biru.</li>
             <li id="liColor2"><span class="dot" style="background:#00A878"></span><b>das</b> — netral. Kartu jadi hijau.</li>
             <li id="liColor3"><span class="dot" style="background:#FF4D94"></span><b>die</b> — feminin. Kartu jadi pink.</li>
+            <li id="liColor4"><span class="dot" style="background:#FFE066"></span>Huruf kuning pada bentuk jamak menandai bagian yang berubah dari bentuk tunggalnya.</li>
         </ul>
         <h3 id="hNext">Sedang dikerjakan</h3>
         <ul>
             <li id="liNext1"><b>Tandai kata sulit.</b> Simpan kata yang sering meleset ke daftar sendiri.</li>
-            <li id="liNext2"><b>Contoh kalimat.</b> Satu kalimat pendek di balik kartu untuk melihat kata dipakai.</li>
+            <li id="liNext2"><b>Latihan menulis.</b> Ketik ulang kata untuk melatih ejaan dan umlaut.</li>
         </ul>
     </div>
 </div>
@@ -600,7 +702,7 @@
             </button>
         </div>
         <p id="installText">Buka langsung dari layar utama, tanpa lewat browser. Kartu tetap bisa dibuka saat offline.</p>
-        <div class="stack" style="margin-top:20px">
+        <div class="stack" style="margin-top:18px">
             <button class="cta cta-accent" onclick="triggerInstall()" id="btnInstall">Pasang sekarang</button>
             <button class="cta cta-ghost" onclick="snoozeInstall()" id="btnInstallLater">Nanti saja</button>
         </div>
@@ -611,7 +713,7 @@
 
 <script>
 /* ==========================================================
-   ADEGAN BLOB — layar selesai
+   ILUSTRASI LAYAR SELESAI
    ========================================================== */
 const SCENE = `
 <svg viewBox="0 0 320 232" role="img" aria-label="Wajah-wajah ceria">
@@ -643,8 +745,10 @@ const i18n = {
     id: {
         next: "Lanjut",
         hintFront: "Ketuk kartu untuk melihat arti", hintBack: "Ketuk untuk kembali",
-        backLabel: "Arti", streakLabel: "Beruntun", streakUnit: "hari", progressLabel: "Kartu hari ini",
-        gender: { der: "der · maskulin", die: "die · feminin", das: "das · netral" },
+        backLabel: "Arti", pluralLabel: "Bentuk jamak", exampleLabel: "Contoh kalimat",
+        noExample: "Belum ada contoh kalimat untuk kata ini.",
+        streakLabel: "Beruntun", streakUnit: "hari", progressLabel: "Kartu hari ini",
+        gender: { der: "maskulin", die: "feminin", das: "netral" },
 
         preQuizKicker: "10 dari 10 kata",
         preQuizTitle: "Kartu hari ini selesai",
@@ -653,11 +757,11 @@ const i18n = {
 
         quizKicker: "Kuis harian",
         qArticle: "Pilih artikel yang tepat", qMeaning: "Apa arti kata ini?",
-        qReverse: "Apa bahasa Jermannya?", qPlural: "Apa bentuk pluralnya?",
+        qReverse: "Apa bahasa Jermannya?", qPlural: "Apa bentuk jamaknya?",
         remaining: n => "Sisa " + n + " soal", score: n => "Skor " + n,
 
-        matchKicker: "Soal terakhir", matchTitle: "Pasangkan artikelnya",
-        matchText: "Pilih der, die, atau das untuk kelima kata ini.",
+        matchKicker: "Soal terakhir", matchTitle: "Seret artikelnya",
+        matchText: "Seret setiap kartu artikel ke kata yang cocok. Bisa juga ketuk kartunya dulu, lalu ketuk kotak tujuan.",
         btnSubmitMatch: "Cek jawaban", btnMatchNext: "Lihat hasil",
 
         resultKicker: "Hasil", resultTitle: "Kuis selesai",
@@ -671,11 +775,13 @@ const i18n = {
         liHow1: "<b>Balik kartu.</b> Ketuk kartu atau tekan <span class='kbd'>Spasi</span>.",
         liHow2: "<b>Dengar pelafalan.</b> Ketuk tombol bulat hitam di sudut kartu.",
         liHow3: "<b>Pindah kata.</b> Tekan <span class='kbd'>&larr;</span> <span class='kbd'>&rarr;</span> atau pakai tombol di bawah kartu.",
+        liHow4: "<b>Soal terakhir.</b> Seret kartu artikel ke kata yang cocok, atau ketuk kartunya lalu ketuk kotak tujuan.",
         liColor1: "<span class='dot' style='background:#2F5BFF'></span><b>der</b> — maskulin. Kartu jadi biru.",
         liColor2: "<span class='dot' style='background:#00A878'></span><b>das</b> — netral. Kartu jadi hijau.",
         liColor3: "<span class='dot' style='background:#FF4D94'></span><b>die</b> — feminin. Kartu jadi pink.",
+        liColor4: "<span class='dot' style='background:#FFE066'></span>Huruf kuning pada bentuk jamak menandai bagian yang berubah dari bentuk tunggalnya.",
         liNext1: "<b>Tandai kata sulit.</b> Simpan kata yang sering meleset ke daftar sendiri.",
-        liNext2: "<b>Contoh kalimat.</b> Satu kalimat pendek di balik kartu untuk melihat kata dipakai.",
+        liNext2: "<b>Latihan menulis.</b> Ketik ulang kata untuk melatih ejaan dan umlaut.",
         coffeeTitle: "Traktir kopi",
         coffeeText: "Aplikasi ini gratis dan tanpa iklan. Dukunganmu membuatnya tetap begitu.",
         coffeeLink: "Buka di Saweria",
@@ -688,8 +794,10 @@ const i18n = {
     de: {
         next: "Weiter",
         hintFront: "Karte antippen für die Bedeutung", hintBack: "Antippen zum Zurückdrehen",
-        backLabel: "Bedeutung", streakLabel: "In Folge", streakUnit: "Tage", progressLabel: "Karten heute",
-        gender: { der: "der · maskulin", die: "die · feminin", das: "das · neutral" },
+        backLabel: "Bedeutung", pluralLabel: "Pluralform", exampleLabel: "Beispielsatz",
+        noExample: "Für dieses Wort gibt es noch keinen Beispielsatz.",
+        streakLabel: "In Folge", streakUnit: "Tage", progressLabel: "Karten heute",
+        gender: { der: "maskulin", die: "feminin", das: "neutral" },
 
         preQuizKicker: "10 von 10 Wörtern",
         preQuizTitle: "Karten für heute geschafft",
@@ -701,8 +809,8 @@ const i18n = {
         qReverse: "Wie heißt das auf Deutsch?", qPlural: "Wie lautet der Plural?",
         remaining: n => "Noch " + n + " Fragen", score: n => "Punkte " + n,
 
-        matchKicker: "Letzte Frage", matchTitle: "Ordne die Artikel zu",
-        matchText: "Wähle der, die oder das für diese fünf Wörter.",
+        matchKicker: "Letzte Frage", matchTitle: "Zieh die Artikel",
+        matchText: "Zieh jede Artikelkarte zum passenden Wort. Du kannst auch erst die Karte antippen und dann das Feld.",
         btnSubmitMatch: "Antworten prüfen", btnMatchNext: "Ergebnis ansehen",
 
         resultKicker: "Ergebnis", resultTitle: "Quiz beendet",
@@ -716,11 +824,13 @@ const i18n = {
         liHow1: "<b>Karte umdrehen.</b> Karte antippen oder <span class='kbd'>Leertaste</span> drücken.",
         liHow2: "<b>Aussprache hören.</b> Auf den schwarzen Kreis in der Ecke tippen.",
         liHow3: "<b>Wort wechseln.</b> <span class='kbd'>&larr;</span> <span class='kbd'>&rarr;</span> drücken oder die Tasten unter der Karte nutzen.",
+        liHow4: "<b>Letzte Frage.</b> Artikelkarte zum passenden Wort ziehen — oder Karte antippen und dann das Feld.",
         liColor1: "<span class='dot' style='background:#2F5BFF'></span><b>der</b> — maskulin. Die Karte wird blau.",
         liColor2: "<span class='dot' style='background:#00A878'></span><b>das</b> — neutral. Die Karte wird grün.",
         liColor3: "<span class='dot' style='background:#FF4D94'></span><b>die</b> — feminin. Die Karte wird pink.",
+        liColor4: "<span class='dot' style='background:#FFE066'></span>Die gelben Buchstaben im Plural zeigen, was sich gegenüber dem Singular ändert.",
         liNext1: "<b>Schwere Wörter markieren.</b> Wörter, die oft danebengehen, in einer eigenen Liste sammeln.",
-        liNext2: "<b>Beispielsätze.</b> Ein kurzer Satz auf der Rückseite zeigt das Wort im Gebrauch.",
+        liNext2: "<b>Schreibübung.</b> Das Wort abtippen, um Rechtschreibung und Umlaute zu üben.",
         coffeeTitle: "Kaffee für Chester",
         coffeeText: "Diese App ist kostenlos und werbefrei. Deine Unterstützung hält das so.",
         coffeeLink: "Bei Saweria öffnen",
@@ -733,6 +843,7 @@ const i18n = {
 };
 
 let lang = localStorage.getItem('appLang') || 'id';
+let booted = false;
 
 /* ==========================================================
    WARNA GENDER
@@ -751,12 +862,9 @@ function paint(article) {
     root.setProperty('--accent-text', (isDark() ? TEXT_DARK : TEXT_LIGHT)[currentArticle]);
 }
 
-const SUN = 'M12 4v2m0 12v2M4 12H2m20 0h-2M6.3 6.3 4.9 4.9m14.2 14.2-1.4-1.4M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z';
-const MOON = 'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z';
-
 function applyTheme(dark) {
     document.body.classList.toggle('dark', dark);
-    document.getElementById('themeIcon').innerHTML = '<path d="' + (dark ? SUN : MOON) + '"/>';
+    document.getElementById('themeToggle').setAttribute('aria-pressed', dark);
     paint(currentArticle);
 }
 applyTheme(localStorage.getItem('darkMode') === 'true');
@@ -772,17 +880,27 @@ document.getElementById('themeToggle').addEventListener('click', () => {
 const txt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 const html = (id, v) => { const el = document.getElementById(id); if (el) el.innerHTML = v; };
 
+function replay(el) {
+    if (!el) return;
+    el.classList.remove('swap');
+    void el.offsetWidth;
+    el.classList.add('swap');
+}
+
 function setLanguage(next) {
+    const changed = booted && next !== lang;
     lang = next;
     localStorage.setItem('appLang', next);
     const t = i18n[next];
 
+    document.getElementById('langSwitch').dataset.lang = next;
     document.getElementById('langID').setAttribute('aria-pressed', next === 'id');
     document.getElementById('langDE').setAttribute('aria-pressed', next === 'de');
     document.documentElement.lang = next;
 
     txt('txtNext', t.next);
-    txt('hintFront', t.hintFront); txt('hintBack', t.hintBack); txt('backLabel', t.backLabel);
+    txt('hintFront', t.hintFront); txt('hintBack', t.hintBack);
+    txt('backLabel', t.backLabel); txt('pluralLabel', t.pluralLabel); txt('exampleLabel', t.exampleLabel);
     txt('streakLabel', t.streakLabel); txt('streakUnit', t.streakUnit); txt('progressLabel', t.progressLabel);
 
     txt('preQuizKicker', t.preQuizKicker); txt('preQuizTitle', t.preQuizTitle); txt('preQuizText', t.preQuizText);
@@ -794,8 +912,8 @@ function setLanguage(next) {
 
     txt('txtGuide', t.guide); txt('txtCoffee', t.coffee);
     txt('guideTitle', t.guideTitle); txt('hHowTo', t.hHowTo); txt('hColor', t.hColor); txt('hNext', t.hNext);
-    html('liHow1', t.liHow1); html('liHow2', t.liHow2); html('liHow3', t.liHow3);
-    html('liColor1', t.liColor1); html('liColor2', t.liColor2); html('liColor3', t.liColor3);
+    html('liHow1', t.liHow1); html('liHow2', t.liHow2); html('liHow3', t.liHow3); html('liHow4', t.liHow4);
+    html('liColor1', t.liColor1); html('liColor2', t.liColor2); html('liColor3', t.liColor3); html('liColor4', t.liColor4);
     html('liNext1', t.liNext1); html('liNext2', t.liNext2);
     txt('coffeeTitle', t.coffeeTitle); txt('coffeeText', t.coffeeText); txt('coffeeLink', t.coffeeLink);
     txt('installTitle', t.installTitle); txt('installText', t.installText);
@@ -805,6 +923,11 @@ function setLanguage(next) {
     renderStreak();
     if (studyVisible()) renderCard();
     if (document.getElementById('quizPanel').classList.contains('show')) loadQuestion();
+
+    if (changed) {
+        replay(document.getElementById('dateLabel'));
+        replay(document.querySelector('.panel.show'));
+    }
 }
 
 /* ==========================================================
@@ -862,7 +985,7 @@ function celebrate(count) {
 }
 
 /* ==========================================================
-   AUDIO PELAFALAN
+   AUDIO
    ========================================================== */
 let audio = null;
 const mapName = s => s.replace(/ß/g,'s5').replace(/ä/g,'a3').replace(/ö/g,'o3').replace(/ü/g,'u3')
@@ -890,6 +1013,7 @@ function play(src, fallback, btn) {
     };
     audio.play().catch(stop);
 }
+
 function speakWord(e) {
     e.stopPropagation();
     const d = words[index]; if (!d) return;
@@ -953,21 +1077,36 @@ function renderCard() {
 
     setTimeout(() => {
         paint(d.article);
-        txt('genderTag', t.gender[d.article] || d.article);
-        txt('wordText', d.word);
-        txt('backWord', d.article + ' ' + d.word);
-        txt('wordMeaning', d.meaning);
 
+        txt('genderTag', t.gender[d.article] || d.article);
+        txt('wordArticle', d.article);
+        txt('wordText', d.word);
         const ipa = document.getElementById('wordIpa');
         ipa.textContent = (d.ipa && d.ipa !== '-') ? d.ipa : '';
         ipa.style.display = ipa.textContent ? 'block' : 'none';
 
-        const chip = document.getElementById('pluralChip');
+        const pluralBlock = document.getElementById('pluralBlock');
         if (d.plural && d.plural !== '-') {
-            chip.style.display = '';
+            pluralBlock.style.display = '';
+            // *huruf* menandai perbedaan dari bentuk tunggal -> disorot kuning
             html('wordPlural', d.plural.replace(/\*(.*?)\*/g, '<b>$1</b>'));
         } else {
-            chip.style.display = 'none';
+            pluralBlock.style.display = 'none';
+        }
+
+        txt('backWord', d.article + ' ' + d.word);
+        txt('wordMeaning', d.meaning);
+
+        const ex = d.example;
+        const exDe = document.getElementById('exampleDe');
+        const exId = document.getElementById('exampleId');
+        if (ex && ex.de) {
+            exDe.textContent = ex.de;
+            exId.textContent = ex.id || '';
+            exId.style.display = ex.id ? '' : 'none';
+        } else {
+            exDe.textContent = t.noExample;
+            exId.style.display = 'none';
         }
 
         txt('counterValue', String(index + 1).padStart(2, '0'));
@@ -1016,13 +1155,13 @@ function skipQuiz() {
 }
 
 /* ==========================================================
-   KUIS
+   KUIS PILIHAN GANDA
    ========================================================== */
 const TOTAL_POINTS = 14;
-let queue = [], score = 0, matchDone = false, matchWords = [], picks = {};
+let queue = [], score = 0, matchDone = false, matchWords = [];
 
 function startQuiz() {
-    score = 0; matchDone = false; picks = {};
+    score = 0; matchDone = false;
     const shuffled = daily.slice().sort(() => Math.random() - .5);
 
     queue = shuffled.slice(0, 9).map(w => {
@@ -1117,40 +1256,53 @@ function answerQuestion(picked, answer, btn, q) {
     }
 }
 
+/* ==========================================================
+   SOAL TERAKHIR — SERET & LEPAS
+   Pointer Events dipakai supaya jalan di sentuh maupun tetikus.
+   Ketuk-lalu-ketuk disediakan sebagai jalur cadangan.
+   ========================================================== */
+let matchLocked = false, selectedChip = null, drag = null;
+
 function loadMatch() {
     const t = i18n[lang];
-    picks = {};
+    matchLocked = false;
+    selectedChip = null;
     paint('none');
     showPanel('matchPanel');
 
+    const tray = document.getElementById('tray');
     const list = document.getElementById('matchList');
     const submit = document.getElementById('btnSubmitMatch');
+    tray.innerHTML = '';
     list.innerHTML = '';
 
     matchWords.forEach((w, i) => {
         const row = document.createElement('div');
-        row.className = 'match-row';
+        row.className = 'drop-row';
 
         const name = document.createElement('span');
         name.className = 'match-word';
         name.textContent = w.word;
 
-        const group = document.createElement('div');
-        group.className = 'match-group';
-        ['der', 'die', 'das'].forEach(a => {
-            const b = document.createElement('button');
-            b.textContent = a;
-            b.onclick = () => {
-                [...group.children].forEach(c => c.classList.remove('picked'));
-                b.classList.add('picked');
-                picks[i] = a;
-                submit.disabled = Object.keys(picks).length !== matchWords.length;
-            };
-            group.appendChild(b);
-        });
+        const slot = document.createElement('div');
+        slot.className = 'slot';
+        slot.dataset.index = i;
 
-        row.append(name, group);
+        row.append(name, slot);
         list.appendChild(row);
+    });
+
+    // lima kartu artikel sesuai jawaban, urutannya diacak
+    matchWords.map(w => w.article).sort(() => Math.random() - .5).forEach(a => {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'chip-drag';
+        chip.textContent = a;
+        attachDrag(chip);
+        cell.appendChild(chip);
+        tray.appendChild(cell);
     });
 
     submit.textContent = t.btnSubmitMatch;
@@ -1158,23 +1310,131 @@ function loadMatch() {
     submit.onclick = checkMatch;
 }
 
+function clearSelection() {
+    if (selectedChip) selectedChip.classList.remove('selected');
+    selectedChip = null;
+}
+
+function firstEmptyCell() {
+    return [...document.querySelectorAll('#tray .cell')].find(c => !c.querySelector('.chip-drag'));
+}
+
+function refreshSlots() {
+    document.querySelectorAll('#matchList .slot').forEach(s =>
+        s.classList.toggle('filled', !!s.querySelector('.chip-drag')));
+    const filled = document.querySelectorAll('#matchList .slot .chip-drag').length;
+    document.getElementById('btnSubmitMatch').disabled = filled !== matchWords.length;
+}
+
+function placeChip(chip, target) {
+    if (!target || target === chip.parentElement) return;
+    const occupant = target.querySelector('.chip-drag');
+    const origin = chip.parentElement;
+
+    if (occupant) {
+        // tukar posisi dengan kartu yang sudah ada di sana
+        (origin && (origin.classList.contains('slot') || origin.classList.contains('cell'))
+            ? origin
+            : firstEmptyCell() || target
+        ).appendChild(occupant);
+    }
+    target.appendChild(chip);
+    refreshSlots();
+}
+
+function attachDrag(chip) {
+    chip.addEventListener('pointerdown', e => {
+        if (matchLocked) return;
+        const r = chip.getBoundingClientRect();
+        drag = {
+            chip, sx: e.clientX, sy: e.clientY,
+            dx: e.clientX - r.left, dy: e.clientY - r.top,
+            w: r.width, h: r.height, moved: false, over: null
+        };
+        chip.setPointerCapture(e.pointerId);
+    });
+
+    chip.addEventListener('pointermove', e => {
+        if (!drag || drag.chip !== chip) return;
+
+        if (!drag.moved) {
+            if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 5) return;
+            drag.moved = true;
+            clearSelection();
+            chip.classList.add('dragging');
+            chip.style.width = drag.w + 'px';
+            chip.style.height = drag.h + 'px';
+        }
+
+        chip.style.left = (e.clientX - drag.dx) + 'px';
+        chip.style.top = (e.clientY - drag.dy) + 'px';
+
+        const under = document.elementFromPoint(e.clientX, e.clientY);
+        const target = under ? under.closest('.slot, .cell') : null;
+        if (target !== drag.over) {
+            if (drag.over) drag.over.classList.remove('over');
+            drag.over = target;
+            if (target) target.classList.add('over');
+        }
+    });
+
+    const finish = () => {
+        if (!drag || drag.chip !== chip) return;
+
+        if (drag.moved) {
+            chip.classList.remove('dragging');
+            chip.style.cssText = '';
+            if (drag.over) placeChip(chip, drag.over);
+        } else if (!matchLocked) {
+            if (selectedChip === chip) clearSelection();
+            else { clearSelection(); selectedChip = chip; chip.classList.add('selected'); }
+        }
+        if (drag.over) drag.over.classList.remove('over');
+        drag = null;
+    };
+
+    chip.addEventListener('pointerup', finish);
+    chip.addEventListener('pointercancel', finish);
+}
+
+// jalur cadangan: ketuk kartu, lalu ketuk kotak tujuan
+document.getElementById('matchList').addEventListener('click', e => {
+    if (matchLocked || !selectedChip) return;
+    const target = e.target.closest('.slot');
+    if (!target) return;
+    placeChip(selectedChip, target);
+    clearSelection();
+});
+document.getElementById('tray').addEventListener('click', e => {
+    if (matchLocked || !selectedChip) return;
+    const target = e.target.closest('.cell');
+    if (!target || target.contains(selectedChip)) return;
+    placeChip(selectedChip, target);
+    clearSelection();
+});
+
 function checkMatch() {
     const submit = document.getElementById('btnSubmitMatch');
+    matchLocked = true;
     submit.disabled = true;
+    clearSelection();
 
-    const rows = document.querySelectorAll('#matchList .match-row');
     let perfect = true;
+    document.querySelectorAll('#matchList .drop-row').forEach((row, i) => {
+        const chip = row.querySelector('.slot .chip-drag');
+        const correct = matchWords[i].article;
 
-    matchWords.forEach((w, i) => {
-        [...rows[i].querySelector('.match-group').children].forEach(b => {
-            b.style.pointerEvents = 'none';
-            b.classList.remove('picked');
-            if (b.textContent === picks[i]) {
-                if (picks[i] === w.article) { b.classList.add('correct'); score++; }
-                else { b.classList.add('wrong'); perfect = false; }
-            }
-            if (picks[i] !== w.article && b.textContent === w.article) b.classList.add('correct');
-        });
+        if (chip && chip.textContent === correct) {
+            chip.classList.add('ok');
+            score++;
+        } else {
+            perfect = false;
+            if (chip) chip.classList.add('no');
+            const fix = document.createElement('span');
+            fix.className = 'fix';
+            fix.textContent = correct;
+            row.querySelector('.match-word').appendChild(fix);
+        }
     });
 
     beep(perfect ? 'correct' : 'wrong');
@@ -1267,6 +1527,7 @@ function backdropSnooze(e, id) { if (e.target.id === id) snoozeInstall(); }
    ========================================================== */
 setLanguage(lang);
 initDay('A1');
+booted = true;
 </script>
 </body>
 </html>
