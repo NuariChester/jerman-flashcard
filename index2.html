@@ -38,6 +38,7 @@
         --orange:   #FF5A1F;
         --yellow:   #FFC831;
         --flag-red: #FF3B2F;
+        --mark:     #17130E;
 
         --accent:      #FF5A1F;
         --accent-text: #FF5A1F;
@@ -273,15 +274,11 @@
         max-width: 100%;
     }
     .plural-chip > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    /* imbuhan jamak: blok putih penuh, hurufnya memakai warna kartu.
-       Kontrasnya jauh lebih kuat dibanding sekadar teks kuning. */
-    .plural-chip b {
-        background: #FFFFFF; color: var(--accent);
-        font-weight: 700; padding: 1px 4px; margin: 0 1px;
-        border-radius: 6px; box-decoration-break: clone;
-        -webkit-box-decoration-break: clone;
-        transition: color .45s ease;
-    }
+    /* Imbuhan jamak: hanya hurufnya yang diberi warna.
+       Nada gelap dipilih karena teks di sekitarnya putih dan latar
+       kartu berwarna sedang — warna terang justru terlihat lebih
+       redup daripada putih, sedangkan nada gelap paling menonjol. */
+    .plural-chip b { color: var(--mark); font-weight: 800; }
 
     .card-hint { font-size: 12px; opacity: .75; margin: 12px 0 0; font-weight: 500; }
 
@@ -297,10 +294,8 @@
     .example { width: 100%; background: var(--cream); border-radius: 18px; padding: 12px 14px; transition: background-color .45s ease; }
     .ex-de { font-size: 15px; font-weight: 600; margin: 0; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .ex-de mark {
-        background: var(--accent); color: #FFFFFF;
-        padding: 1px 6px; border-radius: 7px; font-weight: 700;
-        box-decoration-break: clone; -webkit-box-decoration-break: clone;
-        transition: background-color .45s ease;
+        background: none; color: var(--accent-text);
+        font-weight: 800; transition: color .45s ease;
     }
     .ex-id { font-size: 13px; color: var(--ink-2); margin: 4px 0 0; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
@@ -505,7 +500,6 @@
 
     .kbd { display: inline-block; background: var(--cream); border-radius: 7px; padding: 1px 8px; font-family: var(--f-mono); font-size: 12px; }
     .dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; vertical-align: -1px; margin-right: 7px; }
-    .swatch { display: inline-block; background: #FFF; color: #17130E; border: 1px solid var(--ink-2); border-radius: 5px; padding: 0 4px; font-weight: 700; margin-right: 6px; }
     .qr { width: 100%; max-width: 240px; border-radius: 18px; display: block; margin: 16px auto; box-shadow: var(--sh-md); }
 
     @media (prefers-reduced-motion: reduce) {
@@ -663,7 +657,6 @@
     </main>
 
     <section class="panel" id="preQuizPanel">
-        <div class="scene" id="sceneHost"></div>
         <p class="label panel-kicker" id="preQuizKicker">10 dari 10 kata</p>
         <h2 class="panel-title" id="preQuizTitle">Kartu hari ini selesai</h2>
         <p class="panel-text" id="preQuizText">Uji ingatanmu dengan sepuluh soal, atau simpan tenagamu untuk besok.</p>
@@ -802,27 +795,6 @@
 
 <script>
 /* ==========================================================
-   ILUSTRASI (hanya di layar selesai hafalan)
-   ========================================================== */
-document.getElementById('sceneHost').innerHTML = `
-<svg viewBox="0 0 320 232" role="img" aria-label="Wajah-wajah ceria">
-  <path d="M34 118V96a59 59 0 0 1 118 0v22Z" fill="#FF8A00"/>
-  <ellipse cx="72" cy="80" rx="15" ry="17" fill="#FFF6EC"/>
-  <ellipse cx="110" cy="80" rx="15" ry="17" fill="#FFF6EC"/>
-  <circle cx="76" cy="84" r="9" fill="#17130E"/>
-  <circle cx="114" cy="84" r="9" fill="#17130E"/>
-  <circle cx="228" cy="86" r="60" fill="#FFC831"/>
-  <path d="M198 72q10-12 20 0M238 72q10-12 20 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
-  <path d="M192 90q36 40 72 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
-  <rect x="34" y="124" width="118" height="96" rx="24" fill="#FFF6EC"/>
-  <path d="M60 158q10-11 20 0M106 158q10-11 20 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
-  <path d="M70 188h46" stroke="#17130E" stroke-width="5.5" stroke-linecap="round"/>
-  <rect x="164" y="126" width="126" height="94" rx="45" fill="#FF7FB4"/>
-  <path d="M192 164q10-11 20 0M240 164q10-11 20 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
-  <path d="M204 186q23 20 46 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
-</svg>`;
-
-/* ==========================================================
    TEKS ANTARMUKA — ID / EN / DE
    ========================================================== */
 const i18n = {
@@ -864,8 +836,8 @@ const i18n = {
         liColor1: "<span class='dot' style='background:#2F5BFF'></span><b>der</b> — maskulin. Kartu jadi biru.",
         liColor2: "<span class='dot' style='background:#00A878'></span><b>das</b> — netral. Kartu jadi hijau.",
         liColor3: "<span class='dot' style='background:#FF4D94'></span><b>die</b> — feminin. Kartu jadi pink.",
-        liColor4: "<span class='swatch'>ä</span>Blok putih pada bentuk jamak menandai bagian yang berubah dari bentuk tunggalnya.",
-        liColor5: "Di contoh kalimat, kata yang sedang dipelajari ditandai dengan blok berwarna.",
+        liColor4: "<b>Bentuk jamak.</b> Huruf yang berubah dari bentuk tunggalnya dicetak tebal dengan warna gelap.",
+        liColor5: "<b>Contoh kalimat.</b> Kata yang sedang dipelajari diwarnai mengikuti gendernya.",
         liNext1: "<b>Tandai kata sulit.</b> Simpan kata yang sering meleset ke daftar sendiri.",
         liNext2: "<b>Latihan menulis.</b> Ketik ulang kata untuk melatih ejaan dan umlaut.",
         coffeeTitle: "Traktir kopi",
@@ -915,8 +887,8 @@ const i18n = {
         liColor1: "<span class='dot' style='background:#2F5BFF'></span><b>der</b> — masculine. The card turns blue.",
         liColor2: "<span class='dot' style='background:#00A878'></span><b>das</b> — neuter. The card turns green.",
         liColor3: "<span class='dot' style='background:#FF4D94'></span><b>die</b> — feminine. The card turns pink.",
-        liColor4: "<span class='swatch'>ä</span>White blocks in the plural mark the letters that change from the singular.",
-        liColor5: "In the example sentence, the word you are studying is marked with a coloured block.",
+        liColor4: "<b>Plural form.</b> Letters that change from the singular are set in bold dark type.",
+        liColor5: "<b>Example sentence.</b> The word you are studying takes the colour of its gender.",
         liNext1: "<b>Flag hard words.</b> Collect the ones you keep missing in their own list.",
         liNext2: "<b>Spelling practice.</b> Retype the word to drill spelling and umlauts.",
         coffeeTitle: "Buy a coffee",
@@ -966,8 +938,8 @@ const i18n = {
         liColor1: "<span class='dot' style='background:#2F5BFF'></span><b>der</b> — maskulin. Die Karte wird blau.",
         liColor2: "<span class='dot' style='background:#00A878'></span><b>das</b> — neutral. Die Karte wird grün.",
         liColor3: "<span class='dot' style='background:#FF4D94'></span><b>die</b> — feminin. Die Karte wird pink.",
-        liColor4: "<span class='swatch'>ä</span>Die weißen Blöcke im Plural zeigen, welche Buchstaben sich gegenüber dem Singular ändern.",
-        liColor5: "Im Beispielsatz ist das gerade gelernte Wort farbig markiert.",
+        liColor4: "<b>Pluralform.</b> Buchstaben, die sich gegenüber dem Singular ändern, stehen fett und dunkel.",
+        liColor5: "<b>Beispielsatz.</b> Das gerade gelernte Wort trägt die Farbe seines Genus.",
         liNext1: "<b>Schwere Wörter markieren.</b> Wörter, die oft danebengehen, in einer eigenen Liste sammeln.",
         liNext2: "<b>Schreibübung.</b> Das Wort abtippen, um Rechtschreibung und Umlaute zu üben.",
         coffeeTitle: "Kaffee für Chester",
@@ -1043,12 +1015,16 @@ document.addEventListener('click', e => {
 /* ==========================================================
    ACCORDION PANDUAN
    ========================================================== */
-document.querySelectorAll('[data-acc]').forEach(acc => {
-    const head = acc.querySelector('.acc-head');
-    head.addEventListener('click', () => {
-        const open = !acc.classList.contains('open');
-        acc.classList.toggle('open', open);
-        head.setAttribute('aria-expanded', open);
+const accordions = [...document.querySelectorAll('[data-acc]')];
+accordions.forEach(acc => {
+    acc.querySelector('.acc-head').addEventListener('click', () => {
+        const willOpen = !acc.classList.contains('open');
+        // hanya satu bagian yang boleh terbuka
+        accordions.forEach(other => {
+            const open = other === acc && willOpen;
+            other.classList.toggle('open', open);
+            other.querySelector('.acc-head').setAttribute('aria-expanded', open);
+        });
     });
 });
 
