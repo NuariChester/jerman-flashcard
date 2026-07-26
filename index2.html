@@ -38,7 +38,6 @@
         --orange:   #FF5A1F;
         --yellow:   #FFC831;
         --flag-red: #FF3B2F;
-        --plural-hl:#FFE066;
 
         --accent:      #FF5A1F;
         --accent-text: #FF5A1F;
@@ -101,7 +100,7 @@
        HEADER
        ========================================================== */
     .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand { display: flex; align-items: center; gap: 9px; min-width: 0; }
 
     .flagmark { display: flex; flex-direction: column; gap: 2.5px; flex: none; }
     .flagmark i { width: 20px; height: 5.5px; border-radius: 3px; }
@@ -111,29 +110,43 @@
 
     .brand h1 { font-family: var(--f-display); font-weight: 600; font-size: 23px; margin: 0; line-height: 1; letter-spacing: -.01em; }
 
-    .tools { display: flex; align-items: center; gap: 8px; }
+    .tools { display: flex; align-items: center; gap: 8px; flex: none; }
 
-    /* sakelar bahasa — easing tanpa overshoot supaya knob tidak
-       melewati tepi pill dan terlihat terpotong */
-    .langswitch {
-        position: relative; display: flex;
-        background: var(--surface); border-radius: 999px; padding: 3px;
-        box-shadow: var(--sh-sm); overflow: hidden;
+    /* pemilih bahasa: satu tombol + menu, lebarnya tetap
+       berapa pun jumlah bahasanya */
+    .langwrap { position: relative; }
+    .langbtn {
+        display: flex; align-items: center; gap: 5px;
+        height: 38px; padding: 0 11px 0 13px; border-radius: 999px;
+        background: var(--surface); box-shadow: var(--sh-sm);
+        font-family: var(--f-display); font-weight: 600; font-size: 13.5px;
+        transition: transform .16s ease;
     }
-    .langswitch .knob {
-        position: absolute; top: 3px; left: 3px;
-        width: 42px; height: calc(100% - 6px);
-        border-radius: 999px; background: var(--ink);
-        transition: transform .4s cubic-bezier(.5,0,.15,1);
+    .langbtn:active { transform: scale(.94); }
+    .langbtn svg { width: 12px; height: 12px; stroke: var(--ink-2); fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s ease; }
+    .langbtn[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+    .langmenu {
+        position: absolute; top: calc(100% + 8px); right: 0; z-index: 80;
+        width: 212px; padding: 6px;
+        background: var(--surface); border-radius: 20px; box-shadow: var(--sh-lg);
+        opacity: 0; transform: scale(.94) translateY(-6px); transform-origin: top right;
+        pointer-events: none;
+        transition: opacity .18s ease, transform .24s cubic-bezier(.2,.8,.2,1);
     }
-    .langswitch[data-lang="de"] .knob { transform: translateX(42px); }
-    .langswitch button {
-        position: relative; z-index: 1; width: 42px;
-        border-radius: 999px; padding: 7px 0;
-        font-family: var(--f-display); font-size: 13px; font-weight: 600;
-        color: var(--ink-2); transition: color .3s ease .06s;
+    .langmenu.open { opacity: 1; transform: none; pointer-events: auto; }
+    .langmenu button {
+        display: flex; align-items: center; gap: 10px; width: 100%;
+        padding: 9px 10px; border-radius: 14px; text-align: left;
+        transition: background-color .16s ease;
     }
-    .langswitch button[aria-pressed="true"] { color: var(--cream); }
+    .langmenu button:hover { background: var(--cream); }
+    .langmenu b { font-family: var(--f-display); font-size: 12px; font-weight: 600; width: 24px; color: var(--ink-2); flex: none; }
+    .langmenu span { flex: 1; font-size: 14px; font-weight: 500; }
+    .langmenu .tick { width: 15px; height: 15px; stroke: var(--accent-text); fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; flex: none; }
+    .langmenu button[aria-checked="true"] { background: var(--cream); }
+    .langmenu button[aria-checked="true"] b { color: var(--accent-text); }
+    .langmenu button[aria-checked="true"] .tick { opacity: 1; }
 
     /* tombol tema */
     .theme-btn {
@@ -163,8 +176,7 @@
     .datestamp { color: var(--ink-2); font-size: 12.5px; font-weight: 500; margin: 5px 0 13px 29px; }
 
     /* ==========================================================
-       KARTU STATISTIK — dipadatkan agar tombol Lanjut
-       tetap terjangkau tanpa scroll
+       KARTU STATISTIK
        ========================================================== */
     .stats { display: grid; grid-template-columns: 1fr 1.3fr; gap: 10px; margin-bottom: 13px; }
     .stat {
@@ -240,29 +252,36 @@
 
     .card-mid { margin: auto 0; padding: 12px 0; width: 100%; }
 
-    .article {
-        font-family: var(--f-display); font-weight: 500; font-size: 18px;
-        margin: 0 0 1px; opacity: .82; line-height: 1.1;
-    }
+    /* artikel kiri, kata utama langsung di sebelahnya */
     .word {
+        display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px;
         font-family: var(--f-display); font-weight: 600;
         font-size: clamp(2.1rem, 9.5vw, 2.9rem);
-        line-height: 1; letter-spacing: -.025em; margin: 0;
+        line-height: 1.02; letter-spacing: -.025em; margin: 0;
         word-break: break-word; hyphens: auto;
     }
+    .word .art { font-size: .42em; font-weight: 500; opacity: .82; letter-spacing: .01em; }
+
     .ipa { font-family: var(--f-mono); font-size: 13.5px; opacity: .8; margin-top: 8px; }
 
     .plural-block { width: 100%; }
     .face-front .minilabel { opacity: .72; }
     .plural-chip {
         display: inline-flex; align-items: center; gap: 7px;
-        background: rgba(255,255,255,.2); border-radius: 999px;
+        background: rgba(255,255,255,.24); border-radius: 999px;
         padding: 6px 6px 6px 14px; font-size: 14.5px; font-weight: 500;
         max-width: 100%;
     }
     .plural-chip > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    /* huruf yang berubah dari bentuk tunggal ke jamak */
-    .plural-chip b { color: var(--plural-hl); font-weight: 700; }
+    /* imbuhan jamak: blok putih penuh, hurufnya memakai warna kartu.
+       Kontrasnya jauh lebih kuat dibanding sekadar teks kuning. */
+    .plural-chip b {
+        background: #FFFFFF; color: var(--accent);
+        font-weight: 700; padding: 1px 4px; margin: 0 1px;
+        border-radius: 6px; box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+        transition: color .45s ease;
+    }
 
     .card-hint { font-size: 12px; opacity: .75; margin: 12px 0 0; font-weight: 500; }
 
@@ -276,8 +295,14 @@
     .face-back .minilabel { color: var(--ink-2); }
 
     .example { width: 100%; background: var(--cream); border-radius: 18px; padding: 12px 14px; transition: background-color .45s ease; }
-    .ex-de { font-size: 15px; font-weight: 600; margin: 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    .ex-id { font-size: 13px; color: var(--ink-2); margin: 3px 0 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .ex-de { font-size: 15px; font-weight: 600; margin: 0; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .ex-de mark {
+        background: var(--accent); color: #FFFFFF;
+        padding: 1px 6px; border-radius: 7px; font-weight: 700;
+        box-decoration-break: clone; -webkit-box-decoration-break: clone;
+        transition: background-color .45s ease;
+    }
+    .ex-id { font-size: 13px; color: var(--ink-2); margin: 4px 0 0; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
     /* tombol suara */
     .sound {
@@ -335,9 +360,17 @@
     .stack { display: flex; flex-direction: column; gap: 10px; }
     .stack .cta { width: 100%; }
 
+    .scoreboard {
+        display: flex; align-items: baseline; gap: 8px;
+        background: var(--surface); border-radius: var(--r-card);
+        padding: 16px 18px; margin-bottom: 18px; box-shadow: var(--sh-sm);
+    }
+    .scoreboard .big { font-family: var(--f-display); font-weight: 600; font-size: 42px; line-height: 1; color: var(--accent-text); transition: color .45s ease; }
+    .scoreboard .of { font-family: var(--f-display); font-size: 17px; color: var(--ink-2); }
+
     .qprompt { font-size: 15px; color: var(--ink-2); font-weight: 500; margin: 0 0 4px; }
     .qsubject { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.9rem,9vw,2.7rem); line-height: 1.05; letter-spacing: -.025em; margin: 0 0 20px; }
-    .qsubject em { font-style: normal; color: var(--accent-text); transition: color .45s ease; }
+    .qsubject em { font-style: normal; font-size: .45em; font-weight: 500; color: var(--accent-text); margin-right: 6px; transition: color .45s ease; }
 
     .option {
         width: 100%; display: flex; align-items: center; gap: 13px;
@@ -419,7 +452,7 @@
     .slot.over { border-color: var(--accent); background: rgba(255,90,31,.12); }
 
     /* ==========================================================
-       FOOTER + MODAL
+       FOOTER
        ========================================================== */
     .footer { margin-top: 28px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
     .footer-nav { display: flex; gap: 8px; }
@@ -428,6 +461,9 @@
     .credit { color: var(--ink-2); font-size: 12.5px; font-weight: 500; }
     .credit a { color: var(--accent-text); text-decoration: none; font-weight: 700; }
 
+    /* ==========================================================
+       MODAL
+       ========================================================== */
     .overlay {
         position: fixed; inset: 0; z-index: 999;
         background: rgba(23,19,14,.5); backdrop-filter: blur(5px);
@@ -446,15 +482,30 @@
         .overlay { align-items: center; padding: 24px; }
         .sheet { border-radius: 30px; }
     }
-    .sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+    .sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
     .sheet-head h2 { font-family: var(--f-display); font-weight: 600; font-size: 23px; margin: 0; letter-spacing: -.01em; }
-    .sheet h3 { font-family: var(--f-display); font-weight: 600; font-size: 15px; margin: 22px 0 9px; color: var(--accent-text); }
-    .sheet ul { list-style: none; margin: 0; padding: 0; }
-    .sheet li { background: var(--surface); border-radius: 15px; padding: 11px 13px; margin-bottom: 8px; font-size: 14px; box-shadow: var(--sh-sm); }
-    .sheet li b { font-weight: 700; }
     .sheet p { font-size: 14px; color: var(--ink-2); margin: 0; }
+
+    /* accordion panduan */
+    .acc { background: var(--surface); border-radius: var(--r-card); margin-bottom: 9px; box-shadow: var(--sh-sm); overflow: hidden; }
+    .acc-head {
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        width: 100%; padding: 14px 16px; text-align: left;
+        font-family: var(--f-display); font-weight: 600; font-size: 15.5px;
+    }
+    .acc-head svg { width: 15px; height: 15px; stroke: var(--ink-2); fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; flex: none; transition: transform .32s cubic-bezier(.2,.8,.2,1); }
+    .acc.open .acc-head { color: var(--accent-text); }
+    .acc.open .acc-head svg { transform: rotate(180deg); stroke: var(--accent-text); }
+    .acc-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .34s cubic-bezier(.2,.8,.2,1); }
+    .acc.open .acc-body { grid-template-rows: 1fr; }
+    .acc-inner { overflow: hidden; }
+    .acc ul { list-style: none; margin: 0; padding: 0 16px 6px; }
+    .acc li { padding: 10px 0; border-top: 1px solid var(--cream); font-size: 14px; line-height: 1.5; }
+    .acc li b { font-weight: 700; }
+
     .kbd { display: inline-block; background: var(--cream); border-radius: 7px; padding: 1px 8px; font-family: var(--f-mono); font-size: 12px; }
     .dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; vertical-align: -1px; margin-right: 7px; }
+    .swatch { display: inline-block; background: #FFF; color: #17130E; border: 1px solid var(--ink-2); border-radius: 5px; padding: 0 4px; font-weight: 700; margin-right: 6px; }
     .qr { width: 100%; max-width: 240px; border-radius: 18px; display: block; margin: 16px auto; box-shadow: var(--sh-md); }
 
     @media (prefers-reduced-motion: reduce) {
@@ -472,10 +523,25 @@
             <h1>Deutsch</h1>
         </div>
         <div class="tools">
-            <div class="langswitch" id="langSwitch" data-lang="id" role="group" aria-label="Bahasa antarmuka">
-                <span class="knob" aria-hidden="true"></span>
-                <button id="langID" aria-pressed="true" onclick="setLanguage('id')">ID</button>
-                <button id="langDE" aria-pressed="false" onclick="setLanguage('de')">DE</button>
+            <div class="langwrap">
+                <button class="langbtn" id="langBtn" aria-haspopup="true" aria-expanded="false" aria-label="Pilih bahasa">
+                    <span id="langCode">ID</span>
+                    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="langmenu" id="langMenu" role="menu">
+                    <button role="menuitemradio" aria-checked="true" data-lang="id">
+                        <b>ID</b><span>Bahasa Indonesia</span>
+                        <svg class="tick" viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 7"/></svg>
+                    </button>
+                    <button role="menuitemradio" aria-checked="false" data-lang="en">
+                        <b>EN</b><span>English</span>
+                        <svg class="tick" viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 7"/></svg>
+                    </button>
+                    <button role="menuitemradio" aria-checked="false" data-lang="de">
+                        <b>DE</b><span>Deutsch</span>
+                        <svg class="tick" viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 7"/></svg>
+                    </button>
+                </div>
             </div>
             <button class="theme-btn" id="themeToggle" aria-label="Ganti tema">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -538,8 +604,9 @@
                     </div>
 
                     <div class="card-mid">
-                        <p class="article" id="wordArticle">der</p>
-                        <h2 class="word" id="wordText">Memuat</h2>
+                        <h2 class="word">
+                            <span class="art" id="wordArticle">der</span><span id="wordText">Memuat</span>
+                        </h2>
                         <div class="ipa" id="wordIpa"></div>
                     </div>
 
@@ -609,7 +676,7 @@
     <section class="panel" id="quizPanel">
         <p class="label panel-kicker" id="quizKicker">Kuis harian</p>
         <p class="qprompt" id="quizPrompt">—</p>
-        <h2 class="qsubject"><em id="quizArticle"></em> <span id="quizWord">—</span></h2>
+        <h2 class="qsubject"><em id="quizArticle"></em><span id="quizWord">—</span></h2>
         <div id="quizOptions"></div>
         <div class="qmeta">
             <span class="label" id="quizRemaining">—</span>
@@ -627,9 +694,12 @@
     </section>
 
     <section class="panel" id="resultPanel">
-        <div class="scene" id="sceneHost2"></div>
         <p class="label panel-kicker" id="resultKicker">Hasil</p>
         <h2 class="panel-title" id="resultTitle">Kuis selesai</h2>
+        <div class="scoreboard" id="scoreboard">
+            <span class="big" id="scoreBig">0</span>
+            <span class="of" id="scoreOf">/ 14</span>
+        </div>
         <p class="panel-text" id="resultText">—</p>
         <div class="stack">
             <button class="cta cta-accent" id="btnRestartCards" onclick="restartCards()">Ulangi kartu</button>
@@ -655,25 +725,44 @@
                 <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
             </button>
         </div>
-        <h3 id="hHowTo">Cara pakai</h3>
-        <ul>
-            <li id="liHow1"><b>Balik kartu.</b> Ketuk kartu atau tekan <span class="kbd">Spasi</span>.</li>
-            <li id="liHow2"><b>Dengar pelafalan.</b> Ketuk tombol bulat hitam di sudut kartu.</li>
-            <li id="liHow3"><b>Pindah kata.</b> Tekan <span class="kbd">←</span> <span class="kbd">→</span> atau pakai tombol di bawah kartu.</li>
-            <li id="liHow4"><b>Soal terakhir.</b> Seret kartu artikel ke kata yang cocok, atau ketuk kartunya lalu ketuk kotak tujuan.</li>
-        </ul>
-        <h3 id="hColor">Arti warnanya</h3>
-        <ul>
-            <li id="liColor1"><span class="dot" style="background:#2F5BFF"></span><b>der</b> — maskulin. Kartu jadi biru.</li>
-            <li id="liColor2"><span class="dot" style="background:#00A878"></span><b>das</b> — netral. Kartu jadi hijau.</li>
-            <li id="liColor3"><span class="dot" style="background:#FF4D94"></span><b>die</b> — feminin. Kartu jadi pink.</li>
-            <li id="liColor4"><span class="dot" style="background:#FFE066"></span>Huruf kuning pada bentuk jamak menandai bagian yang berubah dari bentuk tunggalnya.</li>
-        </ul>
-        <h3 id="hNext">Sedang dikerjakan</h3>
-        <ul>
-            <li id="liNext1"><b>Tandai kata sulit.</b> Simpan kata yang sering meleset ke daftar sendiri.</li>
-            <li id="liNext2"><b>Latihan menulis.</b> Ketik ulang kata untuk melatih ejaan dan umlaut.</li>
-        </ul>
+
+        <div class="acc open" data-acc>
+            <button class="acc-head" aria-expanded="true">
+                <span id="hHowTo">Cara pakai</span>
+                <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="acc-body"><div class="acc-inner"><ul>
+                <li id="liHow1"></li>
+                <li id="liHow2"></li>
+                <li id="liHow3"></li>
+                <li id="liHow4"></li>
+            </ul></div></div>
+        </div>
+
+        <div class="acc" data-acc>
+            <button class="acc-head" aria-expanded="false">
+                <span id="hColor">Arti warnanya</span>
+                <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="acc-body"><div class="acc-inner"><ul>
+                <li id="liColor1"></li>
+                <li id="liColor2"></li>
+                <li id="liColor3"></li>
+                <li id="liColor4"></li>
+                <li id="liColor5"></li>
+            </ul></div></div>
+        </div>
+
+        <div class="acc" data-acc>
+            <button class="acc-head" aria-expanded="false">
+                <span id="hNext">Sedang dikerjakan</span>
+                <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="acc-body"><div class="acc-inner"><ul>
+                <li id="liNext1"></li>
+                <li id="liNext2"></li>
+            </ul></div></div>
+        </div>
     </div>
 </div>
 
@@ -713,36 +802,32 @@
 
 <script>
 /* ==========================================================
-   ILUSTRASI LAYAR SELESAI
+   ILUSTRASI (hanya di layar selesai hafalan)
    ========================================================== */
-const SCENE = `
+document.getElementById('sceneHost').innerHTML = `
 <svg viewBox="0 0 320 232" role="img" aria-label="Wajah-wajah ceria">
   <path d="M34 118V96a59 59 0 0 1 118 0v22Z" fill="#FF8A00"/>
   <ellipse cx="72" cy="80" rx="15" ry="17" fill="#FFF6EC"/>
   <ellipse cx="110" cy="80" rx="15" ry="17" fill="#FFF6EC"/>
   <circle cx="76" cy="84" r="9" fill="#17130E"/>
   <circle cx="114" cy="84" r="9" fill="#17130E"/>
-
   <circle cx="228" cy="86" r="60" fill="#FFC831"/>
   <path d="M198 72q10-12 20 0M238 72q10-12 20 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
   <path d="M192 90q36 40 72 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
-
   <rect x="34" y="124" width="118" height="96" rx="24" fill="#FFF6EC"/>
   <path d="M60 158q10-11 20 0M106 158q10-11 20 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
   <path d="M70 188h46" stroke="#17130E" stroke-width="5.5" stroke-linecap="round"/>
-
   <rect x="164" y="126" width="126" height="94" rx="45" fill="#FF7FB4"/>
   <path d="M192 164q10-11 20 0M240 164q10-11 20 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
   <path d="M204 186q23 20 46 0" stroke="#17130E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
 </svg>`;
-document.getElementById('sceneHost').innerHTML = SCENE;
-document.getElementById('sceneHost2').innerHTML = SCENE;
 
 /* ==========================================================
-   TEKS ANTARMUKA
+   TEKS ANTARMUKA — ID / EN / DE
    ========================================================== */
 const i18n = {
     id: {
+        name: "Bahasa Indonesia", locale: "id-ID",
         next: "Lanjut",
         hintFront: "Ketuk kartu untuk melihat arti", hintBack: "Ketuk untuk kembali",
         backLabel: "Arti", pluralLabel: "Bentuk jamak", exampleLabel: "Contoh kalimat",
@@ -765,7 +850,7 @@ const i18n = {
         btnSubmitMatch: "Cek jawaban", btnMatchNext: "Lihat hasil",
 
         resultKicker: "Hasil", resultTitle: "Kuis selesai",
-        resultText: (s, t) => "Kamu menjawab benar " + s + " dari " + t + " soal.",
+        resultText: (s, t) => s === t ? "Semua soal kamu jawab dengan benar." : "Ulangi kuisnya untuk mengejar sisa " + (t - s) + " poin.",
         skipKicker: "Selesai", skipTitle: "Hafalan selesai",
         skipText: "Kartu hari ini sudah tuntas. Kuis bisa kamu mulai kapan saja.",
         btnRestartCards: "Ulangi kartu", btnRestartQuiz: "Ulangi kuis",
@@ -779,7 +864,8 @@ const i18n = {
         liColor1: "<span class='dot' style='background:#2F5BFF'></span><b>der</b> — maskulin. Kartu jadi biru.",
         liColor2: "<span class='dot' style='background:#00A878'></span><b>das</b> — netral. Kartu jadi hijau.",
         liColor3: "<span class='dot' style='background:#FF4D94'></span><b>die</b> — feminin. Kartu jadi pink.",
-        liColor4: "<span class='dot' style='background:#FFE066'></span>Huruf kuning pada bentuk jamak menandai bagian yang berubah dari bentuk tunggalnya.",
+        liColor4: "<span class='swatch'>ä</span>Blok putih pada bentuk jamak menandai bagian yang berubah dari bentuk tunggalnya.",
+        liColor5: "Di contoh kalimat, kata yang sedang dipelajari ditandai dengan blok berwarna.",
         liNext1: "<b>Tandai kata sulit.</b> Simpan kata yang sering meleset ke daftar sendiri.",
         liNext2: "<b>Latihan menulis.</b> Ketik ulang kata untuk melatih ejaan dan umlaut.",
         coffeeTitle: "Traktir kopi",
@@ -788,10 +874,62 @@ const i18n = {
         installTitle: "Pasang di layar utama",
         installText: "Buka langsung dari layar utama, tanpa lewat browser. Kartu tetap bisa dibuka saat offline.",
         installTextIOS: "Di Safari: ketuk tombol Bagikan, pilih “Add to Home Screen”, lalu ketuk “Add”.",
-        btnInstall: "Pasang sekarang", btnInstallIOS: "Mengerti", btnInstallLater: "Nanti saja",
-        locale: "id-ID"
+        btnInstall: "Pasang sekarang", btnInstallIOS: "Mengerti", btnInstallLater: "Nanti saja"
     },
+
+    en: {
+        name: "English", locale: "en-GB",
+        next: "Next",
+        hintFront: "Tap the card to see the meaning", hintBack: "Tap to flip back",
+        backLabel: "Meaning", pluralLabel: "Plural form", exampleLabel: "Example sentence",
+        noExample: "No example sentence for this word yet.",
+        streakLabel: "Streak", streakUnit: "days", progressLabel: "Cards today",
+        gender: { der: "masculine", die: "feminine", das: "neuter" },
+
+        preQuizKicker: "10 of 10 words",
+        preQuizTitle: "Today's cards are done",
+        preQuizText: "Test your memory with ten questions, or save your energy for tomorrow.",
+        btnStartQuiz: "Start quiz", btnSkipQuiz: "Skip quiz",
+
+        quizKicker: "Daily quiz",
+        qArticle: "Pick the right article", qMeaning: "What does this word mean?",
+        qReverse: "What is this in German?", qPlural: "What is the plural form?",
+        remaining: n => n + " questions left", score: n => "Score " + n,
+
+        matchKicker: "Last question", matchTitle: "Drag the articles",
+        matchText: "Drag each article card onto the word it belongs to. You can also tap a card first, then tap the box.",
+        btnSubmitMatch: "Check answers", btnMatchNext: "See result",
+
+        resultKicker: "Result", resultTitle: "Quiz complete",
+        resultText: (s, t) => s === t ? "You got every question right." : "Run the quiz again to pick up the remaining " + (t - s) + " points.",
+        skipKicker: "Done", skipTitle: "Practice finished",
+        skipText: "Today's cards are done. You can start the quiz whenever you like.",
+        btnRestartCards: "Review cards", btnRestartQuiz: "Retry quiz",
+
+        guide: "Guide", coffee: "Buy a coffee",
+        guideTitle: "Guide", hHowTo: "How to use", hColor: "What the colours mean", hNext: "In progress",
+        liHow1: "<b>Flip the card.</b> Tap the card or press <span class='kbd'>Space</span>.",
+        liHow2: "<b>Hear the pronunciation.</b> Tap the black circle in the card's corner.",
+        liHow3: "<b>Change word.</b> Press <span class='kbd'>&larr;</span> <span class='kbd'>&rarr;</span> or use the buttons below the card.",
+        liHow4: "<b>Last question.</b> Drag an article card onto the matching word, or tap the card then tap the box.",
+        liColor1: "<span class='dot' style='background:#2F5BFF'></span><b>der</b> — masculine. The card turns blue.",
+        liColor2: "<span class='dot' style='background:#00A878'></span><b>das</b> — neuter. The card turns green.",
+        liColor3: "<span class='dot' style='background:#FF4D94'></span><b>die</b> — feminine. The card turns pink.",
+        liColor4: "<span class='swatch'>ä</span>White blocks in the plural mark the letters that change from the singular.",
+        liColor5: "In the example sentence, the word you are studying is marked with a coloured block.",
+        liNext1: "<b>Flag hard words.</b> Collect the ones you keep missing in their own list.",
+        liNext2: "<b>Spelling practice.</b> Retype the word to drill spelling and umlauts.",
+        coffeeTitle: "Buy a coffee",
+        coffeeText: "This app is free and ad-free. Your support keeps it that way.",
+        coffeeLink: "Open in Saweria",
+        installTitle: "Add to home screen",
+        installText: "Open it straight from your home screen, no browser needed. Cards work offline too.",
+        installTextIOS: "In Safari: tap Share, choose “Add to Home Screen”, then tap “Add”.",
+        btnInstall: "Install now", btnInstallIOS: "Got it", btnInstallLater: "Maybe later"
+    },
+
     de: {
+        name: "Deutsch", locale: "de-DE",
         next: "Weiter",
         hintFront: "Karte antippen für die Bedeutung", hintBack: "Antippen zum Zurückdrehen",
         backLabel: "Bedeutung", pluralLabel: "Pluralform", exampleLabel: "Beispielsatz",
@@ -814,7 +952,7 @@ const i18n = {
         btnSubmitMatch: "Antworten prüfen", btnMatchNext: "Ergebnis ansehen",
 
         resultKicker: "Ergebnis", resultTitle: "Quiz beendet",
-        resultText: (s, t) => "Du hast " + s + " von " + t + " Fragen richtig beantwortet.",
+        resultText: (s, t) => s === t ? "Du hast alle Fragen richtig beantwortet." : "Starte das Quiz erneut und hol dir die restlichen " + (t - s) + " Punkte.",
         skipKicker: "Fertig", skipTitle: "Lernen beendet",
         skipText: "Die Karten von heute sind durch. Das Quiz kannst du jederzeit starten.",
         btnRestartCards: "Karten wiederholen", btnRestartQuiz: "Quiz wiederholen",
@@ -828,7 +966,8 @@ const i18n = {
         liColor1: "<span class='dot' style='background:#2F5BFF'></span><b>der</b> — maskulin. Die Karte wird blau.",
         liColor2: "<span class='dot' style='background:#00A878'></span><b>das</b> — neutral. Die Karte wird grün.",
         liColor3: "<span class='dot' style='background:#FF4D94'></span><b>die</b> — feminin. Die Karte wird pink.",
-        liColor4: "<span class='dot' style='background:#FFE066'></span>Die gelben Buchstaben im Plural zeigen, was sich gegenüber dem Singular ändert.",
+        liColor4: "<span class='swatch'>ä</span>Die weißen Blöcke im Plural zeigen, welche Buchstaben sich gegenüber dem Singular ändern.",
+        liColor5: "Im Beispielsatz ist das gerade gelernte Wort farbig markiert.",
         liNext1: "<b>Schwere Wörter markieren.</b> Wörter, die oft danebengehen, in einer eigenen Liste sammeln.",
         liNext2: "<b>Schreibübung.</b> Das Wort abtippen, um Rechtschreibung und Umlaute zu üben.",
         coffeeTitle: "Kaffee für Chester",
@@ -837,13 +976,16 @@ const i18n = {
         installTitle: "Auf dem Startbildschirm ablegen",
         installText: "Direkt vom Startbildschirm öffnen, ohne Browser. Die Karten laufen auch offline.",
         installTextIOS: "In Safari: auf Teilen tippen, „Zum Home-Bildschirm“ wählen, dann „Hinzufügen“.",
-        btnInstall: "Jetzt installieren", btnInstallIOS: "Verstanden", btnInstallLater: "Später",
-        locale: "de-DE"
+        btnInstall: "Jetzt installieren", btnInstallIOS: "Verstanden", btnInstallLater: "Später"
     }
 };
 
-let lang = localStorage.getItem('appLang') || 'id';
+let lang = localStorage.getItem('appLang');
+if (!i18n[lang]) lang = 'id';
 let booted = false;
+
+/* arti kata mengikuti bahasa antarmuka bila datanya tersedia */
+const meaningOf = d => (lang === 'en' && d.meaning_en) ? d.meaning_en : d.meaning;
 
 /* ==========================================================
    WARNA GENDER
@@ -875,6 +1017,42 @@ document.getElementById('themeToggle').addEventListener('click', () => {
 });
 
 /* ==========================================================
+   MENU BAHASA
+   ========================================================== */
+const langBtn = document.getElementById('langBtn');
+const langMenu = document.getElementById('langMenu');
+
+function openLangMenu(open) {
+    langMenu.classList.toggle('open', open);
+    langBtn.setAttribute('aria-expanded', open);
+}
+langBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    openLangMenu(!langMenu.classList.contains('open'));
+});
+langMenu.addEventListener('click', e => {
+    const item = e.target.closest('[data-lang]');
+    if (!item) return;
+    setLanguage(item.dataset.lang);
+    openLangMenu(false);
+});
+document.addEventListener('click', e => {
+    if (!e.target.closest('.langwrap')) openLangMenu(false);
+});
+
+/* ==========================================================
+   ACCORDION PANDUAN
+   ========================================================== */
+document.querySelectorAll('[data-acc]').forEach(acc => {
+    const head = acc.querySelector('.acc-head');
+    head.addEventListener('click', () => {
+        const open = !acc.classList.contains('open');
+        acc.classList.toggle('open', open);
+        head.setAttribute('aria-expanded', open);
+    });
+});
+
+/* ==========================================================
    BAHASA
    ========================================================== */
 const txt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
@@ -888,14 +1066,15 @@ function replay(el) {
 }
 
 function setLanguage(next) {
+    if (!i18n[next]) return;
     const changed = booted && next !== lang;
     lang = next;
     localStorage.setItem('appLang', next);
     const t = i18n[next];
 
-    document.getElementById('langSwitch').dataset.lang = next;
-    document.getElementById('langID').setAttribute('aria-pressed', next === 'id');
-    document.getElementById('langDE').setAttribute('aria-pressed', next === 'de');
+    txt('langCode', next.toUpperCase());
+    langMenu.querySelectorAll('[data-lang]').forEach(b =>
+        b.setAttribute('aria-checked', b.dataset.lang === next));
     document.documentElement.lang = next;
 
     txt('txtNext', t.next);
@@ -913,7 +1092,8 @@ function setLanguage(next) {
     txt('txtGuide', t.guide); txt('txtCoffee', t.coffee);
     txt('guideTitle', t.guideTitle); txt('hHowTo', t.hHowTo); txt('hColor', t.hColor); txt('hNext', t.hNext);
     html('liHow1', t.liHow1); html('liHow2', t.liHow2); html('liHow3', t.liHow3); html('liHow4', t.liHow4);
-    html('liColor1', t.liColor1); html('liColor2', t.liColor2); html('liColor3', t.liColor3); html('liColor4', t.liColor4);
+    html('liColor1', t.liColor1); html('liColor2', t.liColor2); html('liColor3', t.liColor3);
+    html('liColor4', t.liColor4); html('liColor5', t.liColor5);
     html('liNext1', t.liNext1); html('liNext2', t.liNext2);
     txt('coffeeTitle', t.coffeeTitle); txt('coffeeText', t.coffeeText); txt('coffeeLink', t.coffeeLink);
     txt('installTitle', t.installTitle); txt('installText', t.installText);
@@ -1027,6 +1207,35 @@ function speakPlural(e) {
 }
 
 /* ==========================================================
+   PENANDA KATA DI CONTOH KALIMAT
+   Bentuk di kalimat sering berbeda dari lemanya
+   (Stern -> Sterne, Vater -> Väter), jadi pencocokan
+   dilakukan pada akar kata dengan umlaut dinormalkan.
+   ========================================================== */
+const escapeHtml = s => s.replace(/[&<>]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[c]));
+const normalize = s => s.toLowerCase()
+    .replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'ss');
+
+function markWord(sentence, lemma) {
+    const safe = escapeHtml(sentence);
+    if (!lemma) return safe;
+
+    const target = normalize(lemma);
+    const stem = target.slice(0, Math.max(3, target.length - 1));
+    let done = false;
+
+    return safe.replace(/[\p{L}\p{M}]+/gu, token => {
+        if (done) return token;
+        const t = normalize(token);
+        const match = t === target ||
+            (t.startsWith(stem) && t.length >= target.length - 1 && t.length - target.length <= 4);
+        if (!match) return token;
+        done = true;
+        return '<mark>' + token + '</mark>';
+    });
+}
+
+/* ==========================================================
    KATA HARIAN
    ========================================================== */
 const DAY = Math.floor(Date.now() / 86400000);
@@ -1088,22 +1297,23 @@ function renderCard() {
         const pluralBlock = document.getElementById('pluralBlock');
         if (d.plural && d.plural !== '-') {
             pluralBlock.style.display = '';
-            // *huruf* menandai perbedaan dari bentuk tunggal -> disorot kuning
-            html('wordPlural', d.plural.replace(/\*(.*?)\*/g, '<b>$1</b>'));
+            // *huruf* menandai perbedaan dari bentuk tunggal
+            html('wordPlural', escapeHtml(d.plural).replace(/\*(.*?)\*/g, '<b>$1</b>'));
         } else {
             pluralBlock.style.display = 'none';
         }
 
         txt('backWord', d.article + ' ' + d.word);
-        txt('wordMeaning', d.meaning);
+        txt('wordMeaning', meaningOf(d));
 
         const ex = d.example;
         const exDe = document.getElementById('exampleDe');
         const exId = document.getElementById('exampleId');
         if (ex && ex.de) {
-            exDe.textContent = ex.de;
-            exId.textContent = ex.id || '';
-            exId.style.display = ex.id ? '' : 'none';
+            exDe.innerHTML = markWord(ex.de, d.word);
+            const trans = lang === 'de' ? '' : (ex[lang] || '');
+            exId.textContent = trans;
+            exId.style.display = trans ? '' : 'none';
         } else {
             exDe.textContent = t.noExample;
             exId.style.display = 'none';
@@ -1148,6 +1358,7 @@ function skipQuiz() {
     const t = i18n[lang];
     showPanel('resultPanel');
     paint('none');
+    document.getElementById('scoreboard').style.display = 'none';
     txt('resultKicker', t.skipKicker);
     txt('resultTitle', t.skipTitle);
     txt('resultText', t.skipText);
@@ -1200,10 +1411,10 @@ function loadQuestion() {
         answer = q.article; options = ['der', 'die', 'das'];
     } else if (q.type === 'meaning') {
         txt('quizPrompt', t.qMeaning); txt('quizArticle', q.article); txt('quizWord', q.word);
-        answer = q.meaning;
-        options = fillOptions([answer], () => p[Math.floor(Math.random() * p.length)].meaning);
+        answer = meaningOf(q);
+        options = fillOptions([answer], () => meaningOf(p[Math.floor(Math.random() * p.length)]));
     } else if (q.type === 'reverse') {
-        txt('quizPrompt', t.qReverse); txt('quizArticle', ''); txt('quizWord', '“' + q.meaning + '”');
+        txt('quizPrompt', t.qReverse); txt('quizArticle', ''); txt('quizWord', '“' + meaningOf(q) + '”');
         answer = q.article + ' ' + q.word;
         options = fillOptions([answer], () => {
             const r = p[Math.floor(Math.random() * p.length)];
@@ -1258,8 +1469,6 @@ function answerQuestion(picked, answer, btn, q) {
 
 /* ==========================================================
    SOAL TERAKHIR — SERET & LEPAS
-   Pointer Events dipakai supaya jalan di sentuh maupun tetikus.
-   Ketuk-lalu-ketuk disediakan sebagai jalur cadangan.
    ========================================================== */
 let matchLocked = false, selectedChip = null, drag = null;
 
@@ -1292,7 +1501,6 @@ function loadMatch() {
         list.appendChild(row);
     });
 
-    // lima kartu artikel sesuai jawaban, urutannya diacak
     matchWords.map(w => w.article).sort(() => Math.random() - .5).forEach(a => {
         const cell = document.createElement('div');
         cell.className = 'cell';
@@ -1332,7 +1540,6 @@ function placeChip(chip, target) {
     const origin = chip.parentElement;
 
     if (occupant) {
-        // tukar posisi dengan kartu yang sudah ada di sana
         (origin && (origin.classList.contains('slot') || origin.classList.contains('cell'))
             ? origin
             : firstEmptyCell() || target
@@ -1397,7 +1604,6 @@ function attachDrag(chip) {
     chip.addEventListener('pointercancel', finish);
 }
 
-// jalur cadangan: ketuk kartu, lalu ketuk kotak tujuan
 document.getElementById('matchList').addEventListener('click', e => {
     if (matchLocked || !selectedChip) return;
     const target = e.target.closest('.slot');
@@ -1448,6 +1654,9 @@ function showResult() {
     const t = i18n[lang];
     showPanel('resultPanel');
     paint('none');
+    document.getElementById('scoreboard').style.display = '';
+    txt('scoreBig', score);
+    txt('scoreOf', '/ ' + TOTAL_POINTS);
     txt('resultKicker', t.resultKicker);
     txt('resultTitle', t.resultTitle);
     txt('resultText', t.resultText(score, TOTAL_POINTS));
@@ -1464,6 +1673,7 @@ function closeModal(id) { document.getElementById(id).classList.remove('show'); 
 function backdropClose(e, id) { if (e.target.id === id) closeModal(id); }
 
 document.addEventListener('keydown', e => {
+    if (langMenu.classList.contains('open') && e.key === 'Escape') { openLangMenu(false); return; }
     const open = document.querySelector('.overlay.show');
     if (open) {
         if (e.key === 'Escape') { open.id === 'installModal' ? snoozeInstall() : closeModal(open.id); }
