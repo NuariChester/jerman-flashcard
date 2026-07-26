@@ -213,7 +213,23 @@
        Jangan pasang overflow:hidden di .face — di dalam
        preserve-3d hal itu mematikan backface-visibility.
        ========================================================== */
-    .stage { perspective: 1600px; margin-bottom: 14px; }
+    .stage { margin-bottom: 14px; }
+    /* perspektif dipisah ke .deck supaya .stage bebas dianimasikan
+       tanpa mengganggu konteks 3D milik kartu */
+    .deck { perspective: 1600px; }
+
+    /* perpindahan antar kartu */
+    .stage.out-left  { animation: cardOutLeft  .15s cubic-bezier(.4,0,1,1) forwards; }
+    .stage.out-right { animation: cardOutRight .15s cubic-bezier(.4,0,1,1) forwards; }
+    .stage.in-right  { animation: cardInRight  .3s cubic-bezier(.2,.85,.25,1) both; }
+    .stage.in-left   { animation: cardInLeft   .3s cubic-bezier(.2,.85,.25,1) both; }
+    .stage.in-up     { animation: cardInUp     .32s cubic-bezier(.2,.85,.25,1) both; }
+
+    @keyframes cardOutLeft  { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(-9%) scale(.95); } }
+    @keyframes cardOutRight { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(9%) scale(.95); } }
+    @keyframes cardInRight  { from { opacity: 0; transform: translateX(11%) scale(.95); } to { opacity: 1; transform: none; } }
+    @keyframes cardInLeft   { from { opacity: 0; transform: translateX(-11%) scale(.95); } to { opacity: 1; transform: none; } }
+    @keyframes cardInUp     { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }
     .card {
         position: relative; display: grid;
         width: 100%; min-height: 296px;
@@ -581,7 +597,8 @@
             <button data-level="A2" aria-pressed="false">Level A2</button>
         </div>
 
-        <div class="stage">
+        <div class="stage" id="stage">
+          <div class="deck">
             <div class="card" id="card" role="button" tabindex="0" aria-label="Kartu kosakata, ketuk untuk membalik">
 
                 <!-- DEPAN -->
@@ -641,6 +658,7 @@
                     <p class="card-hint" id="hintBack" style="color:var(--ink-2)">Ketuk untuk kembali</p>
                 </div>
             </div>
+          </div>
         </div>
 
         <div class="controls">
@@ -1077,7 +1095,7 @@ function setLanguage(next) {
 
     txt('dateLabel', new Date().toLocaleDateString(t.locale, { weekday: 'long', day: 'numeric', month: 'long' }));
     renderStreak();
-    if (studyVisible()) renderCard();
+    if (studyVisible() && words.length) fillCard();
     if (document.getElementById('quizPanel').classList.contains('show')) loadQuestion();
 
     if (changed) {
@@ -1234,7 +1252,7 @@ function initDay(nextLevel) {
     words = daily.slice();
     index = 0;
     showStudy();
-    renderCard();
+    renderCard('fresh');
 }
 
 /* ==========================================================
@@ -1254,50 +1272,99 @@ function showPanel(id) {
     PANELS.forEach(p => document.getElementById(p).classList.toggle('show', p === id));
 }
 
-function renderCard() {
+const stage = document.getElementById('stage');
+const ANIM = ['out-left', 'out-right', 'in-left', 'in-right', 'in-up'];
+const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+let navLock = false;
+
+/* mengisi ulang isi kartu tanpa menyentuh posisi balik/animasi */
+function fillCard() {
+    const d = words[index], t = i18n[lang];
+    paint(d.article);
+
+    txt('genderTag', t.gender[d.article] || d.article);
+    txt('wordArticle', d.article);
+    txt('wordText', d.word);
+    const ipa = document.getElementById('wordIpa');
+    ipa.textContent = (d.ipa && d.ipa !== '-') ? d.ipa : '';
+    ipa.style.display = ipa.textContent ? 'block' : 'none';
+
+    const pluralBlock = document.getElementById('pluralBlock');
+    if (d.plural && d.plural !== '-') {
+        pluralBlock.style.display = '';
+        // *huruf* menandai perbedaan dari bentuk tunggal
+        html('wordPlural', escapeHtml(d.plural).replace(/\*(.*?)\*/g, '<b>$1</b>'));
+    } else {
+        pluralBlock.style.display = 'none';
+    }
+
+    txt('backWord', d.article + ' ' + d.word);
+    txt('wordMeaning', meaningOf(d));
+
+    const ex = d.example;
+    const exDe = document.getElementById('exampleDe');
+    const exId = document.getElementById('exampleId');
+    if (ex && ex.de) {
+        exDe.innerHTML = markWord(ex.de, d.word);
+        const trans = lang === 'de' ? '' : (ex[lang] || '');
+        exId.textContent = trans;
+        exId.style.display = trans ? '' : 'none';
+    } else {
+        exDe.textContent = t.noExample;
+        exId.style.display = 'none';
+    }
+
+    txt('counterValue', String(index + 1).padStart(2, '0'));
+    document.getElementById('barFill').style.width = ((index + 1) / words.length * 100) + '%';
+    document.getElementById('prevBtn').disabled = index === 0;
+}
+
+/* membalik kartu ke sisi depan tanpa animasi, dipakai saat
+   kartu sedang tak terlihat di tengah perpindahan */
+function snapToFront() {
+    if (!card.classList.contains('flipped')) return;
+    card.style.transition = 'none';
+    card.classList.remove('flipped');
+    void card.offsetWidth;
+    card.style.transition = '';
+}
+
+/**
+ * dir: 'next' | 'prev'  -> geser ke samping
+ *      'fresh'          -> muncul dari bawah (acak, ganti level, ulangi)
+ *      undefined        -> isi ulang tanpa animasi
+ */
+function renderCard(dir) {
+    if (!words.length) return;
     if (index >= words.length) return finishCards();
 
-    const d = words[index], t = i18n[lang];
-    card.classList.remove('flipped');
+    if (!dir || reduceMotion()) {
+        snapToFront();
+        stage.classList.remove(...ANIM);
+        fillCard();
+        return;
+    }
+
+    if (dir === 'fresh') {
+        snapToFront();
+        fillCard();
+        stage.classList.remove(...ANIM);
+        void stage.offsetWidth;
+        stage.classList.add('in-up');
+        return;
+    }
+
+    navLock = true;
+    stage.classList.remove(...ANIM);
+    stage.classList.add(dir === 'next' ? 'out-left' : 'out-right');
 
     setTimeout(() => {
-        paint(d.article);
-
-        txt('genderTag', t.gender[d.article] || d.article);
-        txt('wordArticle', d.article);
-        txt('wordText', d.word);
-        const ipa = document.getElementById('wordIpa');
-        ipa.textContent = (d.ipa && d.ipa !== '-') ? d.ipa : '';
-        ipa.style.display = ipa.textContent ? 'block' : 'none';
-
-        const pluralBlock = document.getElementById('pluralBlock');
-        if (d.plural && d.plural !== '-') {
-            pluralBlock.style.display = '';
-            // *huruf* menandai perbedaan dari bentuk tunggal
-            html('wordPlural', escapeHtml(d.plural).replace(/\*(.*?)\*/g, '<b>$1</b>'));
-        } else {
-            pluralBlock.style.display = 'none';
-        }
-
-        txt('backWord', d.article + ' ' + d.word);
-        txt('wordMeaning', meaningOf(d));
-
-        const ex = d.example;
-        const exDe = document.getElementById('exampleDe');
-        const exId = document.getElementById('exampleId');
-        if (ex && ex.de) {
-            exDe.innerHTML = markWord(ex.de, d.word);
-            const trans = lang === 'de' ? '' : (ex[lang] || '');
-            exId.textContent = trans;
-            exId.style.display = trans ? '' : 'none';
-        } else {
-            exDe.textContent = t.noExample;
-            exId.style.display = 'none';
-        }
-
-        txt('counterValue', String(index + 1).padStart(2, '0'));
-        document.getElementById('barFill').style.width = ((index + 1) / words.length * 100) + '%';
-        document.getElementById('prevBtn').disabled = index === 0;
+        snapToFront();
+        fillCard();
+        stage.classList.remove(...ANIM);
+        void stage.offsetWidth;
+        stage.classList.add(dir === 'next' ? 'in-right' : 'in-left');
+        navLock = false;
     }, 150);
 }
 
@@ -1307,9 +1374,9 @@ card.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
 });
 
-function nextWord() { if (index < words.length) { index++; renderCard(); } }
-function prevWord() { if (index > 0) { index--; renderCard(); } }
-function shuffleWords() { words = words.slice().sort(() => Math.random() - .5); index = 0; renderCard(); }
+function nextWord() { if (navLock || index >= words.length) return; index++; renderCard('next'); }
+function prevWord() { if (navLock || index <= 0) return; index--; renderCard('prev'); }
+function shuffleWords() { words = words.slice().sort(() => Math.random() - .5); index = 0; renderCard('fresh'); }
 
 function finishCards() {
     const t = i18n[lang];
@@ -1327,7 +1394,7 @@ function restartCards() {
     words = daily.slice().sort(() => Math.random() - .5);
     index = 0;
     showStudy();
-    renderCard();
+    renderCard('fresh');
 }
 
 function skipQuiz() {
@@ -1638,7 +1705,6 @@ function showResult() {
     txt('resultText', t.resultText(score, TOTAL_POINTS));
     txt('btnRestartCards', t.btnRestartCards);
     txt('btnRestartQuiz', t.btnRestartQuiz);
-    celebrate(140);
 }
 
 /* ==========================================================
