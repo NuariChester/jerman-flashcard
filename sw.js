@@ -7,7 +7,7 @@ const urlsToCache = [
   './index.html',
   './favicon.svg',
   './saweria.png',
-  './words.js'
+  './words.js',
   './manifest.json'
 ];
 
