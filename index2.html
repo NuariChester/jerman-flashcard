@@ -442,11 +442,18 @@
     .chip-drag.no { background: var(--no); color: #fff; }
 
     .drop-row {
-        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        display: flex; align-items: center; justify-content: flex-start; gap: 12px;
         background: var(--surface); border-radius: var(--r-card);
-        padding: 10px 10px 10px 16px; margin-bottom: 9px; box-shadow: var(--sh-sm);
+        padding: 10px 14px; margin-bottom: 9px; box-shadow: var(--sh-sm);
     }
-    .match-word { font-family: var(--f-display); font-weight: 600; font-size: 18px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    /* kata menempel langsung di sisi kotak peletakan, tanpa jarak
+       lebar di antara keduanya; sisa ruang baris dibiarkan kosong
+       di kanan */
+    .match-word {
+        font-family: var(--f-display); font-weight: 600; font-size: 18px;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        min-width: 0;
+    }
     .match-word .fix { color: var(--ok); font-size: 14px; margin-left: 8px; }
 
     .slot {
@@ -1540,7 +1547,7 @@ function loadMatch() {
         slot.className = 'slot';
         slot.dataset.index = i;
 
-        row.append(name, slot);
+        row.append(slot, name);
         list.appendChild(row);
     });
 
