@@ -1170,7 +1170,8 @@ function celebrate(count) {
    ========================================================== */
 let audio = null;
 const mapName = s => s.replace(/ß/g,'s5').replace(/ä/g,'a3').replace(/ö/g,'o3').replace(/ü/g,'u3')
-                      .replace(/Ä/g,'A3').replace(/Ö/g,'O3').replace(/Ü/g,'U3');
+                      .replace(/Ä/g,'A3').replace(/Ö/g,'O3').replace(/Ü/g,'U3')
+                      .replace(/-/g, '_');
 const pluralFile = p => mapName(p.replace(/\*/g,'')).replace(/[^a-zA-Z0-9]/g,'_')
                         .replace(/_+/g,'_').replace(/^_|_$/g,'') + '.mp3';
 
