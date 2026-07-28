@@ -113,8 +113,6 @@
 
     .tools { display: flex; align-items: center; gap: 8px; flex: none; }
 
-    /* pemilih bahasa: satu tombol + menu, lebarnya tetap
-       berapa pun jumlah bahasanya */
     .langwrap { position: relative; }
     .langbtn {
         display: flex; align-items: center; gap: 5px;
@@ -211,7 +209,7 @@
     /* ==========================================================
        FLASHCARD (CARD STACK EFFECT)
        ========================================================== */
-    .stage { margin-bottom: 24px; }
+    .stage { margin-bottom: 24px; position: relative; }
     
     .deck { 
         perspective: 1600px; 
@@ -226,23 +224,24 @@
         width: 100%; height: 100%;
         background: var(--surface);
         border-radius: var(--r-block);
-        box-shadow: var(--sh-sm);
         transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
         pointer-events: none;
     }
 
-    /* Kartu tumpukan pertama */
+    /* Kartu tumpukan pertama (di bawah kartu utama) */
     .deck::before {
-        transform: translateY(12px) scale(0.93);
-        opacity: 0.6;
+        transform: translateY(11px) scale(0.95);
+        opacity: 0.8;
         z-index: -1;
+        box-shadow: var(--sh-md);
     }
 
-    /* Kartu tumpukan kedua */
+    /* Kartu tumpukan kedua (paling bawah) */
     .deck::after {
-        transform: translateY(24px) scale(0.86);
-        opacity: 0.25;
+        transform: translateY(22px) scale(0.90);
+        opacity: 0.4;
         z-index: -2;
+        box-shadow: var(--sh-sm);
     }
 
     /* Sembunyikan tumpukan saat kartu sedang animasi masuk dari bawah (fresh start) */
@@ -250,26 +249,26 @@
         opacity: 0;
     }
 
-    /* Perpindahan antar kartu: Gaya Swipe */
-    .stage.out-left  { animation: swipeOutLeft  .35s cubic-bezier(.4,0,1,1) forwards; }
-    .stage.out-right { animation: swipeOutRight .35s cubic-bezier(.4,0,1,1) forwards; }
-    .stage.in-right  { animation: popFromStack  .4s cubic-bezier(.2,.85,.25,1) both; }
-    .stage.in-left   { animation: popFromStack  .4s cubic-bezier(.2,.85,.25,1) both; }
-    .stage.in-up     { animation: cardInUp      .4s cubic-bezier(.2,.85,.25,1) both; }
+    /* Perpindahan antar kartu: Geser Lurus & Menghilang Pudar */
+    .stage.out-left  { animation: slideFadeOutLeft  .2s ease-in forwards; }
+    .stage.out-right { animation: slideFadeOutRight .2s ease-in forwards; }
+    .stage.in-right  { animation: popFromStack      .35s ease-out both; }
+    .stage.in-left   { animation: popFromStack      .35s ease-out both; }
+    .stage.in-up     { animation: cardInUp          .4s cubic-bezier(.2,.85,.25,1) both; }
 
-    /* Keyframes Swipe ala Tinder */
-    @keyframes swipeOutLeft  { 
-        0%   { transform: translateX(0) rotate(0deg); opacity: 1; } 
-        100% { transform: translateX(-120%) rotate(-10deg); opacity: 0; } 
+    /* Keyframes Lurus & Pudar */
+    @keyframes slideFadeOutLeft  { 
+        0%   { transform: translateX(0); opacity: 1; } 
+        100% { transform: translateX(-60px); opacity: 0; } 
     }
-    @keyframes swipeOutRight { 
-        0%   { transform: translateX(0) rotate(0deg); opacity: 1; } 
-        100% { transform: translateX(120%) rotate(10deg); opacity: 0; } 
+    @keyframes slideFadeOutRight { 
+        0%   { transform: translateX(0); opacity: 1; } 
+        100% { transform: translateX(60px); opacity: 0; } 
     }
     
-    /* Kartu baru seolah-olah maju dari tumpukan belakang */
+    /* Kartu baru seolah-olah maju membesar dari tumpukan belakang */
     @keyframes popFromStack  { 
-        0%   { transform: translateY(12px) scale(0.93); opacity: 0; } 
+        0%   { transform: translateY(11px) scale(0.95); opacity: 0; } 
         100% { transform: translateY(0) scale(1); opacity: 1; } 
     }
     
@@ -338,10 +337,6 @@
         max-width: 100%;
     }
     .plural-chip > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    /* Imbuhan jamak: hanya hurufnya yang diberi warna.
-       Nada gelap dipilih karena teks di sekitarnya putih dan latar
-       kartu berwarna sedang — warna terang justru terlihat lebih
-       redup daripada putih, sedangkan nada gelap paling menonjol. */
     .plural-chip b { color: var(--mark); font-weight: 800; }
 
     .card-hint { font-size: 12px; opacity: .75; margin: 12px 0 0; font-weight: 500; }
@@ -1421,7 +1416,7 @@ function renderCard(dir) {
         void stage.offsetWidth;
         stage.classList.add(dir === 'next' ? 'in-right' : 'in-left');
         navLock = false;
-    }, 250);
+    }, 200); /* Waktu tunggu kini dibuat lebih singkat agar terasa responsif (200ms) */
 }
 
 const flip = () => card.classList.toggle('flipped');
