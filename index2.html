@@ -74,6 +74,9 @@
        ========================================================== */
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+    /* Mencegah scroll menyamping akibat tumpukan kartu yang melebar */
+    html, body { overflow-x: hidden; } 
+
     body {
         margin: 0;
         padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
@@ -216,7 +219,7 @@
         position: relative;
     }
 
-    /* Membuat 2 kartu ilusi di belakang (Tumpukan) */
+    /* Membuat 2 kartu ilusi di belakang (Tumpukan dikanan) */
     .deck::before, .deck::after {
         content: "";
         position: absolute;
@@ -228,20 +231,21 @@
         pointer-events: none;
     }
 
-    /* Kartu tumpukan pertama (di bawah kartu utama) */
+    /* Kartu tumpukan pertama (Kanan atas) */
     .deck::before {
-        transform: translateY(11px) scale(0.95);
-        opacity: 0.8;
+        transform: translateX(20px) scale(0.92);
+        opacity: 0.85;
         z-index: -1;
-        box-shadow: var(--sh-md);
+        /* Tambahkan sedikit shadow gelap agar terpisah dari kartu kedua di belakangnya */
+        box-shadow: -4px 0 16px -6px rgba(0,0,0,0.15);
     }
 
-    /* Kartu tumpukan kedua (paling bawah) */
+    /* Kartu tumpukan kedua (Kanan bawah) */
     .deck::after {
-        transform: translateY(22px) scale(0.90);
-        opacity: 0.4;
+        transform: translateX(38px) scale(0.84);
+        opacity: 0.45;
         z-index: -2;
-        box-shadow: var(--sh-sm);
+        box-shadow: -4px 0 16px -6px rgba(0,0,0,0.1);
     }
 
     /* Sembunyikan tumpukan saat kartu sedang animasi masuk dari bawah (fresh start) */
@@ -250,26 +254,26 @@
     }
 
     /* Perpindahan antar kartu: Geser Lurus & Menghilang Pudar */
-    .stage.out-left  { animation: slideFadeOutLeft  .2s ease-in forwards; }
-    .stage.out-right { animation: slideFadeOutRight .2s ease-in forwards; }
-    .stage.in-right  { animation: popFromStack      .35s ease-out both; }
-    .stage.in-left   { animation: popFromStack      .35s ease-out both; }
+    .stage.out-left  { animation: slideFadeOutLeft  .25s cubic-bezier(.4,0,1,1) forwards; }
+    .stage.out-right { animation: slideFadeOutRight .25s cubic-bezier(.4,0,1,1) forwards; }
+    .stage.in-right  { animation: popFromStackRight .35s cubic-bezier(.2,.8,.2,1) both; }
+    .stage.in-left   { animation: popFromStackRight .35s cubic-bezier(.2,.8,.2,1) both; }
     .stage.in-up     { animation: cardInUp          .4s cubic-bezier(.2,.85,.25,1) both; }
 
     /* Keyframes Lurus & Pudar */
     @keyframes slideFadeOutLeft  { 
         0%   { transform: translateX(0); opacity: 1; } 
-        100% { transform: translateX(-60px); opacity: 0; } 
+        100% { transform: translateX(-100px); opacity: 0; } 
     }
     @keyframes slideFadeOutRight { 
         0%   { transform: translateX(0); opacity: 1; } 
-        100% { transform: translateX(60px); opacity: 0; } 
+        100% { transform: translateX(100px); opacity: 0; } 
     }
     
-    /* Kartu baru seolah-olah maju membesar dari tumpukan belakang */
-    @keyframes popFromStack  { 
-        0%   { transform: translateY(11px) scale(0.95); opacity: 0; } 
-        100% { transform: translateY(0) scale(1); opacity: 1; } 
+    /* Kartu baru ditarik masuk dari tumpukan di sebelah kanan */
+    @keyframes popFromStackRight  { 
+        0%   { transform: translateX(20px) scale(0.92); opacity: 0.5; } 
+        100% { transform: translateX(0) scale(1); opacity: 1; } 
     }
     
     @keyframes cardInUp      { 
@@ -1416,7 +1420,7 @@ function renderCard(dir) {
         void stage.offsetWidth;
         stage.classList.add(dir === 'next' ? 'in-right' : 'in-left');
         navLock = false;
-    }, 200); /* Waktu tunggu kini dibuat lebih singkat agar terasa responsif (200ms) */
+    }, 200);
 }
 
 const flip = () => card.classList.toggle('flipped');
