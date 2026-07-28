@@ -209,27 +209,75 @@
     .levels button[aria-pressed="true"] { background: var(--ink); color: var(--cream); }
 
     /* ==========================================================
-       FLASHCARD
-       Jangan pasang overflow:hidden di .face — di dalam
-       preserve-3d hal itu mematikan backface-visibility.
+       FLASHCARD (CARD STACK EFFECT)
        ========================================================== */
-    .stage { margin-bottom: 14px; }
-    /* perspektif dipisah ke .deck supaya .stage bebas dianimasikan
-       tanpa mengganggu konteks 3D milik kartu */
-    .deck { perspective: 1600px; }
+    .stage { margin-bottom: 24px; }
+    
+    .deck { 
+        perspective: 1600px; 
+        position: relative;
+    }
 
-    /* perpindahan antar kartu */
-    .stage.out-left  { animation: cardOutLeft  .15s cubic-bezier(.4,0,1,1) forwards; }
-    .stage.out-right { animation: cardOutRight .15s cubic-bezier(.4,0,1,1) forwards; }
-    .stage.in-right  { animation: cardInRight  .3s cubic-bezier(.2,.85,.25,1) both; }
-    .stage.in-left   { animation: cardInLeft   .3s cubic-bezier(.2,.85,.25,1) both; }
-    .stage.in-up     { animation: cardInUp     .32s cubic-bezier(.2,.85,.25,1) both; }
+    /* Membuat 2 kartu ilusi di belakang (Tumpukan) */
+    .deck::before, .deck::after {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: var(--surface);
+        border-radius: var(--r-block);
+        box-shadow: var(--sh-sm);
+        transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
+        pointer-events: none;
+    }
 
-    @keyframes cardOutLeft  { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(-9%) scale(.95); } }
-    @keyframes cardOutRight { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(9%) scale(.95); } }
-    @keyframes cardInRight  { from { opacity: 0; transform: translateX(11%) scale(.95); } to { opacity: 1; transform: none; } }
-    @keyframes cardInLeft   { from { opacity: 0; transform: translateX(-11%) scale(.95); } to { opacity: 1; transform: none; } }
-    @keyframes cardInUp     { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }
+    /* Kartu tumpukan pertama */
+    .deck::before {
+        transform: translateY(12px) scale(0.93);
+        opacity: 0.6;
+        z-index: -1;
+    }
+
+    /* Kartu tumpukan kedua */
+    .deck::after {
+        transform: translateY(24px) scale(0.86);
+        opacity: 0.25;
+        z-index: -2;
+    }
+
+    /* Sembunyikan tumpukan saat kartu sedang animasi masuk dari bawah (fresh start) */
+    .stage.in-up .deck::before, .stage.in-up .deck::after {
+        opacity: 0;
+    }
+
+    /* Perpindahan antar kartu: Gaya Swipe */
+    .stage.out-left  { animation: swipeOutLeft  .35s cubic-bezier(.4,0,1,1) forwards; }
+    .stage.out-right { animation: swipeOutRight .35s cubic-bezier(.4,0,1,1) forwards; }
+    .stage.in-right  { animation: popFromStack  .4s cubic-bezier(.2,.85,.25,1) both; }
+    .stage.in-left   { animation: popFromStack  .4s cubic-bezier(.2,.85,.25,1) both; }
+    .stage.in-up     { animation: cardInUp      .4s cubic-bezier(.2,.85,.25,1) both; }
+
+    /* Keyframes Swipe ala Tinder */
+    @keyframes swipeOutLeft  { 
+        0%   { transform: translateX(0) rotate(0deg); opacity: 1; } 
+        100% { transform: translateX(-120%) rotate(-10deg); opacity: 0; } 
+    }
+    @keyframes swipeOutRight { 
+        0%   { transform: translateX(0) rotate(0deg); opacity: 1; } 
+        100% { transform: translateX(120%) rotate(10deg); opacity: 0; } 
+    }
+    
+    /* Kartu baru seolah-olah maju dari tumpukan belakang */
+    @keyframes popFromStack  { 
+        0%   { transform: translateY(12px) scale(0.93); opacity: 0; } 
+        100% { transform: translateY(0) scale(1); opacity: 1; } 
+    }
+    
+    @keyframes cardInUp      { 
+        from { opacity: 0; transform: translateY(30px) scale(.97); } 
+        to   { opacity: 1; transform: none; } 
+    }
+
     .card {
         position: relative; display: grid;
         width: 100%; min-height: 296px;
@@ -246,7 +294,7 @@
         border-radius: var(--r-block);
         padding: 17px;
         display: flex; flex-direction: column; align-items: flex-start;
-        box-shadow: var(--sh-lg);
+        box-shadow: var(--sh-md);
     }
 
     .face-front {
@@ -1373,7 +1421,7 @@ function renderCard(dir) {
         void stage.offsetWidth;
         stage.classList.add(dir === 'next' ? 'in-right' : 'in-left');
         navLock = false;
-    }, 150);
+    }, 250);
 }
 
 const flip = () => card.classList.toggle('flipped');
